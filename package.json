@@ -1,0 +1,25 @@
+{
+  "name": "tnc-visualizacion",
+  "version": "0.0.1",
+  "description": "Visualización de proyectos TNC",
+  "main": "index.js",
+  "scripts": {
+    "compile:sass": "node-sass scss/main.scss css/main.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panietoar/tnc-visualizacion.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/panietoar/tnc-visualizacion/issues"
+  },
+  "homepage": "https://github.com/panietoar/tnc-visualizacion#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.0.2",
+    "node-sass": "^4.12.0"
+  }
+}
