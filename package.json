@@ -4,8 +4,7 @@
   "description": "Visualización de proyectos TNC",
   "main": "index.js",
   "scripts": {
-    "compile:sass": "node-sass scss/main.scss css/main.css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"live-server dist/\" \"gulp dev\""
   },
   "repository": {
     "type": "git",
@@ -18,8 +17,11 @@
   },
   "homepage": "https://github.com/panietoar/tnc-visualizacion#readme",
   "devDependencies": {
+    "concurrently": "^5.0.0",
     "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
     "gulp-sass": "^4.0.2",
     "node-sass": "^4.12.0"
-  }
+  },
+  "dependencies": {}
 }
