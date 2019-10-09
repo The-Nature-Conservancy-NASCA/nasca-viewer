@@ -16,13 +16,17 @@ function copyHTML(cb) {
   return src('*.html').pipe(dest('dist/'));
 }
 
+function copyAssets(cb) {
+  return src('assets/img/*').pipe(dest('dist/img'))
+}
+
 function compileSass(cb) {
   return src('scss/main.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(dest('dist/css'));
 }
 
-exports.default = parallel(compileJs, compileSass, copyHTML);
+exports.default = parallel(compileJs, compileSass, copyAssets, copyHTML);
 
 exports.dev = function() {
   watch('scss/**/*.scss', compileSass);

@@ -23,11 +23,78 @@
 
 <body>
   <div class="toolbar">
-    <ul class="toolbar_menu">
-      <li class="toolbar__menu-item">Carbono</li>
-      <li class="toolbar__menu-item">Energia</li>
-      <li class="toolbar__menu-item">Agua</li>
+    <ul class="toolbar__menu">
+      <li class="toolbar__menu-item" data-menu="menu-home">
+        <img src="img/icon-home.png" class="toolbar__menu-icon">
+      </li>
+      <li class="toolbar__menu-item" data-menu="menu-capas">
+        <img src="img/icon-capas.png" class="toolbar__menu-icon">
+      </li>
+      <li class="toolbar__menu-item" id="menu-buscar">
+        <img src="img/icon-buscar.png" class="toolbar__menu-icon">
+      </li>
+      <li class="toolbar__menu-item" data-menu="menu-info">
+        <img src="img/icon-info.png" class="toolbar__menu-icon">
+      </li>
+      <li class="toolbar__menu-item" data-menu="menu-idioma">
+        <img src="img/icon-idioma.png" class="toolbar__menu-icon">
+      </li>
+      <li class="toolbar__menu-item" data-menu="menu-base">
+        <img src="img/icon-confi.png" class="toolbar__menu-icon">
+      </li>
     </ul>
+    <div id="menu-home" class="menu-panel">
+      <h2 class="menu-panel__title">Proyectos</h2>
+      <div class="menu-panel__contenido">
+        <ul class="menu-panel__menu">
+          <li class="menu-panel__menu-item" data-proyecto="about">Ganadería Colombiana</li>
+          <li class="menu-panel__menu-item" data-proyecto="links">Agroforestería</li>
+        </ul>
+      </div>
+    </div>
+    <div id="menu-capas" class="menu-panel">
+      <h2 class="menu-panel__title">Capas</h2>
+      <div class="menu-panel__contenido">
+        <ul class="menu-panel__menu">
+          <li class="menu-panel__menu-item" data-proyecto="about">Ganadería Colombiana</li>
+          <li class="menu-panel__menu-item" data-proyecto="links">Agroforestería</li>
+        </ul>
+      </div>
+    </div>
+    <div id="menu-info" class="menu-panel">
+      <h2 class="menu-panel__title">Mapa Base</h2>
+      <div class="menu-panel__contenido">
+        <ul class="menu-panel__menu">
+          <li class="menu-panel__menu-item" data-info="about">About</li>
+          <li class="menu-panel__menu-item" data-info="links">Links & Science</li>
+          <li class="menu-panel__menu-item" data-info="privacy">Privacy Policy</li>
+          <li class="menu-panel__menu-item" data-info="login">Login</li>
+        </ul>
+      </div>
+    </div>
+    <div id="menu-idioma" class="menu-panel">
+      <h2 class="menu-panel__title">Idioma</h2>
+      <div class="menu-panel__contenido">
+        <ul class="menu-panel__menu">
+          <li class="menu-panel__menu-item" data-language="es">Español</li>
+          <li class="menu-panel__menu-item" data-language="fr">Français</li>
+          <li class="menu-panel__menu-item" data-language="en">English</li>
+        </ul>
+      </div>
+    </div>
+    <div id="menu-base" class="menu-panel">
+      <h2 class="menu-panel__title">Mapa Base</h2>
+      <div class="menu-panel__contenido">
+        <ul class="menu-panel__menu">
+          <li class="menu-panel__menu-item" data-basemap="topo">Basic</li>
+          <li class="menu-panel__menu-item" data-basemap="streets">Street</li>
+          <li class="menu-panel__menu-item" data-basemap="satellite">Satellite</li>
+          <li class="menu-panel__menu-item" data-basemap="gray">Light</li>
+          <li class="menu-panel__menu-item" data-basemap="dark-gray">Dark</li>
+        </ul>
+      </div>
+    </div>
+
   </div>
   <div id="viewDiv"></div>
   <aside class="panel">
