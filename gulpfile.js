@@ -3,33 +3,43 @@
 const { src, dest, parallel, watch } = require('gulp');
 const sass = require('gulp-sass');
 const concat = require('gulp-concat');
+const uglify = require('gulp-uglify-es').default;
 
 sass.compiler = require('node-sass');
 
 function compileJs(cb) {
-  return src(['lib/*.js'])
-    .pipe(concat('bundle.js'))
+  return src(['src/lib/*.js', 'src/visor.js'])
+    .pipe(concat('visor.min.js')) 
+    //.pipe(uglify())
     .pipe(dest('dist/js/'));
 }
 
+function compileJSLanding(cb) {
+  return src('src/index.js')
+        .pipe(dest('dist/js/'));
+}
+
 function copyHTML(cb) {
-  return src('*.html').pipe(dest('dist/'));
+  return src('src/*.html').pipe(dest('dist/'));
 }
 
 function copyAssets(cb) {
-  return src('assets/img/*').pipe(dest('dist/img'))
+  return src('src/assets/img/*').pipe(dest('dist/img'))
 }
 
 function compileSass(cb) {
-  return src('scss/main.scss')
+  return src(['src/scss/pages/index.scss', 'src/scss/pages/visor.scss'])
     .pipe(sass().on('error', sass.logError))
-    .pipe(dest('dist/css'));
+    .pipe(dest('dist/css/'));
 }
 
 exports.default = parallel(compileJs, compileSass, copyAssets, copyHTML);
 
+exports.compileJSLanding = compileJSLanding;
+
 exports.dev = function() {
-  watch('scss/**/*.scss', compileSass);
-  watch('lib/**/*.js', compileJs);
-  watch('*.html', copyHTML);
+  watch('src/scss/**/*.scss', compileSass);
+  watch('src/lib/**/*.js', compileJs);
+  watch('src/index.js', compileJSLanding);
+  watch('src/*.html', copyHTML);
 }

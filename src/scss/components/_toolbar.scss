@@ -3,7 +3,7 @@
   box-shadow: 5px 0 10px rgba($black, .4);
   left: 0;
   position: absolute;
-  top: 0;
+  top: 8rem;
   z-index: $index-toolbar;
   
   &__menu {
@@ -18,15 +18,6 @@
     padding: .8rem;
     position: relative;
 
-    &::after {
-      background-color: $dark-green;
-      content: "";
-      height: 1px;
-      left: 8px;
-      position: absolute;
-      top: -2px;
-      width: 70%;
-    }
 
     &:hover {
       background-color: $light-green-hover;

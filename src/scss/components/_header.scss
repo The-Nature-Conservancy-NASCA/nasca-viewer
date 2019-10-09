@@ -1,0 +1,9 @@
+.header {
+  background-color: $white;
+  box-shadow: 0 0 8px rgba($black, 0.4);
+  height: 8rem;
+  padding: 1rem 3rem;
+  position: fixed;
+  width: 100vw;
+  z-index: $index-header;
+}

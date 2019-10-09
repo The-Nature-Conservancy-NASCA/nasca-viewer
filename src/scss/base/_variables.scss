@@ -1,17 +1,23 @@
 // Colores
 $black: #000;
 $white: #fff;
+$light-gray: #dedede;
+$dark-gray: #666;
+$font-dark: #333;
+
 $light-green: #49aa42;
 $light-green-hover: #6ab864;
 $dark-green: #104d0c;
 $menu-green: #388e32;
+$agroforesteria-green: #a0bf4d;
  
-$theme-agroforestal: #a0bf4d;
+$theme-tierras: #49aa42;
 $theme-agua: #0097d1;
 $theme-infraestructura: #f88f39;
 
 // Opacidad
-$panel-opacity: .7;
+$panel-opacity: 1;
 
 // Z-index
+$index-header: 11;
 $index-toolbar: 10;

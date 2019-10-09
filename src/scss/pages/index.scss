@@ -1,0 +1,168 @@
+@import "../base/index";
+@import "../utils/index";
+@import "../components/header";
+
+@keyframes card-intro {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.content {
+  position: relative;
+  top: 8rem;
+}
+
+.proyectos {
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 8rem);
+
+  &__card {
+    animation: card-intro 1s forwards;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transform-origin: bottom;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    transition: color, background-color .4s ease;
+    transform: scaleY(0);
+    max-width: 50%;
+
+    &#proyecto-agua {
+      animation-delay: .5s;
+      color: $theme-agua;
+      
+      &:hover {
+        background-color: $theme-agua;
+        color: $white;
+
+        .proyectos__icon {
+          fill: $white;
+        }
+      }
+
+    }
+
+    &#proyecto-tierras {
+      animation-delay: 1s;
+      color: $theme-tierras;
+
+      &:hover {
+        background-color: $theme-tierras;
+        color: $white;
+
+        .proyectos__icon {
+          fill: $white;
+        }
+      }
+    }
+
+    &#proyecto-infraestructura {
+      animation-delay: 1.5s;
+      color: $theme-infraestructura;
+
+      &:hover {
+        background-color: $theme-infraestructura;
+        color: $white;
+
+        .proyectos__icon {
+          fill: $white;
+        }
+      }
+    }
+
+  }
+
+  &__icon {
+    width: 65%;
+    margin-bottom: 5rem;
+  }
+
+  &__title {
+    border-bottom: .6rem solid currentColor;
+    font-size: 4.5rem;
+    padding-bottom: 1.6rem;
+    margin-bottom: 2.6rem;
+    width: calc(100% - 6rem);
+    margin: auto;
+  }
+
+  &__description {
+    padding: 3rem;
+  }
+}
+
+.subproyectos {
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 8rem);
+
+  &__card {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    transform-origin: bottom;
+    justify-content: center;
+    transition: color, background-color .4s ease;
+
+    &#subproyecto-ganaderia {
+      color: $theme-tierras;
+
+      &:hover {
+        background-color: $theme-tierras;
+        color: $white;
+
+        .subproyectos__icon {
+          fill: $white;
+        }
+      }
+    }
+
+    &#subproyecto-agroforesteria {
+      color: $agroforesteria-green;
+
+      &:hover {
+        background-color: $agroforesteria-green;
+        color: $white;
+
+        .subproyectos__icon {
+          fill: $white;
+        }
+      }
+    }
+  }
+
+  &__icon {
+    width: 65%;
+    margin-bottom: 5rem;
+  }
+
+  &__title {
+    border-bottom: .6rem solid currentColor;
+    font-size: 4.5rem;
+    font-weight: 100;
+    padding-bottom: 1.6rem;
+    margin-bottom: 2.6rem;
+    width: calc(100% - 6rem);
+    margin: auto;
+
+    
+    span.bolder {
+      font-weight: 700;
+    }
+  }
+
+  &__description {
+    padding: 3rem;
+  }
+
+}

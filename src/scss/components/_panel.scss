@@ -1,0 +1,29 @@
+.panel {
+  align-items: center;
+  background-color: rgba($white, $panel-opacity);
+  color: $light-green;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 4rem 3rem;
+  position: fixed;
+  right: 0;
+  top: 8rem;
+  width: 25vw;
+
+  &__header {
+    align-items: center;
+    display: flex;
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 4rem;
+      font-weight: lighter;
+      padding-left: 1.5rem;
+    }
+  }
+
+  &__description {
+    margin-bottom: 1.5rem;
+  }
+}

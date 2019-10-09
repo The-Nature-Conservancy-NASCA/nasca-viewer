@@ -13,6 +13,13 @@ body {
   font-size: 1.6rem;
 }
 
+a,
+a:visited,
+a:link,
+a:focus {
+  text-decoration: none;
+}
+
 ul,
 li {
   list-style: none;
