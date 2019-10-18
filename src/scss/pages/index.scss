@@ -16,10 +16,11 @@
   top: 8rem;
 }
 
-.proyectos {
+.estrategias {
   display: flex;
   justify-content: center;
   height: calc(100vh - 8rem);
+  transition: margin-top .2s ease;
 
   &__card {
     animation: card-intro 1s forwards;
@@ -35,7 +36,7 @@
     transform: scaleY(0);
     max-width: 50%;
 
-    &#proyecto-agua {
+    &[data-estrategia=agua] {
       animation-delay: .5s;
       color: $theme-agua;
       
@@ -43,14 +44,14 @@
         background-color: $theme-agua;
         color: $white;
 
-        .proyectos__icon {
+        .estrategias__icon {
           fill: $white;
         }
       }
 
     }
 
-    &#proyecto-tierras {
+    &[data-estrategia=tierras] {
       animation-delay: 1s;
       color: $theme-tierras;
 
@@ -58,13 +59,13 @@
         background-color: $theme-tierras;
         color: $white;
 
-        .proyectos__icon {
+        .estrategias__icon {
           fill: $white;
         }
       }
     }
 
-    &#proyecto-infraestructura {
+    &[data-estrategia=infraestructura] {
       animation-delay: 1.5s;
       color: $theme-infraestructura;
 
@@ -72,7 +73,7 @@
         background-color: $theme-infraestructura;
         color: $white;
 
-        .proyectos__icon {
+        .estrategias__icon {
           fill: $white;
         }
       }
@@ -97,9 +98,14 @@
   &__description {
     padding: 3rem;
   }
+
+  &.collapsed {
+    margin-top: calc(-100vh + 8rem);
+    //height: 0;
+  }
 }
 
-.subproyectos {
+.proyectos {
   display: flex;
   justify-content: center;
   height: calc(100vh - 8rem);
@@ -114,27 +120,27 @@
     justify-content: center;
     transition: color, background-color .4s ease;
 
-    &#subproyecto-ganaderia {
+    &#ganaderia {
       color: $theme-tierras;
 
       &:hover {
         background-color: $theme-tierras;
         color: $white;
 
-        .subproyectos__icon {
+        .proyectos__icon {
           fill: $white;
         }
       }
     }
 
-    &#subproyecto-agroforesteria {
+    &#agroforesteria {
       color: $agroforesteria-green;
 
       &:hover {
         background-color: $agroforesteria-green;
         color: $white;
 
-        .subproyectos__icon {
+        .proyectos__icon {
           fill: $white;
         }
       }
@@ -163,6 +169,10 @@
 
   &__description {
     padding: 3rem;
+  }
+
+  &.hidden {
+    display: none;
   }
 
 }

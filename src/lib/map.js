@@ -2,8 +2,11 @@ class TNCMap {
 
   constructor(container) {
     
-    require(['esri/Map', 'esri/views/MapView'], function (Map, MapView) {
-      window.tnc_map = new Map({
+    require(['esri/WebMap', 'esri/views/MapView'], function (WebMap, MapView) {
+      window.tnc_map = new WebMap({
+        portalItem: {
+          id: "d4f6dbcfa8d341c39156c9c73e0576f1"
+        },  
         basemap: 'satellite',
         slider: false
       });
