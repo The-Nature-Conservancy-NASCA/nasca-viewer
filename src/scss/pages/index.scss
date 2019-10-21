@@ -14,6 +14,21 @@
 .content {
   position: relative;
   top: 8rem;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.loader {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+
+  &.hidden {
+    display: none;
+  }
 }
 
 .estrategias {
@@ -23,59 +38,27 @@
   transition: margin-top .2s ease;
 
   &__card {
-    animation: card-intro 1s forwards;
+    @include animationDelay;
     align-items: center;
+    animation: card-intro 1s forwards;
     cursor: pointer;
     display: flex;
+    flex-basis: 100%;
     flex-direction: column;
-    transform-origin: bottom;
     justify-content: center;
+    max-width: 50%;
     overflow: hidden;
     position: relative;
-    transition: color, background-color .4s ease;
+    transform-origin: bottom;
     transform: scaleY(0);
-    max-width: 50%;
+    transition: color, background-color .4s ease;
 
-    &[data-estrategia=agua] {
-      animation-delay: .5s;
-      color: $theme-agua;
+    &:hover {
+      color: $white;
+      background-color: #000;
       
-      &:hover {
-        background-color: $theme-agua;
-        color: $white;
-
-        .estrategias__icon {
-          fill: $white;
-        }
-      }
-
-    }
-
-    &[data-estrategia=tierras] {
-      animation-delay: 1s;
-      color: $theme-tierras;
-
-      &:hover {
-        background-color: $theme-tierras;
-        color: $white;
-
-        .estrategias__icon {
-          fill: $white;
-        }
-      }
-    }
-
-    &[data-estrategia=infraestructura] {
-      animation-delay: 1.5s;
-      color: $theme-infraestructura;
-
-      &:hover {
-        background-color: $theme-infraestructura;
-        color: $white;
-
-        .estrategias__icon {
-          fill: $white;
-        }
+      .estrategias__icon {
+        fill: $white;
       }
     }
 
@@ -114,35 +97,19 @@
     align-items: center;
     cursor: pointer;
     display: flex;
+    flex-basis: 100%;
     flex-direction: column;
     max-width: 50%;
     transform-origin: bottom;
     justify-content: center;
     transition: color, background-color .4s ease;
 
-    &#ganaderia {
-      color: $theme-tierras;
-
-      &:hover {
-        background-color: $theme-tierras;
-        color: $white;
-
-        .proyectos__icon {
-          fill: $white;
-        }
-      }
-    }
-
-    &#agroforesteria {
-      color: $agroforesteria-green;
-
-      &:hover {
-        background-color: $agroforesteria-green;
-        color: $white;
-
-        .proyectos__icon {
-          fill: $white;
-        }
+    &:hover {
+      color: $white;
+      background-color: #000;
+      
+      .estrategproyectos__iconias__icon {
+        fill: $white;
       }
     }
   }

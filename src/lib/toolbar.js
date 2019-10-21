@@ -15,11 +15,11 @@ const events = {
 class ToolBar {
 
   constructor() {
-    this.menuItems = document.querySelectorAll(selectors.TOOLBAR_MENU_ITEM)
     this.init();
   }
 
   init() {
+    this.menuItems = document.querySelectorAll(selectors.TOOLBAR_MENU_ITEM);
     this.handleEvents();
   }
 
@@ -28,11 +28,10 @@ class ToolBar {
       menuItem.addEventListener(events.CLICK, this.toggleToolbarMenu.bind(this))
     })
 
-
     // Seleccionar nuevo basemap
     document.querySelectorAll(selectors.BASEMAP_SELECTORS).forEach(item => {
       item.addEventListener(events.CLICK, basemapItem => {
-        const basemap = basemapItem.target.dataset.basemap
+        const basemap = basemapItem.currentTarget.dataset.basemap
         window.tnc_map.basemap = basemap
       })
     })

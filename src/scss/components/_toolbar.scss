@@ -57,22 +57,41 @@
 
   &__menu {
     color: $white;
-    width: 20rem;
+    width: 30rem;
+    
+    &--grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
   }
 
   &__menu-item {
     border-bottom: 1px solid $white;
     cursor: pointer;
     padding: 1.5rem 0;
+    
+    &--vertical {
+      align-items: center;
+      border-bottom: none;
+      display: flex;
+      flex-direction: column;
+      flex-basis: 28%;
+    }
 
     &:last-child {
       border-bottom: none;
       margin-bottom: 2rem;
     }
+
+    img {
+      box-shadow: 4px 4px 5px rgba($black, .4);
+      margin-bottom: 5px;
+    }
   }
 
   &--expanded {
-    width: 25rem;
+    width: 34rem;
   }
 }
 

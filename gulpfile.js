@@ -24,7 +24,7 @@ function copyHTML(cb) {
 }
 
 function copyAssets(cb) {
-  return src('src/assets/img/*').pipe(dest('dist/img'))
+  return src('src/assets/img/**/*').pipe(dest('dist/img'))
 }
 
 function compileSass(cb) {
