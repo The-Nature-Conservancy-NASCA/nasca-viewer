@@ -1,6 +1,6 @@
-const SERVICIO = 'https://citydata.init.uji.es/server/rest/services/TNC/TNCServices/MapServer';
-const urlEstrategias = SERVICIO + '/2/query';
-const urlProyectos = SERVICIO + '/3/query'
+const SERVICIO = 'https://citydata.init.uji.es/server/rest/services/TNC/tncGDBV1/MapServer/';
+const urlEstrategias = SERVICIO + '/11/query';
+const urlProyectos = SERVICIO + '/17/query'
 
 class Landing {
   
@@ -9,13 +9,22 @@ class Landing {
   }
   
   registerHandlers() {
-    const elementosEstrategias = document.querySelectorAll('.estrategias__card');
-    elementosEstrategias.forEach(estrategia => {
-      estrategia.addEventListener('click', event => {
-        const selectedId = event.currentTarget.dataset.estrategia;
-        document.querySelector('.estrategias').classList.add('collapsed');
-        this.showProyectos(selectedId);
+    const landingCards = document.querySelectorAll('.card');
+    landingCards.forEach(card => {
+      card.addEventListener('mouseover', event => {
+        event.currentTarget.classList.add('hover');
       });
+      card.addEventListener('mouseleave', event => {
+        event.currentTarget.classList.remove('hover');
+      });
+
+      if(card.classList.contains('estrategia')) {
+        card.addEventListener('click', event => {
+          const selectedId = event.currentTarget.dataset.estrategia;
+          document.querySelector('.estrategias').classList.add('collapsed');
+          this.showProyectos(selectedId);
+        });
+      }
     });
   }
   
@@ -72,10 +81,10 @@ class Landing {
     if (proyectosResponse.data && proyectosResponse.data.features) {
       const { features } = proyectosResponse.data;
       Array.from(features, f => f.attributes).forEach(proyecto => {
-        if (!proyectos[proyecto.ID_estrategia]) {
-          proyectos[proyecto.ID_estrategia] = new Array();
+        if (!proyectos[proyecto.id_estrategia]) {
+          proyectos[proyecto.id_estrategia] = new Array();
         }
-        proyectos[proyecto.ID_estrategia].push(proyecto);
+        proyectos[proyecto.id_estrategia].push(proyecto);
       });
     }
 
@@ -103,12 +112,19 @@ class Landing {
   
   hidrateCard(options) {
     return `
-      <section class="${options.nivel}__card" 
-        ${options.ID_proyecto ? '':
-        'data-estrategia="estrategia_' + options.ID_estrategia + '"'}>
-      <div class="${options.nivel}__text">
-        <h2 class="${options.nivel}__title">${options.nombre_estrategia}</h2>
-        <p class="${options.nivel}__description">${options.descripcion}</p>
+      <section class="card ${options.id_proyecto ? 'proyecto' : 'estrategia'}" 
+        ${options.id_proyecto ? '':
+        'data-estrategia="estrategia_' + options.id_estrategia + '"'}
+        style="background-color: ${options.color};">
+      <div class="card-background">
+        <div class="card-overlay"></div>
+        <img src="${options.fondo}" >
+      </div>
+      <div class="card__text">
+        <h2 class="card__title"
+          style="border-bottom: .6rem solid ${options.color};"
+        >${options.nombre}</h2>
+        <p class="card__description">${options.descripcion}</p>
       </div>
       </section>
     `;
