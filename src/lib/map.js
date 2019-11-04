@@ -1,12 +1,12 @@
 class TNCMap {
 
   constructor(container) {
-    
-    require(['esri/WebMap', 'esri/views/MapView', "esri/Map", "esri/layers/FeatureLayer"], function (WebMap, MapView, Map, FeatureLayer) {
+
+    require(['esri/WebMap', 'esri/views/MapView', 'esri/request', 'esri/layers/FeatureLayer'], function (WebMap, MapView, esriRequest, FeatureLayer) {
       window.tnc_map = new WebMap({
         portalItem: {
           id: "8555040c97e94a08ac159cda460f5020"
-        },  
+        },
         basemap: 'satellite',
         slider: false
       });
@@ -17,7 +17,30 @@ class TNCMap {
         center: [-73.5, 4.5],
         zoom: 6
       });
-    
+
+      window.tnc_map.when(() => {
+        window.tnc_map.layers.forEach(layer => {
+          if (layer.layerId !== 1) {
+            layer.visible = false;
+          } else {
+            const queryOptions = {
+              query: {
+                f: 'json',
+                where: 'ID_proyecto=01AB',
+                outFields: '*',
+                returnGeometry: false
+              },
+              responseType: 'json'
+            };
+
+            esriRequest(layer.url + '/' + layer.layerId, queryOptions).then(response => {
+              debugger
+              console.log(response.data)
+            });
+          }
+        })
+      });
+
       view.ui.remove('zoom');
 
       view.on("click", getPredioId);
@@ -32,7 +55,7 @@ class TNCMap {
 
       const treeMap = new TreeMap("#graph__coberturas");
 
-      function getPredioId (evt) {
+      function getPredioId(evt) {
         view.hitTest(evt).then((response) => {
           console.log(response);
           const predioId = response.results[0].graphic.attributes["ID_predio"];
@@ -43,7 +66,6 @@ class TNCMap {
           //   });
         });
       };
-    })
-
+    });
   }
 }
