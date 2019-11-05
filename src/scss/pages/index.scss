@@ -138,3 +138,21 @@
   }
 
 }
+
+.cta-back {
+  bottom: 2rem;
+  cursor: pointer;
+  left: 3rem;
+  position: absolute;
+  transform: rotateZ(180deg) scaleY(0.75);
+  transition: transform .3s ease;
+  z-index: 5;
+
+  &:hover {
+    transform: rotateZ(180deg) scaleY(0.75) translateY(5px);
+  }
+
+  &.hidden {
+    display: none;
+  }
+}

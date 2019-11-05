@@ -3,7 +3,7 @@
   box-shadow: 5px 0 10px rgba($black, .4);
   left: 0;
   position: absolute;
-  top: 8rem;
+  top: $alto-header;
   z-index: $index-toolbar;
   
   &__menu {

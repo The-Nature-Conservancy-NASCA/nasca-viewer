@@ -21,14 +21,32 @@ class Landing {
       if(card.classList.contains('estrategia')) {
         card.addEventListener('click', event => {
           const selectedId = event.currentTarget.dataset.estrategia;
-          document.querySelector('.estrategias').classList.add('collapsed');
           this.showProyectos(selectedId);
+          document.querySelector('.estrategias').classList.add('collapsed');
         });
       }
+    });
+
+    document.querySelectorAll('.proyecto.card').forEach(el => {
+      el.addEventListener('click', event => {
+        const { currentTarget } = event;
+        const proyectoId = currentTarget.dataset.proyecto;
+        sessionStorage.setItem('proyecto', proyectoId);
+        window.location = '/visor.html'
+      });
+    });
+
+    document.querySelector('.cta-back').addEventListener('click', event => {
+      document.querySelector('.estrategias').classList.remove('collapsed');
+      document.querySelector('.cta-back').classList.add('hidden');
     });
   }
   
   showProyectos(estrategiaId) {
+    document.querySelector('.cta-back').classList.remove('hidden');
+    document.querySelectorAll('.proyectos').forEach(el => {
+      el.classList.add('hidden');
+    })
     const proyecto = document.querySelector(`.proyectos#${estrategiaId}`);
     proyecto.classList.remove('hidden');
   }
@@ -113,7 +131,7 @@ class Landing {
   hidrateCard(options) {
     return `
       <section class="card ${options.id_proyecto ? 'proyecto' : 'estrategia'}" 
-        ${options.id_proyecto ? '':
+        ${options.id_proyecto ? 'data-proyecto="' + options.id_proyecto + '"' :
         'data-estrategia="estrategia_' + options.id_estrategia + '"'}
         style="background-color: ${options.color};">
       <div class="card-background">
