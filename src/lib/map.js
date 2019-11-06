@@ -2,7 +2,7 @@ class TNCMap {
 
   constructor(container) {
 
-    require(['esri/WebMap', 'esri/views/MapView', 'esri/request', 'esri/layers/FeatureLayer'], function (WebMap, MapView, esriRequest, FeatureLayer) {
+    require(['esri/WebMap', 'esri/views/MapView', 'esri/layers/FeatureLayer'], (WebMap, MapView, FeatureLayer) => {
       window.tnc_map = new WebMap({
         portalItem: {
           id: "8555040c97e94a08ac159cda460f5020"
@@ -18,25 +18,12 @@ class TNCMap {
         zoom: 6
       });
 
+      
       window.tnc_map.when(() => {
-        window.tnc_map.layers.items[2].outFields = ["*"];
+ const definition = this.createDefinitionExpression();
         window.tnc_map.layers.forEach(layer => {
-          if (layer.layerId !== 1) {
-            layer.visible = false;
-          } else {
-            const queryOptions = {
-              query: {
-                f: 'json',
-                where: 'ID_proyecto=01AB',
-                outFields: '*',
-                returnGeometry: false
-              },
-              responseType: 'json'
-            };
-
-            esriRequest(layer.url + '/' + layer.layerId, queryOptions).then(response => {
-              console.log(response.data)
-            });
+          if (definition && layer.title === 'Predios') {
+            layer.definitionExpression = definition;
           }
         });
         view.on("click", getPredioId);
@@ -67,5 +54,17 @@ class TNCMap {
         });
       };
     });
+  }
+
+  createDefinitionExpression() {
+    const estrategia = window.sessionStorage.getItem('estrategia');
+    if (estrategia) {
+      return `ID_estrategia='${estrategia}'`;
+    }
+    const proyecto = window.sessionStorage.getItem('proyecto');
+    if(proyecto) {
+      return `ID_proyecto='${proyecto}'`;
+    }
+    return undefined;
   }
 }

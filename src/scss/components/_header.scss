@@ -1,10 +1,45 @@
 .header {
+  align-items: center;
   background-color: $white;
   box-shadow: 0 0 8px rgba($black, 0.4);
+  display: flex;
   height: $alto-header;
+  justify-content: space-between;
   padding: 1rem 3rem;
   position: fixed;
   top: 0;
   width: 100vw;
   z-index: $index-header;
+}
+
+.navigation {
+  align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+
+  ul {
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  &__item {
+    margin-right: 3rem;
+
+    a {
+      color: $font-gray;
+
+      &:hover,
+      &:visited,
+      &:link {
+        text-decoration: none;
+      }
+    }
+  }
+
+  &__options {
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+  }
 }

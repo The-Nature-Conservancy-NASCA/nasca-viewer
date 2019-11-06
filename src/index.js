@@ -1,6 +1,6 @@
-const SERVICIO = 'https://citydata.init.uji.es/server/rest/services/TNC/tncGDBV1/MapServer/';
-const urlEstrategias = SERVICIO + '/11/query';
-const urlProyectos = SERVICIO + '/17/query'
+const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices2/FeatureServer';
+const urlEstrategias = SERVICIO + '/4/query';
+const urlProyectos = SERVICIO + '/5/query'
 
 class Landing {
   
@@ -99,16 +99,17 @@ class Landing {
     if (proyectosResponse.data && proyectosResponse.data.features) {
       const { features } = proyectosResponse.data;
       Array.from(features, f => f.attributes).forEach(proyecto => {
-        if (!proyectos[proyecto.id_estrategia]) {
-          proyectos[proyecto.id_estrategia] = new Array();
+        if (!proyectos[proyecto.ID_estrategia]) {
+          proyectos[proyecto.ID_estrategia] = new Array();
         }
-        proyectos[proyecto.id_estrategia].push(proyecto);
+        proyectos[proyecto.ID_estrategia].push(proyecto);
       });
     }
 
     for (const estrategiaID in proyectos) {
       let divProyecto = document.createElement('div');
       divProyecto.setAttribute('id', `estrategia_${estrategiaID}`);
+      divProyecto.setAttribute('style', `background-color: #999;`);
       divProyecto.classList.add('proyectos', 'hidden');
       divProyecto.innerHTML = this.createHTML(proyectos[estrategiaID], 'proyectos');
       document.querySelector('.content').appendChild(divProyecto);
@@ -130,9 +131,9 @@ class Landing {
   
   hidrateCard(options) {
     return `
-      <section class="card ${options.id_proyecto ? 'proyecto' : 'estrategia'}" 
-        ${options.id_proyecto ? 'data-proyecto="' + options.id_proyecto + '"' :
-        'data-estrategia="estrategia_' + options.id_estrategia + '"'}
+      <section class="card ${options.ID_proyecto ? 'proyecto' : 'estrategia'}" 
+        ${options.ID_proyecto ? 'data-proyecto="' + options.ID_proyecto + '"' :
+        'data-estrategia="estrategia_' + options.ID_estrategia + '"'}
         style="background-color: ${options.color};">
       <div class="card-background">
         <div class="card-overlay"></div>
