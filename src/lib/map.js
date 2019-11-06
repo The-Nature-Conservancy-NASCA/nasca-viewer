@@ -19,6 +19,7 @@ class TNCMap {
       });
 
       window.tnc_map.when(() => {
+        window.tnc_map.layers.items[2].outFields = ["*"];
         window.tnc_map.layers.forEach(layer => {
           if (layer.layerId !== 1) {
             layer.visible = false;
@@ -34,16 +35,16 @@ class TNCMap {
             };
 
             esriRequest(layer.url + '/' + layer.layerId, queryOptions).then(response => {
-              debugger
               console.log(response.data)
             });
           }
-        })
+        });
+        view.on("click", getPredioId);
       });
 
-      view.ui.remove('zoom');
 
-      view.on("click", getPredioId);
+
+      view.ui.remove('zoom');
 
       const coberturasLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices2/FeatureServer/3"
@@ -57,13 +58,12 @@ class TNCMap {
 
       function getPredioId(evt) {
         view.hitTest(evt).then((response) => {
-          console.log(response);
           const predioId = response.results[0].graphic.attributes["ID_predio"];
-          // query.where = `ID_predio = '${predioId}'`;
-          // coberturasLayer.queryFeatures(query)
-          //   .then((r) => {
-          //     treeMap.renderGraphic(r.features);
-          //   });
+          query.where = `ID_predio = '${predioId}'`;
+          coberturasLayer.queryFeatures(query)
+            .then((r) => {
+              treeMap.renderGraphic(r.features);
+            });
         });
       };
     });

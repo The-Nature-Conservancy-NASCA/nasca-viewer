@@ -3,11 +3,11 @@ class TreeMap {
   constructor (el) {
     const margin = {top: 10, right: 10, bottom: 10, left: 10};
     this.width = 300 - margin.left - margin.right;
-    this.height = 300 - margin.top - margin.bottom;
+    this.height = 400 - margin.top - margin.bottom;
 
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    this.svg = d3.select(el)
+    this.g = d3.select(el)
                   .append("svg")
                     .attr("width", this.width + margin.left + margin.right)
                     .attr("height", this.height + margin.top + margin.bottom)
@@ -59,23 +59,29 @@ class TreeMap {
     // create treemap layout
     d3.treemap()
       .size([this.width, this.height])
-      .padding(3)
-      // .round(true)
+      .padding(1)
+      .round(true)
       (root);
 
+    // remove all existing rectangles  
+    this.g.selectAll("rect")
+          .remove();
+
     // add rectangles
-    this.svg.selectAll("rect")
+    this.g.selectAll("rect")
           .data(root.leaves())
           .enter()
           .append("rect")
-            .attr('x', d => d.x0)
-            .attr('y', d => d.y0)
+            .attr("x", d => d.x0)
+            .attr("y", d => d.y0)
+            .attr("fill-opacity", 0.6)
+            .style("fill", d => this.color(d.parent.data.name))
+            .transition()
+            .duration(750)
             .attr('width', d => d.x1 - d.x0)
-            .attr('height', d => d.y1 - d.y0)
-            // .attr("fill-opacity", 0.6)
-            .style("fill", d => this.color(d.parent.data.name));
+            .attr('height', d => d.y1 - d.y0);
       
-    // this.svg.selectAll("text")
+    // this.g.selectAll("text")
     //       .data(root.leaves())
     //       .enter()
     //       .append("text")
