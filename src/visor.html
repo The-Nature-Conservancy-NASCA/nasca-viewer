@@ -24,23 +24,27 @@
 <body>
   <header class="header">
     <img class="header__logo" src="img/tnc-logo.svg" alt="Logo TNC" width="150">
+    <nav class="navigation">
+      <div class="navigation__menu">
+        <ul>
+          <li class="navigation__item"><a href="#">Inicio</a></li>
+          <li class="navigation__item"><a href="#">Ver todo</a></li>
+          <li class="navigation__item"><a href="#">Estrategia</a></li>
+          <li class="navigation__item"><a href="#">Proyectos</a></li>
+        </ul>
+      </div>
+      <div class="navigation__options">
+        <img src="img/icon-info.png" class="toolbar__menu-icon">
+      </div>
+    </nav>
   </header>
   <div class="toolbar">
     <ul class="toolbar__menu">
-      <li class="toolbar__menu-item" data-menu="menu-home">
-        <img src="img/icon-home.png" class="toolbar__menu-icon">
-      </li>
       <li class="toolbar__menu-item" data-menu="menu-capas">
         <img src="img/icon-capas.png" class="toolbar__menu-icon">
       </li>
       <li class="toolbar__menu-item" id="menu-buscar">
         <img src="img/icon-buscar.png" class="toolbar__menu-icon">
-      </li>
-      <li class="toolbar__menu-item" data-menu="menu-info">
-        <img src="img/icon-info.png" class="toolbar__menu-icon">
-      </li>
-      <li class="toolbar__menu-item" data-menu="menu-idioma">
-        <img src="img/icon-idioma.png" class="toolbar__menu-icon">
       </li>
       <li class="toolbar__menu-item" data-menu="menu-base">
         <img src="img/icon-confi.png" class="toolbar__menu-icon">
@@ -187,7 +191,7 @@
           </tbody>
         </table>
       </div> -->
-      <!-- <div class="resultados__carousel">
+      <div class="resultados__carousel">
         <div class="carousel">
           <ul class="carousel__list" data-target="carousel">
             <li class="carousel__card" data-target="card">
@@ -205,8 +209,8 @@
             </button>
           </div>
         </div>
-      </div> -->
-      <!-- <a href="#" class="resultados__enlace">Ver más</a> -->
+      </div>
+      <a href="#" class="resultados__enlace">Ver más</a>
     </section>
   </aside>
   <script src="js/visor.min.js"></script>
