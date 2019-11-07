@@ -20,7 +20,8 @@ class TNCMap {
 
       
       window.tnc_map.when(() => {
- const definition = this.createDefinitionExpression();
+        window.tnc_map.layers.items[2].outFields = ["*"];
+        const definition = this.createDefinitionExpression();
         window.tnc_map.layers.forEach(layer => {
           if (definition && layer.title === 'Predios') {
             layer.definitionExpression = definition;

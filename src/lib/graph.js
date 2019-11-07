@@ -3,12 +3,13 @@ class TreeMap {
   constructor (el) {
     const margin = {top: 10, right: 10, bottom: 10, left: 10};
     this.width = 300 - margin.left - margin.right;
-    this.height = 400 - margin.top - margin.bottom;
+    this.height = 300 - margin.top - margin.bottom;
 
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
 
     this.g = d3.select(el)
                   .append("svg")
+                    .attr("class", "treemap")
                     .attr("width", this.width + margin.left + margin.right)
                     .attr("height", this.height + margin.top + margin.bottom)
                   .append("g")
@@ -67,15 +68,26 @@ class TreeMap {
     this.g.selectAll("rect")
           .remove();
 
+    const that = this;
+
     // add rectangles
     this.g.selectAll("rect")
           .data(root.leaves())
           .enter()
           .append("rect")
+            .on("mouseover", function (d) {
+              console.log(d.parent.data.name);
+              d3.select(this)
+                .attr("stroke", that.color(d.parent.data.name))
+            })
+            .on("mouseout", function (d) {
+              d3.select(this)
+                .attr("stroke", "none")
+            })
             .attr("x", d => d.x0)
             .attr("y", d => d.y0)
             .attr("fill-opacity", 0.6)
-            .style("fill", d => this.color(d.parent.data.name))
+            .attr("fill", d => this.color(d.parent.data.name))
             .transition()
             .duration(750)
             .attr('width', d => d.x1 - d.x0)
