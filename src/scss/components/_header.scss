@@ -12,6 +12,14 @@
   z-index: $index-header;
 }
 
+@mixin dark-hover {
+  transition: color .3s;
+
+  &:hover {
+    color: $font-dark;
+  }
+}
+
 .navigation {
   align-items: center;
   display: flex;
@@ -25,8 +33,9 @@
 
   &__item {
     margin-right: 3rem;
-
+    
     a {
+      @include dark-hover;
       color: $font-gray;
 
       &:hover,
@@ -41,5 +50,33 @@
     align-items: center;
     display: flex;
     justify-content: space-evenly;
+  }
+
+  .divider {
+    background-color: $font-gray;
+    height: 3rem;
+    margin-right: 3rem;
+    width: 2px;
+  }
+}
+
+.options {
+  &__icon {
+    @include dark-hover;
+    cursor: pointer;
+    font-size: 2rem;
+    color: $font-gray;
+    margin-right: 1.5rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__language {
+    @include dark-hover;
+    color: $font-gray;
+    cursor: pointer;
+    margin-right: 1.5rem;
   }
 }

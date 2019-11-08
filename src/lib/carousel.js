@@ -1,5 +1,9 @@
 class Carousel {
-  constructor () {
+
+  constructor (el) {
+    this._el = document.getElementById(el);
+    this.renderHTML();
+
     this.carousel = document.querySelector("[data-target='carousel']")
     this.card = this.carousel.querySelector("[data-target='card']")
     this.leftButton = document.querySelector("[data-action='slideLeft']")
@@ -34,5 +38,29 @@ class Carousel {
         this.carousel.style.transform = `translateX(${offset}px)`
       }
     })
+  }
+
+  renderHTML() {
+    const template = `
+      <div class="carousel">
+      <ul class="carousel__list" data-target="carousel">
+        <li class="carousel__card" data-target="card">
+          <img class="carousel__image" src="img/murcielago1.jpg" alt="">
+          <p class="carousel__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        </li>
+        <li class="carousel__card" data-target="card">
+          <img class="carousel__image" src="img/murcielago1.jpg" alt="">
+          <p class="carousel__text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        </li>
+      </ul>
+      <div class="carousel__buttons">
+        <img class="carousel__button" src="img/keyboard_arrow_left.png" data-action="slideLeft">
+        <img class="carousel__button" src="img/keyboard_arrow_right.png" data-action="slideRight">
+        </button>
+      </div>
+    </div>
+    `;
+
+    this._el.innerHTML = template;
   }
 }

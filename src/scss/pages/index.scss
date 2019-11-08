@@ -89,6 +89,8 @@
 
   img {
     height: $alto-contenido;
+    object-fit: cover;
+    width: 200%;
   }
 }
 
@@ -154,5 +156,19 @@
 
   &.hidden {
     display: none;
+  }
+}
+
+.cta-forward {
+  bottom: 2rem;
+  cursor: pointer;
+  right: 3rem;
+  position: absolute;
+  transform: scaleY(0.75);
+  transition: transform .3s ease;
+  z-index: 5;
+
+  &:hover {
+    transform: scaleY(0.75) translateY(-5px);
   }
 }
