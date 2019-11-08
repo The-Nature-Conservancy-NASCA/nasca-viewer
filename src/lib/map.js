@@ -20,16 +20,15 @@ class TNCMap {
 
       
       window.tnc_map.when(() => {
- const definition = this.createDefinitionExpression();
-        window.tnc_map.layers.forEach(layer => {
-          if (definition && layer.title === 'Predios') {
-            layer.definitionExpression = definition;
-          }
-        });
+        const definition = this.createDefinitionExpression();
+        const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
+
+        if(definition) {
+          layer.definitionExpression = definition;
+        }
+          
         view.on("click", getPredioId);
       });
-
-
 
       view.ui.remove('zoom');
 
@@ -45,6 +44,7 @@ class TNCMap {
 
       function getPredioId(evt) {
         view.hitTest(evt).then((response) => {
+          document.querySelector('.panel').classList.add('panel--visible');
           const predioId = response.results[0].graphic.attributes["ID_predio"];
           query.where = `ID_predio = '${predioId}'`;
           coberturasLayer.queryFeatures(query)

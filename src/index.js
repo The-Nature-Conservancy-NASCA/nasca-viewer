@@ -10,6 +10,7 @@ class Landing {
   
   registerHandlers() {
     const landingCards = document.querySelectorAll('.card');
+    this._proyectos = document.querySelectorAll('.proyectos');
     landingCards.forEach(card => {
       card.addEventListener('mouseover', event => {
         event.currentTarget.classList.add('hover');
@@ -20,8 +21,8 @@ class Landing {
 
       if(card.classList.contains('estrategia')) {
         card.addEventListener('click', event => {
-          const selectedId = event.currentTarget.dataset.estrategia;
-          this.showProyectos(selectedId);
+          this.selectedEstrategia = event.currentTarget.dataset.estrategia;
+          this.showProyectos();
           document.querySelector('.estrategias').classList.add('collapsed');
         });
       }
@@ -31,7 +32,8 @@ class Landing {
       el.addEventListener('click', event => {
         const { currentTarget } = event;
         const proyectoId = currentTarget.dataset.proyecto;
-        sessionStorage.setItem('proyecto', proyectoId);
+        window.sessionStorage.clear();
+        window.sessionStorage.setItem('proyecto', proyectoId);
         window.location = '/visor.html'
       });
     });
@@ -39,16 +41,34 @@ class Landing {
     document.querySelector('.cta-back').addEventListener('click', event => {
       document.querySelector('.estrategias').classList.remove('collapsed');
       document.querySelector('.cta-back').classList.add('hidden');
+      this.hideProyectos();
+    });
+
+    document.querySelector('.cta-forward').addEventListener('click', event => {
+      if(this.estrategiaVisible()) {
+        window.sessionStorage.clear();
+      } else {
+        window.sessionStorage.clear();
+        window.sessionStorage.setItem('estrategia', this.selectedEstrategia);
+      }
     });
   }
+
+  estrategiaVisible() {
+    return !document.querySelector('.estrategias').classList.contains('collapsed');
+  }
   
-  showProyectos(estrategiaId) {
+  showProyectos() {
     document.querySelector('.cta-back').classList.remove('hidden');
-    document.querySelectorAll('.proyectos').forEach(el => {
-      el.classList.add('hidden');
-    })
-    const proyecto = document.querySelector(`.proyectos#${estrategiaId}`);
+    this.hideProyectos();
+    const proyecto = document.querySelector(`.proyectos#${this.selectedEstrategia}`);
     proyecto.classList.remove('hidden');
+  }
+
+  hideProyectos() {
+    this._proyectos.forEach(el => {
+      el.classList.add('hidden');
+    });
   }
   
   loadLandingData() {
