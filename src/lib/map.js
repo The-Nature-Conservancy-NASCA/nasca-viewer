@@ -73,12 +73,14 @@ class TNCMap {
         });
       }
       
-      this.bioQuery.where = `ID_region = '${region}'`;
-      this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
-        this.showBiodiversidad(results.features);
-      }).catch(error => {
-        console.error(error);
-      });
+      if(region) {
+        this.bioQuery.where = `ID_region = '${region}'`;
+        this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
+          this.showBiodiversidad(results.features);
+        }).catch(error => {
+          console.error(error);
+        });
+      }
     });
   }
 
@@ -87,7 +89,7 @@ class TNCMap {
     const predio = capaPredios ? capaPredios.graphic.attributes['ID_predio'] : undefined;
 
     const capaRegiones = results.find(result => result.graphic.layer.title === 'Regiones');
-    const region = capaRegiones.graphic.attributes['ID_region'];
+    const region = capaRegiones ? capaRegiones.graphic.attributes['ID_region'] : undefined;
     return { predio, region };
   }
 
