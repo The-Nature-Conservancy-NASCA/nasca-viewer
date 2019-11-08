@@ -20,7 +20,7 @@ class TNCMap {
 
       
       window.tnc_map.when(() => {
-        window.tnc_map.layers.items[2].outFields = ["*"];
+        window.tnc_map.layers.items[3].outFields = ["*"];
         const definition = this.createDefinitionExpression();
         const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
 
@@ -39,12 +39,13 @@ class TNCMap {
 
       const query = coberturasLayer.createQuery();
       query.returnGeometry = false;
-      query.outFields = ["ID_predio", "cobertura_actual", "sub_cobertura_actual", "porcentaje_area"];
+      query.outFields = ["ID_predio", "cobertura_actual", "sub_cobertura_actual", "area_ha"];
 
       const treeMap = new TreeMap("#graph__coberturas");
 
       function getPredioId(evt) {
         view.hitTest(evt).then((response) => {
+          console.log(response);
           document.querySelector('.panel').classList.add('panel--visible');
           const predioId = response.results[0].graphic.attributes["ID_predio"];
           query.where = `ID_predio = '${predioId}'`;

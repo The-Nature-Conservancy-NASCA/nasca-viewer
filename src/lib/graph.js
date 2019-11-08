@@ -2,7 +2,7 @@ class TreeMap {
 
   constructor (el) {
     const margin = {top: 10, right: 10, bottom: 10, left: 10};
-    this.width = 300 - margin.left - margin.right;
+    this.width = 400 - margin.left - margin.right;
     this.height = 300 - margin.top - margin.bottom;
     this.legendItemSize = 15;
 
@@ -28,7 +28,7 @@ class TreeMap {
       NAME: "coberturas",
       PARENT_LABEL: "cobertura_actual",
       CHILD_LABEL: "sub_cobertura_actual",
-      VALUE_FIELD: "porcentaje_area"
+      VALUE_FIELD: "area_ha"
     };
   }
 
@@ -112,16 +112,20 @@ class TreeMap {
                                         .filter((name) => name === d.parent.data.name)
                                         .attr("font-weight", "bold");
 
-                        const xPosition = parseFloat(d3.select(this).attr("x")) + (d.x1 - d.x0) / 2;
-                        const yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
-                              
+                        const coordinates = d3.mouse(this);
                         d3.select("#tooltip")
-                          .style("left", `${xPosition}px`)
-                          .style("top", `${yPosition}px`)
+                          .style("left", `${coordinates[0]}px`)
+                          .style("top", `${coordinates[1] + 50}px`)
                           .style("display", "block")
-                          .html("...");
-                          // .html(d.name);
+                          .style("font-size", "11px")
+                          .html(`${d.data.name}: ${Math.round(d.data.value)} ha`);
                                         
+                      })
+                      .on("mousemove", function () {
+                        const coordinates = d3.mouse(this);
+                        d3.select("#tooltip")
+                          .style("left", `${coordinates[0]}px`)
+                          .style("top", `${coordinates[1] + 50}px`);
                       })
                       .on("mouseout", function () {
                         that.treeMapGroup.selectAll("rect")
@@ -150,11 +154,14 @@ class TreeMap {
                       .attr('width', d => d.x1 - d.x0)
                       .attr('height', d => d.y1 - d.y0);
 
+    console.log(d3.map(root.leaves(), d => d.parent.data.name));
+
     // add legend
     this.legendItems = this.legendGroup.selectAll("g")
-                    .data(d3.map(root.leaves(), d => d.parent.data.name).keys())
+                    .data(d3.map(root.leaves(), d => d.parent.data.name).values())
                     .enter()
                     .append("g")
+                    .attr("class", )
                     .on("mouseover", function (name) {
                       that.legendItems.selectAll("rect")
                                       .attr("fill-opacity", 0.3);
@@ -180,7 +187,19 @@ class TreeMap {
                                         .filter(d => d.parent.data.name === name)
                                         .attr("stroke", "black");
                                         
-
+                      const coordinates = d3.mouse(this);
+                      d3.select("#tooltip")
+                        .style("left", `${coordinates[0]}px`)
+                        .style("top", `${coordinates[1] + 350}px`)
+                        .style("display", "block")
+                        .style("font-size", "11px")
+                        .html(`${name}: ${Math.round(0)} ha`);
+                    })
+                    .on("mousemove", function () {
+                      const coordinates = d3.mouse(this);
+                      d3.select("#tooltip")
+                        .style("left", `${coordinates[0]}px`)
+                        .style("top", `${coordinates[1] + 350}px`);
                     })
                     .on("mouseout", function () {
                       that.legendItems.selectAll("rect")
@@ -194,6 +213,9 @@ class TreeMap {
                       that.treeMapGroup.selectAll("rect")
                                         .attr("stroke", "none")
                                         .attr("fill-opacity", "0.75");
+                      
+                      d3.select("#tooltip")
+                        .style("display", "none");
                     });
 
     this.legendItems.append("rect")

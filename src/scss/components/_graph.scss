@@ -1,5 +1,5 @@
-.treemap {
-    rect {
+.treemap, .legend {
+    rect, text {
       -moz-transition: all 0.25s;
       -o-transition: all 0.25s;
       -webkit-transition: all 0.25s;
@@ -22,10 +22,17 @@
   position: absolute;
   height: auto;
   padding: 5px;
-  background-color: red;
+  background-color: white;
   border-radius: 10px;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   display: none;
+}
+
+#graph__coberturas {
+  svg {
+    display: block;
+    margin: auto
+  }
 }
 
