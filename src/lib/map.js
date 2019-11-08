@@ -20,6 +20,7 @@ class TNCMap {
 
       
       window.tnc_map.when(() => {
+        window.tnc_map.layers.items[2].outFields = ["*"];
         const definition = this.createDefinitionExpression();
         const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
 
