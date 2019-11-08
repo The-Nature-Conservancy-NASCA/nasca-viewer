@@ -65,3 +65,31 @@
     align-self: baseline;
   }
 }
+
+.biodiversidad {
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 3rem;
+
+  
+  &__card {
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid $light-gray;
+    box-shadow: 0 5px 5px rgba($black, .3);
+    color: $font-dark;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 3rem 2rem;
+  }
+
+  &__card-title {
+    margin-bottom: 2rem;
+  }
+
+  &__card-count {
+    font-size: 3rem;
+    font-weight: 100;
+    color: $light-green;
+  }
+}
