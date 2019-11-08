@@ -15,7 +15,7 @@ class TNCMap {
       this.bioQuery = this.biodiversidadLayer.createQuery();
       this.query.returnGeometry = false;
       this.bioQuery.returnGeometry = false;
-      this.query.outFields = ["ID_predio", "cobertura_actual", "sub_cobertura_actual", "porcentaje_area"];
+      this.query.outFields = ["ID_predio", "cobertura_actual", "sub_cobertura_actual", "area_ha"];
       this.bioQuery.outFields = ['ID_region', 'cantidad_individuos', 'grupo_tnc'];
       const sumPopulation = {
         onStatisticField: "grupo_tnc",

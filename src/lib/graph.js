@@ -97,19 +97,19 @@ class TreeMap {
                           .attr("fill-opacity", 0.75);
 
                         that.legendItems.selectAll("rect")
-                                        .filter((name) => name !== d.parent.data.name)
+                                        .filter((val) => val.parent.data.name !== d.parent.data.name)
                                         .attr("fill-opacity", 0.3);
 
                         that.legendItems.selectAll("rect")
-                                        .filter((name) => name === d.parent.data.name)
+                                        .filter((val) => val.parent.data.name === d.parent.data.name)
                                         .attr("stroke", "black");
 
                         that.legendItems.selectAll("text")
-                                        .filter((name) => name !== d.parent.data.name)
+                                        .filter((val) => val.parent.data.name !== d.parent.data.name)
                                         .attr("fill-opacity", 0.3);
                         
                         that.legendItems.selectAll("text")
-                                        .filter((name) => name === d.parent.data.name)
+                                        .filter((val) => val.parent.data.name === d.parent.data.name)
                                         .attr("font-weight", "bold");
 
                         const coordinates = d3.mouse(this);
@@ -154,15 +154,13 @@ class TreeMap {
                       .attr('width', d => d.x1 - d.x0)
                       .attr('height', d => d.y1 - d.y0);
 
-    console.log(d3.map(root.leaves(), d => d.parent.data.name));
-
     // add legend
     this.legendItems = this.legendGroup.selectAll("g")
                     .data(d3.map(root.leaves(), d => d.parent.data.name).values())
                     .enter()
                     .append("g")
-                    .attr("class", )
-                    .on("mouseover", function (name) {
+                    .on("mouseover", function (val) {
+                      console.log(val)
                       that.legendItems.selectAll("rect")
                                       .attr("fill-opacity", 0.3);
 
@@ -180,11 +178,11 @@ class TreeMap {
                         .attr("font-weight", "bold");
 
                       that.treeMapGroup.selectAll("rect")
-                                        .filter(d => d.parent.data.name !== name)
+                                        .filter(d => d.parent.data.name !== val.parent.data.name)
                                         .attr("fill-opacity", 0.3);
 
                       that.treeMapGroup.selectAll("rect")
-                                        .filter(d => d.parent.data.name === name)
+                                        .filter(d => d.parent.data.name === val.parent.data.name)
                                         .attr("stroke", "black");
                                         
                       const coordinates = d3.mouse(this);
@@ -193,7 +191,7 @@ class TreeMap {
                         .style("top", `${coordinates[1] + 350}px`)
                         .style("display", "block")
                         .style("font-size", "11px")
-                        .html(`${name}: ${Math.round(0)} ha`);
+                        .html(`${val.parent.data.name}: ${Math.round(val.parent.value)} ha`);
                     })
                     .on("mousemove", function () {
                       const coordinates = d3.mouse(this);
@@ -221,7 +219,7 @@ class TreeMap {
     this.legendItems.append("rect")
                       .attr("x", 2)
                       .attr("y", (d, i) => i * (this.legendItemSize + 5))
-                      .attr("fill", d => this.color(d))
+                      .attr("fill", d => this.color(d.parent.data.name))
                       .attr("fill-opacity", 0.75)
                       .transition("transition 2")
                       .duration(750)
@@ -231,14 +229,14 @@ class TreeMap {
     this.legendItems.append("text")
                   .attr("x", 2 + this.legendItemSize + 5)
                   .attr("y", (d, i) => i * (this.legendItemSize + 5) + (this.legendItemSize / 2))
-                  .attr("fill", d => this.color(d))
+                  .attr("fill", d => this.color(d.parent.data.name))
                   .attr("fill-opacity", 0.75)
                   .attr("text-anchor", "left")
                   .style("alignment-baseline", "middle")
                   .attr("font-size", 11)
                   .transition("transition 3")
                   .duration(750)
-                  .text(d => d);
+                  .text(d => d.parent.data.name);
                       
                       
     // this.treeMapGroup.selectAll("text")
