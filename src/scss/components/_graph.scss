@@ -5,4 +5,27 @@
       -webkit-transition: all 0.25s;
       transition: all 0.25s;
     }
+
+    // rect:hover {
+    //   stroke: black;
+    //   fill-opacity: 0.8;
+    // }
 }
+
+.legend {
+  g g {
+    pointer-events: all;
+  }
+}
+
+#tooltip {
+  position: absolute;
+  height: auto;
+  padding: 5px;
+  background-color: red;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  display: none;
+}
+
