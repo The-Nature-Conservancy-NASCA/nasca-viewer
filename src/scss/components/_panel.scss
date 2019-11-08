@@ -1,25 +1,49 @@
 .panel {
   align-items: center;
   background-color: rgba($white, $panel-opacity);
-  color: $light-green;
+  box-shadow: -5px 0 10px rgba($black, .2);
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 4rem 3rem;
   position: fixed;
   right: 0;
   top: $alto-header;
   width: 25vw;
 
   &__header {
-    align-items: center;
-    display: flex;
     margin-bottom: 2rem;
+    width: 100%;
 
     h2 {
       font-size: 4rem;
       font-weight: lighter;
       padding-left: 1.5rem;
+    }
+  }
+
+  &__tabs {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__tab {
+    background-color: $light-green;
+    color: $white;
+    cursor: pointer;
+    padding: 1.6rem;
+    
+    &--active {
+      background-color: $white;
+      color: $font-dark;
+    }
+  }
+
+  &__tab-panel {
+    display: none;
+
+    &--active {
+      display: block;
     }
   }
 

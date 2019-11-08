@@ -42,13 +42,37 @@
   <div id="viewDiv"></div>
   <aside class="panel">
     <header class="panel__header">
-      <img class="panel__header-icon" src="img/icon-bio-40.png" alt="Icono biodiversidad">
-      <h2 class="panel__header-title">Biodiversidad</h2>
+      <ul class="panel__tabs">
+        <li class="panel__tab panel__tab--active" data-tab='carbono'>
+          Carbono
+        </li>
+        <li class="panel__tab" data-tab='biodiversidad'>
+          Biodiversidad
+        </li>
+        <li class="panel__tab" data-tab='cobertura'>
+          Cobertura
+        </li>
+        <li class="panel__tab" data-tab='implementacion'>
+          Implementación
+        </li>
+      </ul>
     </header>
     <div class="panel__description"></div>
     <section class="resultados">
-      <div id="graph__coberturas"></div>
-      <div id="resultado-carousel" class="resultados__carousel"></div>
+      <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
+        hola carbono
+      </div>
+      <div class="panel__tab-panel" id="panel-biodiversidad">
+        hola biodiversidad
+      </div>
+      <div class="panel__tab-panel" id="panel-cobertura">
+        hola coberturas
+        <div id="graph__coberturas"></div>
+      </div>
+      <div class="panel__tab-panel" id="panel-implementacion">
+        hola implementacion
+      </div>
+      <!-- <div id="resultado-carousel" class="resultados__carousel"></div>  -->
     </section>
   </aside>
   <script src="js/visor.min.js"></script>
