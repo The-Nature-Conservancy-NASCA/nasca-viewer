@@ -43,6 +43,8 @@
 
   &__tab-panel {
     display: none;
+    padding: 0 3rem;
+    width: 100%;
 
     &--active {
       display: block;
