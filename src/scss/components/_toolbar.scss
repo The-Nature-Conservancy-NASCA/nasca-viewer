@@ -58,7 +58,6 @@
     font-weight: lighter;
     margin-bottom: 2rem;
     padding-top: 2.5rem;
-    width: 20rem;
   }
 
   &__menu {
@@ -105,8 +104,14 @@
   top: calc(2 * 4.6rem);
 }
 
-#menu-otro {
+#menu-leyenda {
   top: calc(1 * 4.6rem);
+
+  #leyenda-map {
+    max-height: 70vh;
+    overflow-y: scroll;
+    padding: 0 10rem;
+  }
 }
 
 #menu-capas {
