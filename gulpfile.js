@@ -7,7 +7,7 @@ const uglify = require('gulp-uglify-es').default;
 
 sass.compiler = require('node-sass');
 
-function compileJs(cb) {
+function compileJsVisor(cb) {
   return src(['src/lib/*.js', 'src/visor.js'])
     .pipe(concat('visor.min.js')) 
     //.pipe(uglify())
@@ -15,7 +15,9 @@ function compileJs(cb) {
 }
 
 function compileJSLanding(cb) {
-  return src('src/index.js')
+  return src(['src/lib/store.js', 'src/lib/modelAdapters.js', 'src/index.js'])
+        .pipe(concat('index.min.js')) 
+        //.pipe(uglify())
         .pipe(dest('dist/js/'));
 }
 
@@ -38,13 +40,12 @@ function compileSass(cb) {
     .pipe(dest('dist/css/'));
 }
 
-exports.default = parallel(compileJs, compileSass, copyAssets, copyHTML, copyLibraries);
-
-exports.compileJSLanding = compileJSLanding;
+exports.default = parallel(compileJsVisor, compileJSLanding, compileSass, copyAssets, copyHTML, copyLibraries);
 
 exports.dev = function() {
   watch('src/scss/**/*.scss', compileSass);
-  watch('src/lib/**/*.js', compileJs);
+  watch('src/lib/**/*.js', parallel(compileJsVisor, compileJSLanding));
   watch('src/index.js', compileJSLanding);
+  watch('src/visor.js', compileJsVisor);
   watch('src/*.html', copyHTML);
 }
