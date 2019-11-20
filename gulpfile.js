@@ -23,6 +23,11 @@ function copyHTML(cb) {
   return src('src/*.html').pipe(dest('dist/'));
 }
 
+function copyLibraries(cb) {
+  return src('src/libraries/*.js')
+    .pipe(dest('dist/js/'));
+}
+
 function copyAssets(cb) {
   return src('src/assets/img/**/*').pipe(dest('dist/img'))
 }
@@ -33,7 +38,7 @@ function compileSass(cb) {
     .pipe(dest('dist/css/'));
 }
 
-exports.default = parallel(compileJs, compileSass, copyAssets, copyHTML);
+exports.default = parallel(compileJs, compileSass, copyAssets, copyHTML, copyLibraries);
 
 exports.compileJSLanding = compileJSLanding;
 

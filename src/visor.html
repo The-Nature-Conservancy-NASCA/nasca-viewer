@@ -8,11 +8,12 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/light/main.css">
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://js.arcgis.com/4.12/"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsstore/dist/jsstore.min.js"></script>
   <link rel="stylesheet" href="css/visor.css">
   <style>
     html,
     body,
-    #viewDiv {
+    #map-div {
       padding: 0;
       margin: 0;
       height: 100%;
@@ -42,21 +43,21 @@
     </nav>
   </header>
   <div id="toolbar"></div>
-  <div id="viewDiv"></div>
+  <div id="map-div"></div>
   <aside class="panel">
     <header class="panel__header">
       <ul class="panel__tabs">
         <li class="panel__tab panel__tab--active" data-tab='carbono'>
           Carbono
         </li>
-        <li class="panel__tab" data-tab='biodiversidad'>
-          Biodiversidad
-        </li>
         <li class="panel__tab" data-tab='cobertura'>
           Coberturas
         </li>
         <li class="panel__tab" data-tab='implementacion'>
-          Implementación
+          Implementaciones
+        </li>
+        <li class="panel__tab" data-tab='biodiversidad'>
+          Biodiversidad
         </li>
       </ul>
     </header>

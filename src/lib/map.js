@@ -2,7 +2,6 @@ class TNCMap {
   
   constructor(container) {
     this._biodiversidad = new Biodiversidad('biodiversidad-resultados');
-        
     require(['esri/WebMap',
       'esri/views/MapView',
       'esri/widgets/LayerList',

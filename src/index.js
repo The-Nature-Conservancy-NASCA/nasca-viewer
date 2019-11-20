@@ -5,6 +5,7 @@ const urlProyectos = SERVICIO + '/5/query'
 class Landing {
   
   constructor() {
+    this._store = new Store();
     this.loadLandingData();
   }
   
@@ -108,6 +109,7 @@ class Landing {
     if (estrategiasResponse.data && estrategiasResponse.data.features) {
       const { features } = estrategiasResponse.data;
       estrategias = features.map(feature => feature.attributes);
+      this._store.insertRows('Estrategias', estrategias);
     }
 
     let estrategiasHTML = this.createHTML(estrategias, 'estrategias');

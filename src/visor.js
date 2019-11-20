@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', event => {
-  new TNCMap('viewDiv');
+  const store = new Store();
+  new TNCMap('map-div');
   new ToolBar('toolbar');
   new Carousel('resultado-carousel');
   new Panel();
