@@ -19,12 +19,22 @@ class Store {
   async insertRows(table, data) {
     const inserted = await this._connection.insert({
       into: table,
-      values: data
+      values: data,
+      upsert: true
     });
 
     if (inserted > 0) {
       console.info(inserted, 'Filas insertadas');
     }
+  }
+
+  async select(table, where) {
+    const results = await this._connection.select({
+      from: table,
+      where
+    });
+
+    return results;
   }
 
   _createConection() {
@@ -46,31 +56,8 @@ class Store {
   }
 
   _createTables() {
-    const estrategias = {
-      name: 'Estrategias',
-      columns: {
-        ID_estrategia: { primaryKey: true, dataType: 'string' },
-        nombre: { dataType: 'string' },
-        descripcion: { dataType: 'string' },
-        color: { dataType: 'string' },
-        fondo: { dataType: 'string' },
-        icono: { dataType: 'string' }
-      }
-    };
-
-    const proyectos = {
-      name: 'Proyectos',
-      columns: {
-        ID_proyecto: { primaryKey: true, dataType: 'string' },
-        ID_estrategia: { dataType: 'string' },
-        nombre: { dataType: 'string' },
-        descripcion: { dataType: 'string' },
-        color: { dataType: 'string' },
-        fondo: { dataType: 'string' },
-        icono: { dataType: 'string' }
-      }
-    }
-
-    return [estrategias];
+    const estrategias = EstrategiaRepository.getTabla();
+    const proyectos = ProyectoRepository.getTabla();
+    return [estrategias, proyectos];
   }
 }

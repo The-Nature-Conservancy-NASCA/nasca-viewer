@@ -139,4 +139,16 @@ class TNCMap {
     }
     return undefined;
   }
+
+  changeEstrategia(estrategiaId) {
+    const definitionExpression = `ID_estrategia='${estrategiaId}'`;
+    const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
+    layer.definitionExpression = definitionExpression;
+  }
+
+  changeProyecto(proyectoId) {
+    const definitionExpression = `ID_proyecto='${proyectoId}'`;
+    const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
+    layer.definitionExpression = definitionExpression;
+  }
 }

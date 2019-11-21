@@ -11,13 +11,19 @@
   <script src="https://cdn.jsdelivr.net/npm/jsstore/dist/jsstore.min.js"></script>
   <link rel="stylesheet" href="css/visor.css">
   <style>
+    :root {
+      --theme-color: #555;
+      --theme-color-hover: #777;
+      --theme-color-active: #333;
+    }
+
     html,
     body,
     #map-div {
       padding: 0;
       margin: 0;
       height: 100%;
-      width: 100%;
+      width: calc(100vw - 48rem);
     }
   </style>
 </head>
@@ -27,11 +33,15 @@
     <img class="header__logo" src="img/tnc-logo.svg" alt="Logo TNC" width="150">
     <nav class="navigation">
       <div class="navigation__menu">
-        <ul>
+        <ul class="navigation__menu-list">
           <li class="navigation__item"><a href="/">Inicio</a></li>
           <li class="navigation__item"><a href="#" id="nav-ver-todo">Ver todo</a></li>
-          <li class="navigation__item"><a href="#">Estrategia</a></li>
-          <li class="navigation__item"><a href="#">Proyectos</a></li>
+          <li class="navigation__item"><a href="#" id="toggle-selector-estrategias">Estrategia</a>
+            <div class="navigation__selector" id="selector-estrategias"></div>
+          </li>
+          <li class="navigation__item"><a href="#" id="toggle-selector-proyecto">Proyectos</a>
+            <div class="navigation__selector" id="selector-proyectos"></div>
+          </li>
         </ul>
       </div>
       <div class="divider"></div>

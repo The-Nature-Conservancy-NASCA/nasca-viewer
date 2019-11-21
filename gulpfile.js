@@ -8,14 +8,14 @@ const uglify = require('gulp-uglify-es').default;
 sass.compiler = require('node-sass');
 
 function compileJsVisor(cb) {
-  return src(['src/lib/*.js', 'src/visor.js'])
+  return src(['src/lib/**/*.js', 'src/visor.js'])
     .pipe(concat('visor.min.js')) 
     //.pipe(uglify())
     .pipe(dest('dist/js/'));
 }
 
 function compileJSLanding(cb) {
-  return src(['src/lib/store.js', 'src/lib/modelAdapters.js', 'src/index.js'])
+  return src(['src/lib/repositories/estrategia.js', 'src/lib/repositories/proyecto.js', 'src/lib/store.js', 'src/index.js'])
         .pipe(concat('index.min.js')) 
         //.pipe(uglify())
         .pipe(dest('dist/js/'));
