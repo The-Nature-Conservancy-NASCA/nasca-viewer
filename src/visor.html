@@ -8,15 +8,22 @@
   <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/light/main.css">
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://js.arcgis.com/4.12/"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsstore/dist/jsstore.min.js"></script>
   <link rel="stylesheet" href="css/visor.css">
   <style>
+    :root {
+      --theme-color: #555;
+      --theme-color-hover: #777;
+      --theme-color-active: #333;
+    }
+
     html,
     body,
-    #viewDiv {
+    #map-div {
       padding: 0;
       margin: 0;
       height: 100%;
-      width: 100%;
+      width: calc(100vw - 48rem);
     }
   </style>
 </head>
@@ -26,11 +33,15 @@
     <img class="header__logo" src="img/tnc-logo.svg" alt="Logo TNC" width="150">
     <nav class="navigation">
       <div class="navigation__menu">
-        <ul>
+        <ul class="navigation__menu-list">
           <li class="navigation__item"><a href="/">Inicio</a></li>
           <li class="navigation__item"><a href="#" id="nav-ver-todo">Ver todo</a></li>
-          <li class="navigation__item"><a href="#">Estrategia</a></li>
-          <li class="navigation__item"><a href="#">Proyectos</a></li>
+          <li class="navigation__item"><a href="#" id="toggle-selector-estrategias">Estrategia</a>
+            <div class="navigation__selector" id="selector-estrategias"></div>
+          </li>
+          <li class="navigation__item"><a href="#" id="toggle-selector-proyecto">Proyectos</a>
+            <div class="navigation__selector" id="selector-proyectos"></div>
+          </li>
         </ul>
       </div>
       <div class="divider"></div>
@@ -42,32 +53,33 @@
     </nav>
   </header>
   <div id="toolbar"></div>
-  <div id="viewDiv"></div>
+  <div id="map-div"></div>
   <aside class="panel">
     <header class="panel__header">
       <ul class="panel__tabs">
         <li class="panel__tab panel__tab--active" data-tab='carbono'>
           Carbono
         </li>
-        <li class="panel__tab" data-tab='biodiversidad'>
-          Biodiversidad
-        </li>
         <li class="panel__tab" data-tab='cobertura'>
           Coberturas
         </li>
         <li class="panel__tab" data-tab='implementacion'>
-          Implementación
+          Implementaciones
+        </li>
+        <li class="panel__tab" data-tab='biodiversidad'>
+          Biodiversidad
         </li>
       </ul>
     </header>
     <div class="panel__description"></div>
     <section class="resultados">
       <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
-        hola carbono
+        Selecciona un predio para ver mas detalles
       </div>
       <div class="panel__tab-panel" id="panel-biodiversidad">
-        <div id="biodiversidad-resultados"></div>
-        <div id="graph__biodiversidad"></div>
+        <div id="biodiversidad-resultados">
+          Selecciona un predio para ver mas detalles
+        </div>
         <div id="resultado-carousel"></div>
       </div>
       <div class="panel__tab-panel" id="panel-cobertura">
@@ -75,7 +87,7 @@
         <div id="tooltip"></div>
       </div>
       <div class="panel__tab-panel" id="panel-implementacion">
-        hola implementacion
+        Selecciona un predio para ver mas detalles
       </div>
       <!-- <div id="resultado-carousel" class="resultados__carousel"></div>  -->
     </section>

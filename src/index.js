@@ -2,6 +2,8 @@ const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/serv
 const urlEstrategias = SERVICIO + '/4/query';
 const urlProyectos = SERVICIO + '/5/query'
 
+window.store = new Store();
+
 class Landing {
   
   constructor() {
@@ -108,6 +110,7 @@ class Landing {
     if (estrategiasResponse.data && estrategiasResponse.data.features) {
       const { features } = estrategiasResponse.data;
       estrategias = features.map(feature => feature.attributes);
+      window.store.insertRows('Estrategias', estrategias);
     }
 
     let estrategiasHTML = this.createHTML(estrategias, 'estrategias');
@@ -118,7 +121,9 @@ class Landing {
     let proyectos = {};
     if (proyectosResponse.data && proyectosResponse.data.features) {
       const { features } = proyectosResponse.data;
-      Array.from(features, f => f.attributes).forEach(proyecto => {
+      const proyectosRaw = Array.from(features, f => f.attributes);
+      window.store.insertRows('Proyectos', proyectosRaw);
+      proyectosRaw.forEach(proyecto => {
         if (!proyectos[proyecto.ID_estrategia]) {
           proyectos[proyecto.ID_estrategia] = new Array();
         }

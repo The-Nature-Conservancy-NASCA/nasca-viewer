@@ -1,9 +1,22 @@
 class TNCMap {
-
+  
   constructor(container) {
-
-        
-    require(['esri/WebMap', 'esri/views/MapView', 'esri/layers/FeatureLayer'], function(WebMap, MapView, FeatureLayer) {
+    this._biodiversidad = new Biodiversidad('biodiversidad-resultados');
+    require(['esri/WebMap',
+      'esri/views/MapView',
+      'esri/widgets/LayerList',
+      'esri/widgets/Legend',
+      'esri/widgets/Zoom',
+      'esri/widgets/ScaleBar',
+      'esri/layers/FeatureLayer'],
+      function(
+          WebMap,
+          MapView,
+          LayerList,
+          Legend,
+          Zoom,
+          ScaleBar,
+          FeatureLayer) {
       this.coberturasLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices2/FeatureServer/3"
       });
@@ -40,6 +53,29 @@ class TNCMap {
         zoom: 6
       });
 
+      const legend = new Legend({
+        view: this.view,
+        container: 'leyenda-map'
+      });
+
+      const layerList = new LayerList({
+        view: this.view,
+        container: 'layerList-map'
+      });
+
+      var scaleBar = new ScaleBar({
+        view: this.view,
+        unit: 'metric'
+      });
+      
+      const zoom = new Zoom({
+        view: this.view
+      });
+      
+      this.view.ui.add([zoom, scaleBar], {
+        position: 'bottom-left'
+      });
+      
       window.tnc_map.when(() => {
         window.tnc_map.layers.items[2].outFields = ["*"];
         window.tnc_map.layers.items[3].outFields = ["*"];
@@ -63,7 +99,6 @@ class TNCMap {
 
   mapClick(event) {
     this.view.hitTest(event).then((response) => {
-      document.querySelector('.panel').classList.add('panel--visible');
       const { predio, region } = this.extractIds(response.results);
       
       if(predio) {
@@ -78,7 +113,7 @@ class TNCMap {
         window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
         this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
-          this.showBiodiversidad(results.features);
+          this._biodiversidad.showSpeciesCards(results.features);
         }).catch(error => {
           console.error(error);
         });
@@ -127,6 +162,18 @@ class TNCMap {
 
   groupByLandCover() {
     console.log(this);
-    console.log(window.sessionStorage.getItem('region'));
+    console.log(window.sessionStorage.getItem('region'))
+  }
+  
+  changeEstrategia(estrategiaId) {
+    const definitionExpression = `ID_estrategia='${estrategiaId}'`;
+    const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
+    layer.definitionExpression = definitionExpression;
+  }
+
+  changeProyecto(proyectoId) {
+    const definitionExpression = `ID_proyecto='${proyectoId}'`;
+    const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
+    layer.definitionExpression = definitionExpression;
   }
 }

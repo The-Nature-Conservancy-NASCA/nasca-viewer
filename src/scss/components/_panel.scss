@@ -8,8 +8,6 @@
   position: fixed;
   right: 0;
   top: $alto-header;
-  transform: translateX(100%);
-  transition: transform .4s ease-in-out;
   width: 48rem;
 
   &__header {
@@ -30,7 +28,7 @@
   }
 
   &__tab {
-    background-color: $light-green;
+    background-color: var(--theme-color);
     color: $white;
     cursor: pointer;
     padding: 1.6rem;
@@ -53,9 +51,5 @@
 
   &__description {
     margin-bottom: 1.5rem;
-  }
-
-  &--visible {
-    transform: translateX(0);
   }
 }

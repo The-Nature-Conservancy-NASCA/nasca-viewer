@@ -80,8 +80,8 @@ class ToolBar {
         <li class="toolbar__menu-item" data-menu="menu-capas">
           <i class="toolbar__menu-icon esri-icon-layers" title="Capas"></i>
         </li>
-        <li class="toolbar__menu-item" data-menu="menu-otro">
-          <i class="toolbar__menu-icon esri-icon-layer-list"></i>
+        <li class="toolbar__menu-item" data-menu="menu-leyenda">
+          <i class="toolbar__menu-icon esri-icon-layer-list" title="Leyenda"></i>
         </li>
         <li class="toolbar__menu-item" data-menu="menu-base">
           <i class="toolbar__menu-icon esri-icon-basemap" title="Mapa base"></i>
@@ -89,20 +89,12 @@ class ToolBar {
       </ul>
       <div id="menu-capas" class="menu-panel">
         <h2 class="menu-panel__title">Capas</h2>
-        <div class="menu-panel__contenido">
-          <ul class="menu-panel__menu">
-            <li class="menu-panel__menu-item" data-proyecto="about">Ganadería Colombiana</li>
-            <li class="menu-panel__menu-item" data-proyecto="links">Agroforestería</li>
-          </ul>
+        <div class="menu-panel__contenido" id="layerList-map">
         </div>
       </div>
-      <div id="menu-otro" class="menu-panel">
-        <h2 class="menu-panel__title">Capas</h2>
-        <div class="menu-panel__contenido">
-          <ul class="menu-panel__menu">
-            <li class="menu-panel__menu-item" data-proyecto="about">Ganadería Colombiana</li>
-            <li class="menu-panel__menu-item" data-proyecto="links">Agroforestería</li>
-          </ul>
+      <div id="menu-leyenda" class="menu-panel">
+        <h2 class="menu-panel__title">Leyenda</h2>
+        <div class="menu-panel__contenido" id="leyenda-map">
         </div>
       </div>
       <template>

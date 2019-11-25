@@ -1,0 +1,63 @@
+class Store {
+
+  constructor() {
+    this._createConection();
+    this._createDatabase();
+  }
+
+  async insertRow(table, data) {
+    const inserted = await this._connection.insert({
+      into: table,
+      values: [data]
+    });
+
+    if (inserted > 0) {
+      console.info('Fila insertada');
+    }
+  }
+
+  async insertRows(table, data) {
+    const inserted = await this._connection.insert({
+      into: table,
+      values: data,
+      upsert: true
+    });
+
+    if (inserted > 0) {
+      console.info(inserted, 'Filas insertadas');
+    }
+  }
+
+  async select(table, where) {
+    const results = await this._connection.select({
+      from: table,
+      where
+    });
+
+    return results;
+  }
+
+  _createConection() {
+    this._connection = new JsStore.Instance(new Worker('js/jsstore.worker.js'));
+  }
+
+  async _createDatabase() {
+    const tables = this._createTables();
+    const databaseOptions = {
+      name: 'tnc',
+      tables
+    }
+
+    const isDatabaseCreated = await this._connection.initDb(databaseOptions);
+    if (isDatabaseCreated) {
+      console.log('DB iniciada');
+    }
+
+  }
+
+  _createTables() {
+    const estrategias = EstrategiaRepository.getTabla();
+    const proyectos = ProyectoRepository.getTabla();
+    return [estrategias, proyectos];
+  }
+}

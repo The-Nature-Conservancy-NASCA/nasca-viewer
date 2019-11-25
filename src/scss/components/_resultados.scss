@@ -68,28 +68,35 @@
 
 .biodiversidad {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-evenly;
-  margin-bottom: 3rem;
-
   
   &__card {
     align-items: center;
-    justify-content: space-between;
-    border: 1px solid $light-gray;
-    box-shadow: 0 5px 5px rgba($black, .3);
+    border-top: 1px solid $light-gray;
+    box-shadow: 0 5px 10px rgba($black, .3);
     color: $font-dark;
     display: flex;
     flex-direction: column;
-    padding: 1rem 3rem 2rem;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    width: 15rem;
   }
-
+  
   &__card-title {
-    margin-bottom: 2rem;
+    margin: 1rem;
   }
 
   &__card-count {
-    font-size: 3rem;
-    font-weight: 100;
-    color: $light-green;
+    background-color: $light-green;
+    padding: 2rem;
+    width: 100%;
+
+    h3 {
+      color: $white;
+      font-size: 3rem;
+      font-weight: 100;
+      text-align: center;
+    }
   }
 }
