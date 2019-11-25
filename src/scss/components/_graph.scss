@@ -27,6 +27,10 @@
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   display: none;
+
+  .tooltip__title {
+    font-weight: bold;
+  }
 }
 
 #graph__coberturas {
@@ -34,5 +38,10 @@
     display: block;
     margin: auto
   }
+}
+
+#graph__biodiversidad {
+  width: 150px;
+  height: 150px;
 }
 
