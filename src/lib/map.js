@@ -30,7 +30,7 @@ class TNCMap {
       this.bioQuery = this.biodiversidadLayer.createQuery();
       this.query.returnGeometry = false;
       this.bioQuery.returnGeometry = false;
-      this.query.outFields = ["ID_predio", "cobertura_actual", "sub_cobertura_actual", "area_ha"];
+      this.query.outFields = ["ID_predio", "cobertura_actual", "sub_cobertura_actual", "porcentaje_area"];
       this.bioQuery.outFields = ['ID_region', 'cantidad_individuos', 'grupo_tnc'];
       const sumPopulation = {
         onStatisticField: "grupo_tnc",
@@ -113,6 +113,7 @@ class TNCMap {
 
 
       this.treeMap = new TreeMap("#graph__coberturas");
+      this.pie = new Pie('#graph__biodiversidad');
     }.bind(this));
   }
 
@@ -129,6 +130,7 @@ class TNCMap {
       }
       
       if(region) {
+        window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
         this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
           this._biodiversidad.showSpeciesCards(results.features);
@@ -148,6 +150,24 @@ class TNCMap {
     return { predio, region };
   }
 
+  showBiodiversidad(features) {
+    let html = '<section class="biodiversidad">';
+    features.forEach(feature => {
+      const {cantidad, grupo_tnc} = feature.attributes;
+      console.log(grupo_tnc);
+      if (grupo_tnc !== null) {
+        html += `<div class="biodiversidad__card" data-grupo="${grupo_tnc}">
+        <h4 class="biodiversidad__card-title">${grupo_tnc}</h4>
+        <h3 class="biodiversidad__card-count">${cantidad}</h3>
+        </div>`;
+      }
+    });
+    html += '</section>';
+    document.getElementById('biodiversidad-resultados').innerHTML = html;
+    d3.selectAll('.biodiversidad__card')
+      .on('click', this.groupByLandCover)
+  }
+
   createDefinitionExpression() {
     const estrategia = window.sessionStorage.getItem('estrategia');
     if (estrategia) {
@@ -160,6 +180,11 @@ class TNCMap {
     return undefined;
   }
 
+  groupByLandCover() {
+    console.log(this);
+    console.log(window.sessionStorage.getItem('region'))
+  }
+  
   changeEstrategia(estrategiaId) {
     const definitionExpression = `ID_estrategia='${estrategiaId}'`;
     const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');

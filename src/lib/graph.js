@@ -4,7 +4,6 @@ class TreeMap {
     const margin = {top: 10, right: 10, bottom: 10, left: 10};
     this.width = 400 - margin.left - margin.right;
     this.height = 300 - margin.top - margin.bottom;
-    this.legendItemSize = 15;
 
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -16,19 +15,11 @@ class TreeMap {
                           .append("g")
                             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-    this.legendGroup = d3.select(el)
-                        .append("svg")
-                          .attr("class", "legend")
-                          .attr("width", this.width + margin.left + margin.right)
-                          // .attr("height", this.height + margin.top + margin.bottom)
-                        .append("g")
-                          .attr("transform", `translate(${margin.left}, ${margin.top})`);
-    
     this.constants = {
       NAME: "coberturas",
       PARENT_LABEL: "cobertura_actual",
       CHILD_LABEL: "sub_cobertura_actual",
-      VALUE_FIELD: "area_ha"
+      VALUE_FIELD: "porcentaje_area"
     };
   }
 
@@ -77,10 +68,6 @@ class TreeMap {
     this.treeMapGroup.selectAll("rect")
                     .remove();
 
-    // remove existing legend
-    this.legendGroup.selectAll("g")
-                    .remove();
-
     const that = this;
 
     // add rectangles
@@ -96,29 +83,17 @@ class TreeMap {
                           .attr("stroke", "black")
                           .attr("fill-opacity", 0.75);
 
-                        that.legendItems.selectAll("rect")
-                                        .filter((val) => val.parent.data.name !== d.parent.data.name)
-                                        .attr("fill-opacity", 0.3);
-
-                        that.legendItems.selectAll("rect")
-                                        .filter((val) => val.parent.data.name === d.parent.data.name)
-                                        .attr("stroke", "black");
-
-                        that.legendItems.selectAll("text")
-                                        .filter((val) => val.parent.data.name !== d.parent.data.name)
-                                        .attr("fill-opacity", 0.3);
-                        
-                        that.legendItems.selectAll("text")
-                                        .filter((val) => val.parent.data.name === d.parent.data.name)
-                                        .attr("font-weight", "bold");
-
                         const coordinates = d3.mouse(this);
+                        const tooltipContent = `
+                          <span class="tooltip__title">${d.parent.data.name}</span><br>
+                          <span class="tooltip__subtitle">${d.data.name}</span>: <span class="tooltip__value">${Math.round(d.data.value * 100)}%</span>
+                        `;
                         d3.select("#tooltip")
                           .style("left", `${coordinates[0]}px`)
                           .style("top", `${coordinates[1] + 50}px`)
                           .style("display", "block")
                           .style("font-size", "11px")
-                          .html(`${d.data.name}: ${Math.round(d.data.value)} ha`);
+                          .html(tooltipContent);
                                         
                       })
                       .on("mousemove", function () {
@@ -134,14 +109,6 @@ class TreeMap {
                         d3.select(this)
                           .attr("stroke", "none");
 
-                        that.legendItems.selectAll("rect")
-                                        .attr("fill-opacity", 0.75)
-                                        .attr("stroke", "none");
-
-                        that.legendItems.selectAll("text")
-                                        .attr("font-weight", "normal")
-                                        .attr("fill-opacity", 0.75);
-
                         d3.select("#tooltip")
                           .style("display", "none");
                       })
@@ -149,106 +116,11 @@ class TreeMap {
                       .attr("y", d => d.y0)
                       .attr("fill-opacity", 0.75)
                       .attr("fill", d => this.color(d.parent.data.name))
-                      .transition("transition 1")
+                      .transition()
                       .duration(750)
                       .attr('width', d => d.x1 - d.x0)
                       .attr('height', d => d.y1 - d.y0);
-
-    // add legend
-    this.legendItems = this.legendGroup.selectAll("g")
-                    .data(d3.map(root.leaves(), d => d.parent.data.name).values())
-                    .enter()
-                    .append("g")
-                    .on("mouseover", function (val) {
-                      console.log(val)
-                      that.legendItems.selectAll("rect")
-                                      .attr("fill-opacity", 0.3);
-
-                      that.legendItems.selectAll("text")
-                                      .attr("fill-opacity", 0.3);
-
-                      d3.select(this)
-                        .select("rect")
-                        .attr("fill-opacity", 0.75)
-                        .attr("stroke", "black");
-
-                      d3.select(this)
-                        .select("text")
-                        .attr("fill-opacity", 0.75)
-                        .attr("font-weight", "bold");
-
-                      that.treeMapGroup.selectAll("rect")
-                                        .filter(d => d.parent.data.name !== val.parent.data.name)
-                                        .attr("fill-opacity", 0.3);
-
-                      that.treeMapGroup.selectAll("rect")
-                                        .filter(d => d.parent.data.name === val.parent.data.name)
-                                        .attr("stroke", "black");
-                                        
-                      const coordinates = d3.mouse(this);
-                      d3.select("#tooltip")
-                        .style("left", `${coordinates[0]}px`)
-                        .style("top", `${coordinates[1] + 350}px`)
-                        .style("display", "block")
-                        .style("font-size", "11px")
-                        .html(`${val.parent.data.name}: ${Math.round(val.parent.value)} ha`);
-                    })
-                    .on("mousemove", function () {
-                      const coordinates = d3.mouse(this);
-                      d3.select("#tooltip")
-                        .style("left", `${coordinates[0]}px`)
-                        .style("top", `${coordinates[1] + 350}px`);
-                    })
-                    .on("mouseout", function () {
-                      that.legendItems.selectAll("rect")
-                                      .attr("stroke", "none")
-                                      .attr("fill-opacity", 0.75);
-
-                      that.legendItems.selectAll("text")
-                                      .attr("font-weight", "normal")
-                                      .attr("fill-opacity", 0.75);
-
-                      that.treeMapGroup.selectAll("rect")
-                                        .attr("stroke", "none")
-                                        .attr("fill-opacity", "0.75");
-                      
-                      d3.select("#tooltip")
-                        .style("display", "none");
-                    });
-
-    this.legendItems.append("rect")
-                      .attr("x", 2)
-                      .attr("y", (d, i) => i * (this.legendItemSize + 5))
-                      .attr("fill", d => this.color(d.parent.data.name))
-                      .attr("fill-opacity", 0.75)
-                      .transition("transition 2")
-                      .duration(750)
-                      .attr("width", this.legendItemSize)
-                      .attr("height", this.legendItemSize);
-
-    this.legendItems.append("text")
-                  .attr("x", 2 + this.legendItemSize + 5)
-                  .attr("y", (d, i) => i * (this.legendItemSize + 5) + (this.legendItemSize / 2))
-                  .attr("fill", d => this.color(d.parent.data.name))
-                  .attr("fill-opacity", 0.75)
-                  .attr("text-anchor", "left")
-                  .style("alignment-baseline", "middle")
-                  .attr("font-size", 11)
-                  .transition("transition 3")
-                  .duration(750)
-                  .text(d => d.parent.data.name);
-                      
-                      
-    // this.treeMapGroup.selectAll("text")
-    //       .data(root.leaves())
-    //       .enter()
-    //       .append("text")
-    //         .attr("clip-path", d => d.clipUid)
-    //         .attr("x", d => d.x0 + 3)
-    //         .attr("y", d => d.y0 + 14)
-    //         .text(d => d.data.name)
-    //         .attr("font-size", "12px")
-    //         .attr("fill", "white");
+                    
   }
 
   renderGraphic (features) {
@@ -256,4 +128,24 @@ class TreeMap {
     this._renderTreeMap(data);
   }
 
+}
+
+class Pie {
+    constructor (el) {
+      const margin = {top: 10, right: 10, bottom: 10, left: 10};
+      this.width = 150 - margin.left - margin.right;
+      this.height = 150 - margin.top - margin.bottom;
+      this.legendItemSize = 15;
+  
+      this.color = d3.scaleOrdinal(d3.schemeCategory10);
+
+      this.pieGroup = d3.select(el)
+                        .append("svg")
+                          .attr("class", "pie")
+                          .attr("width", this.width + margin.left + margin.right)
+                          .attr("height", this.height + margin.top + margin.bottom)
+                        .append("g")
+                          .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    }
 }
