@@ -60,15 +60,11 @@
     padding-top: 2.5rem;
   }
 
-  &__menu {
-    color: $white;
-    width: 30rem;
-    
-    &--grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-    }
+  &__contenido {
+    max-height: 70vh;
+    overflow-y: scroll;
+    padding: 0 1rem;
+    width: 20rem;
   }
 
   &__menu-item {
@@ -96,7 +92,7 @@
   }
 
   &--expanded {
-    width: 34rem;
+    width: 20rem;
   }
 }
 
@@ -106,12 +102,6 @@
 
 #menu-leyenda {
   top: calc(1 * 4.6rem);
-
-  #leyenda-map {
-    max-height: 70vh;
-    overflow-y: scroll;
-    padding: 0 10rem;
-  }
 }
 
 #menu-capas {

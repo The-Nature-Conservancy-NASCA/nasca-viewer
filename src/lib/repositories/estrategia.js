@@ -29,6 +29,14 @@ class EstrategiaRepository {
     }
   }
 
+  static async getColor(id) {
+    const result = await window.store.select(this.TABLE_NAME, {
+      ID_estrategia: id
+    });
+
+    return result[0].color;
+  }
+
 }
 
 EstrategiaRepository.TABLE_NAME = 'Estrategias';
