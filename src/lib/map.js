@@ -99,11 +99,12 @@ class TNCMap {
           });
           definitionExpression = `ID_proyecto='${proyecto}'`;
         }
-
+        
         const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-
         if(definitionExpression) {
-          layer.definitionExpression = definition;
+          layer.when(() => {
+            layer.definitionExpression = definition;
+          });
         }
           
         this.view.on("click", this.mapClick.bind(this));
