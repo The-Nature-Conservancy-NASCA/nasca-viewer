@@ -34,11 +34,15 @@ class EstrategiaSelector {
     if(itemsEstrategia) {
       itemsEstrategia.forEach(item => {
         item.addEventListener('click', event => {
-          this._closeSelector();
           const estrategiaId = event.currentTarget.dataset.estrategia;
-          const estrategiaColor = event.currentTarget.dataset.color;
-          window.map.changeEstrategia(estrategiaId);
-          changeThemeColor(estrategiaColor);
+          if(estrategiaId !== '02') {
+            alert('No hay predios para la estrategia seleccionada');
+          } else {
+            this._closeSelector();
+            const estrategiaColor = event.currentTarget.dataset.color;
+            window.map.changeEstrategia(estrategiaId);
+            changeThemeColor(estrategiaColor);
+          }
         });
       });
     }

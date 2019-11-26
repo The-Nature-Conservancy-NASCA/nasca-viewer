@@ -4,6 +4,7 @@ class TNCMap {
     this._biodiversidad = new Biodiversidad('biodiversidad-resultados');
     require(['esri/WebMap',
       'esri/views/MapView',
+      'esri/widgets/BasemapGallery',
       'esri/widgets/LayerList',
       'esri/widgets/Legend',
       'esri/widgets/Zoom',
@@ -12,6 +13,7 @@ class TNCMap {
       function(
           WebMap,
           MapView,
+          BasemapGallery,
           LayerList,
           Legend,
           Zoom,
@@ -68,6 +70,11 @@ class TNCMap {
         container: 'layerList-map'
       });
 
+      const basemap = new BasemapGallery({
+        view: this.view,
+        container: 'basemap-map'
+      });
+
       var scaleBar = new ScaleBar({
         view: this.view,
         unit: 'metric'
@@ -84,11 +91,25 @@ class TNCMap {
       window.tnc_map.when(() => {
         window.tnc_map.layers.items[2].outFields = ["*"];
         window.tnc_map.layers.items[3].outFields = ["*"];
-        const definition = this.createDefinitionExpression();
+        const estrategiaLanding = window.sessionStorage.getItem('estrategia');
+        let definitionExpression = null;
+        if (estrategiaLanding) {
+          EstrategiaRepository.getColor(estrategiaLanding).then(color => { changeThemeColor(color); });
+          // TODO: Lógica para mostrar predios de los propyectos de la estrategia
+        }
+        const proyecto = window.sessionStorage.getItem('proyecto');
+        if(proyecto) {
+          ProyectoRepository.getColor(proyecto).then(color => {
+            changeThemeColor(color);
+          });
+          definitionExpression = `ID_proyecto='${proyecto}'`;
+        }
+        
         const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-
-        if(definition) {
-          layer.definitionExpression = definition;
+        if(definitionExpression) {
+          layer.when(() => {
+            layer.definitionExpression = definition;
+          });
         }
           
         this.view.on("click", this.mapClick.bind(this));

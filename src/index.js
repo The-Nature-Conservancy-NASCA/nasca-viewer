@@ -1,6 +1,6 @@
-const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices2/FeatureServer';
-const urlEstrategias = SERVICIO + '/4/query';
-const urlProyectos = SERVICIO + '/5/query'
+const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServiceV2/FeatureServer';
+const urlEstrategias = SERVICIO + '/3/query';
+const urlProyectos = SERVICIO + '/4/query'
 
 window.store = new Store();
 
@@ -160,6 +160,7 @@ class Landing {
         ${options.ID_proyecto ? 'data-proyecto="' + options.ID_proyecto + '"' :
         'data-estrategia="estrategia_' + options.ID_estrategia + '"'}
         style="background-color: ${options.color};">
+        <img class="card__icon" src="${options.icono}">
       <div class="card-background">
         <div class="card-overlay"></div>
         <img src="${options.fondo}" >

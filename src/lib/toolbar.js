@@ -1,6 +1,5 @@
 const selectors = {
-  TOOLBAR_MENU_ITEM: '.toolbar__menu-item',
-  BASEMAP_SELECTORS: '#menu-base .menu-panel__menu-item'
+  TOOLBAR_MENU_ITEM: '.toolbar__menu-item'
 }
 
 const classes = {
@@ -28,14 +27,6 @@ class ToolBar {
   handleEvents() {
     this.menuItems.forEach(menuItem => {
       menuItem.addEventListener(events.CLICK, this.toggleToolbarMenu.bind(this))
-    })
-
-    // Seleccionar nuevo basemap
-    document.querySelectorAll(selectors.BASEMAP_SELECTORS).forEach(item => {
-      item.addEventListener(events.CLICK, basemapItem => {
-        const basemap = basemapItem.currentTarget.dataset.basemap
-        window.tnc_map.basemap = basemap
-      })
     })
   }
 
@@ -122,38 +113,7 @@ class ToolBar {
       </template>
       <div id="menu-base" class="menu-panel">
         <h2 class="menu-panel__title">Mapa Base</h2>
-        <div class="menu-panel__contenido">
-          <ul class="menu-panel__menu menu-panel__menu--grid">
-            <li class="menu-panel__menu-item menu-panel__menu-item--vertical" data-basemap="satellite">
-              <img src="img/basemap/satellite.jpg" alt="" width="80">
-              <p>Satellite</p>
-            </li>
-            <li class="menu-panel__menu-item menu-panel__menu-item--vertical" data-basemap="streets">
-              <img src="img/basemap/streets.jpg" alt="" width="80">
-              <p>Streets</p>
-            </li>
-            <li class="menu-panel__menu-item menu-panel__menu-item--vertical" data-basemap="topo">
-              <img src="img/basemap/topo.jpg" alt="" width="80">
-              <p>Topographic</p>
-            </li>
-            <li class="menu-panel__menu-item menu-panel__menu-item--vertical" data-basemap="dark-gray">
-              <img src="img/basemap/dark.png" alt="" width="80">
-              <p>Dark</p>
-            </li>
-            <li class="menu-panel__menu-item menu-panel__menu-item--vertical" data-basemap="gray">
-              <img src="img/basemap/gray.jpg" alt="" width="80">
-              <p>Gray</p>
-            </li>
-            <li class="menu-panel__menu-item menu-panel__menu-item--vertical" data-basemap="national-geographic">
-              <img src="img/basemap/natgeo.jpg" alt="" width="80">
-              <p>National Geographic</p>
-            </li>
-            <li class="menu-panel__menu-item menu-panel__menu-item--vertical" data-basemap="terrain">
-              <img src="img/basemap/terrain.jpg" alt="" width="80">
-              <p>Terrain</p>
-            </li>
-          </ul>
-        </div>
+        <div class="menu-panel__contenido" id="basemap-map"></div>
       </div>
     </div>
       `;
