@@ -20,15 +20,19 @@ class TNCMap {
       this.coberturasLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices2/FeatureServer/3"
       });
-      
       this.biodiversidadLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices2/FeatureServer/2"
       });
+      this.coloresLayer = new FeatureLayer({
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServiceV2/FeatureServer/12"
+      });
       this.query = this.coberturasLayer.createQuery();
       this.bioQuery = this.biodiversidadLayer.createQuery();
+      this.colorQuery = this.coloresLayer.createQuery();
       this.query.returnGeometry = false;
       this.bioQuery.returnGeometry = false;
-      this.query.outFields = ["ID_predio", "cobertura_actual", "sub_cobertura_actual", "porcentaje_area"];
+      this.colorQuery.where = "1=1";
+      this.query.outFields = ["ID_predio", "ID_cobertura", "cobertura_actual", "sub_cobertura_actual", "porcentaje_area"];
       this.bioQuery.outFields = ['ID_region', 'cantidad_individuos', 'grupo_tnc'];
       const sumPopulation = {
         onStatisticField: "grupo_tnc",
@@ -36,7 +40,8 @@ class TNCMap {
         statisticType: "count"
       };
       this.bioQuery.outStatistics = [sumPopulation];
-      this.bioQuery.groupByFieldsForStatistics = ['grupo_tnc']
+      this.bioQuery.groupByFieldsForStatistics = ['grupo_tnc'];
+      this.colorQuery.outFields = ["*"];
       
       window.tnc_map = new WebMap({
         portalItem: {
@@ -91,8 +96,12 @@ class TNCMap {
 
       this.view.ui.remove('zoom');
 
-
-      this.treeMap = new TreeMap("#graph__coberturas");
+      this.coloresLayer.queryFeatures(this.colorQuery)
+      .then(r => {
+        const colors = this.colorsToObject(r.features);
+        console.log(colors);
+        this.treeMap = new TreeMap("#graph__coberturas", colors);
+      })
       this.pie = new Pie('#graph__biodiversidad');
     }.bind(this));
   }
@@ -119,6 +128,14 @@ class TNCMap {
         });
       }
     });
+  }
+
+  colorsToObject(features) {
+    const colors = {};
+    features.forEach(el => {
+      colors[el.attributes.ID_cobertura] = el.attributes.color;
+    });
+    return colors;
   }
 
   extractIds(results) {

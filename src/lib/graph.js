@@ -1,11 +1,13 @@
 class TreeMap {
 
-  constructor (el) {
+  constructor (el, colors) {
     const margin = {top: 10, right: 10, bottom: 10, left: 10};
     this.width = 400 - margin.left - margin.right;
     this.height = 300 - margin.top - margin.bottom;
 
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    this.colors = colors;
 
     this.treeMapGroup = d3.select(el)
                           .append("svg")
@@ -19,7 +21,8 @@ class TreeMap {
       NAME: "coberturas",
       PARENT_LABEL: "cobertura_actual",
       CHILD_LABEL: "sub_cobertura_actual",
-      VALUE_FIELD: "porcentaje_area"
+      VALUE_FIELD: "porcentaje_area",
+      EXTRA_FIELD: "ID_cobertura"
     };
   }
 
@@ -76,6 +79,7 @@ class TreeMap {
                     .enter()
                     .append("rect")
                       .on("mouseover", function (d) {
+                        console.log(d);
                         that.treeMapGroup.selectAll("rect")
                               .attr("fill-opacity", 0.3);
 
