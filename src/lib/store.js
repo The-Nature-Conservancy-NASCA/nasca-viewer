@@ -17,14 +17,18 @@ class Store {
   }
 
   async insertRows(table, data) {
-    const inserted = await this._connection.insert({
-      into: table,
-      values: data,
-      upsert: true
-    });
+    try {
+      const inserted = await this._connection.insert({
+        into: table,
+        values: data,
+        upsert: true
+      });
 
-    if (inserted > 0) {
-      console.info(inserted, 'Filas insertadas');
+      if (inserted > 0) {
+        console.info(inserted, 'Filas insertadas');
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -58,6 +62,7 @@ class Store {
   _createTables() {
     const estrategias = EstrategiaRepository.getTabla();
     const proyectos = ProyectoRepository.getTabla();
-    return [estrategias, proyectos];
+    const carousel = CarouselRepository.getTabla();
+    return [estrategias, proyectos, carousel];
   }
 }

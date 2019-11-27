@@ -7,7 +7,12 @@ window.store = new Store();
 class Landing {
   
   constructor() {
+    this.loadData();
     this.loadLandingData();
+  }
+
+  loadData() {
+    CarouselRepository.loadData();
   }
   
   registerHandlers() {
@@ -155,7 +160,7 @@ class Landing {
   }
   
   hidrateCard(options) {
-    return `
+    return /* html */`
       <section class="card ${options.ID_proyecto ? 'proyecto' : 'estrategia'}" 
         ${options.ID_proyecto ? 'data-proyecto="' + options.ID_proyecto + '"' :
         'data-estrategia="estrategia_' + options.ID_estrategia + '"'}

@@ -15,7 +15,7 @@ function compileJsVisor(cb) {
 }
 
 function compileJSLanding(cb) {
-  return src(['src/lib/repositories/estrategia.js', 'src/lib/repositories/proyecto.js', 'src/lib/store.js', 'src/index.js'])
+  return src(['src/lib/repositories/*.js', 'src/lib/store.js', 'src/index.js'])
         .pipe(concat('index.min.js')) 
         //.pipe(uglify())
         .pipe(dest('dist/js/'));

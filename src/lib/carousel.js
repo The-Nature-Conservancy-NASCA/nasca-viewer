@@ -39,48 +39,26 @@ class Carousel {
   }
 
   _queryData() {
-    require(['esri/request'], esriRequest => {
-      const queryOptions = {
-        query: {
-          f: 'json',
-          where: '1=1',
-          outFields: '*',
-          returnGeometry: false
-        },
-        responseType: 'json'
-      };
-      const estrategiasRequest = esriRequest('https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServiceV2/FeatureServer/10/query', queryOptions);
-      estrategiasRequest.then(response => {
-        const carouselData = response.data.features.map(feature => {
-          const { Especie, URL, nombre_comun } = feature.attributes;
-          return {
-            especie: Especie,
-            url: URL,
-            nombreComun: nombre_comun
-          }
-        });
-
-        this.renderHTML(carouselData);
-      });
+    CarouselRepository.getData().then(carouselData => {
+      this.renderHTML(carouselData);
     });
   }
   
   renderHTML(options) {
-    const template = `
+    const template = /* html */`
     <div class="carousel">
-    <ul class="carousel__list" data-target="carousel">
-    ${options.map(item => `
-    <li class="carousel__card" data-target="card">
-    <img class="carousel__image" src="${item.url}" alt="${item.nombreComun}">
-    <p class="carousel__text">${item.especie} - ${item.nombreComun}</p>
-    </li>
-    `).join('')}
-    </ul>
-    <div class="carousel__buttons">
-    <img class="carousel__button" src="img/keyboard_arrow_left.png" data-action="slideLeft">
-    <img class="carousel__button" src="img/keyboard_arrow_right.png" data-action="slideRight">
-    </button>
-    </div>
+      <ul class="carousel__list" data-target="carousel">
+        ${options.map(item => /* html */`
+          <li class="carousel__card" data-target="card">
+            <img class="carousel__image" src="${item.url}" alt="${item.nombreComun}">
+            <p class="carousel__text">${item.especie} - ${item.nombreComun}</p>
+          </li>
+        `).join('')}
+      </ul>
+      <div class="carousel__buttons">
+        <img class="carousel__button" src="img/keyboard_arrow_left.png" data-action="slideLeft">
+        <img class="carousel__button" src="img/keyboard_arrow_right.png" data-action="slideRight">
+      </div>
     </div>
     `;
     
