@@ -1,10 +1,11 @@
 window.store = new Store();
+const eventBus = new Eventbus();
 
 window.addEventListener('DOMContentLoaded', event => {
   window.map = new TNCMap('map-div');
   new ToolBar('toolbar');
   new Carousel('resultado-carousel');
-  new Panel();
+  const PANEL_RESULTADOS = new Panel();
   const selectEstrategias = new EstrategiaSelector('selector-estrategias');
   const selectProyectos = new ProyectoSelector('selector-proyectos');
 

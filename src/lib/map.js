@@ -7,6 +7,7 @@ class TNCMap {
       'esri/widgets/BasemapGallery',
       'esri/widgets/LayerList',
       'esri/widgets/Legend',
+      'esri/widgets/Search',
       'esri/widgets/Zoom',
       'esri/widgets/ScaleBar',
       'esri/layers/FeatureLayer'],
@@ -16,6 +17,7 @@ class TNCMap {
           BasemapGallery,
           LayerList,
           Legend,
+          Search,
           Zoom,
           ScaleBar,
           FeatureLayer) {
@@ -79,6 +81,11 @@ class TNCMap {
         view: this.view,
         unit: 'metric'
       });
+
+      const search = new Search({
+        view: this.view,
+        container: 'search-map'
+      });
       
       const zoom = new Zoom({
         view: this.view
@@ -132,6 +139,7 @@ class TNCMap {
       const { predio, region } = this.extractIds(response.results);
       
       if(predio) {
+        eventBus.emitEventListeners('predioClicked');
         this.query.where = `ID_predio = '${predio}'`;
         this.coberturasLayer.queryFeatures(this.query)
         .then((r) => {
@@ -140,6 +148,7 @@ class TNCMap {
       }
       
       if(region) {
+        eventBus.emitEventListeners('regionClicked');
         window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
         this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {

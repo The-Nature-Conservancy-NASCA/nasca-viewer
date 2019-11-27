@@ -65,9 +65,12 @@ class ToolBar {
   }
 
   renderHTML() {
-    this._el.innerHTML = 
-      `  <div class="toolbar">
+    this._el.innerHTML = /*html*/ `
+      <div class="toolbar">
       <ul class="toolbar__menu">
+        <li class="toolbar__menu-item" data-menu="menu-buscar">
+          <i class="toolbar__menu-icon esri-icon-search" title="Buscar"></i>
+        </li>
         <li class="toolbar__menu-item" data-menu="menu-capas">
           <i class="toolbar__menu-icon esri-icon-layers" title="Capas"></i>
         </li>
@@ -78,6 +81,10 @@ class ToolBar {
           <i class="toolbar__menu-icon esri-icon-basemap" title="Mapa base"></i>
         </li>
       </ul>
+      <div id="menu-buscar" class="menu-panel">
+        <div class="menu-panel__contenido" id="search-map">
+        </div>
+      </div>
       <div id="menu-capas" class="menu-panel">
         <h2 class="menu-panel__title">Capas</h2>
         <div class="menu-panel__contenido" id="layerList-map">

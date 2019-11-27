@@ -37,6 +37,10 @@
       background-color: $white;
       color: $font-dark;
     }
+
+    &--disabled {
+      background-color: $light-gray;
+    }
   }
 
   &__tab-panel {
