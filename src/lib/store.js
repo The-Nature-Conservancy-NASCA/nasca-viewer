@@ -60,9 +60,11 @@ class Store {
   }
 
   _createTables() {
-    const estrategias = EstrategiaRepository.getTabla();
-    const proyectos = ProyectoRepository.getTabla();
-    const carousel = CarouselRepository.getTabla();
-    return [estrategias, proyectos, carousel];
+    return [
+      EstrategiaRepository.getTabla(),
+      ProyectoRepository.getTabla(),
+      CarouselRepository.getTabla(),
+      CoberturasRepository.getTabla()
+    ];
   }
 }

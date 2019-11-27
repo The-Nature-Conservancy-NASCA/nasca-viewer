@@ -30,6 +30,11 @@ function copyLibraries(cb) {
     .pipe(dest('dist/js/'));
 }
 
+function copyJSON(cb) {
+  return src('src/json/*.json')
+    .pipe(dest('dist/json/'))
+}
+
 function copyAssets(cb) {
   return src('src/assets/img/**/*').pipe(dest('dist/img'))
 }
@@ -40,7 +45,7 @@ function compileSass(cb) {
     .pipe(dest('dist/css/'));
 }
 
-exports.default = parallel(compileJsVisor, compileJSLanding, compileSass, copyAssets, copyHTML, copyLibraries);
+exports.default = parallel(compileJsVisor, compileJSLanding, compileSass, copyAssets, copyHTML, copyLibraries, copyJSON);
 
 exports.dev = function() {
   watch('src/scss/**/*.scss', compileSass);
@@ -48,4 +53,5 @@ exports.dev = function() {
   watch('src/index.js', compileJSLanding);
   watch('src/visor.js', compileJsVisor);
   watch('src/*.html', copyHTML);
+  watch('src/json/*.json', copyJSON);
 }

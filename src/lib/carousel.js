@@ -50,8 +50,8 @@ class Carousel {
       <ul class="carousel__list" data-target="carousel">
         ${options.map(item => /* html */`
           <li class="carousel__card" data-target="card">
-            <img class="carousel__image" src="${item.url}" alt="${item.nombreComun}">
-            <p class="carousel__text">${item.especie} - ${item.nombreComun}</p>
+            <img class="carousel__image" src="${item.url}" alt="${item.nombre}">
+            <p class="carousel__text">${item.especie} - ${item.nombre}</p>
           </li>
         `).join('')}
       </ul>

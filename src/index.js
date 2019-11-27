@@ -1,4 +1,4 @@
-const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServiceV2/FeatureServer';
+const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer';
 const urlEstrategias = SERVICIO + '/3/query';
 const urlProyectos = SERVICIO + '/4/query'
 
@@ -13,6 +13,7 @@ class Landing {
 
   loadData() {
     CarouselRepository.loadData();
+    CoberturasRepository.loadData();
   }
   
   registerHandlers() {
@@ -183,4 +184,10 @@ class Landing {
 
 }
 
-new Landing();
+fetch('/json/config.json').then(response => {
+  response.json().then(config => {
+    window.tncConfig = config;
+    new Landing();
+  });
+
+})

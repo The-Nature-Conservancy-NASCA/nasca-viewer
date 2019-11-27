@@ -23,8 +23,8 @@ class CarouselRepository {
         },
         responseType: 'json'
       };
-      const estrategiasRequest = esriRequest('https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServiceV2/FeatureServer/10/query', queryOptions);
-      estrategiasRequest.then(response => {
+      const carouselRequest = esriRequest(window.tncConfig.urls.carrusel, queryOptions);
+      carouselRequest.then(response => {
         const carouselData = response.data.features.map(feature => {
           const { OBJECTID, Especie, URL, nombre_comun } = feature.attributes;
           return {

@@ -146,8 +146,7 @@ class TNCMap {
           this.treeMap.renderGraphic(r.features);
         });
       }
-      
-      if(region) {
+      else if(region) {
         eventBus.emitEventListeners('regionClicked');
         window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
