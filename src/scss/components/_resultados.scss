@@ -84,11 +84,12 @@
   }
   
   &__card-title {
+    font-weight: normal;
     margin: 1rem;
   }
 
   &__card-count {
-    background-color: $light-green;
+    background-color: var(--theme-color);
     padding: 2rem;
     width: 100%;
 

@@ -86,18 +86,18 @@ class ToolBar {
         </div>
       </div>
       <div id="menu-capas" class="menu-panel">
-        <h2 class="menu-panel__title">Capas</h2>
+        <h2 class="menu-panel__title">Layers</h2>
         <div class="menu-panel__contenido" id="layerList-map">
         </div>
       </div>
       <div id="menu-leyenda" class="menu-panel">
-        <h2 class="menu-panel__title">Leyenda</h2>
+        <h2 class="menu-panel__title">Legend</h2>
         <div class="menu-panel__contenido" id="leyenda-map">
         </div>
       </div>
       <template>
         <div id="menu-info" class="menu-panel">
-          <h2 class="menu-panel__title">Información</h2>
+          <h2 class="menu-panel__title">Information</h2>
           <div class="menu-panel__contenido">
             <ul class="menu-panel__menu">
               <li class="menu-panel__menu-item" data-info="about">About</li>
@@ -119,7 +119,7 @@ class ToolBar {
         </div>
       </template>
       <div id="menu-base" class="menu-panel">
-        <h2 class="menu-panel__title">Mapa Base</h2>
+        <h2 class="menu-panel__title">Basemap</h2>
         <div class="menu-panel__contenido" id="basemap-map"></div>
       </div>
     </div>
