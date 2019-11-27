@@ -5,7 +5,7 @@ window.addEventListener('DOMContentLoaded', event => {
   window.map = new TNCMap('map-div');
   new ToolBar('toolbar');
   new Carousel('resultado-carousel');
-  const PANEL_RESULTADOS = new Panel();
+  new Panel();
   const selectEstrategias = new EstrategiaSelector('selector-estrategias');
   const selectProyectos = new ProyectoSelector('selector-proyectos');
 

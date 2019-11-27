@@ -49,7 +49,7 @@ class TNCMap {
       
       window.tnc_map = new WebMap({
         portalItem: {
-          id: "8555040c97e94a08ac159cda460f5020"
+          id: "9b5f3da3a6ae4558bbaa25d50754e286"
         },
         basemap: 'satellite',
         slider: false
@@ -96,8 +96,8 @@ class TNCMap {
       });
       
       window.tnc_map.when(() => {
-        window.tnc_map.layers.items[2].outFields = ["*"];
-        window.tnc_map.layers.items[3].outFields = ["*"];
+        window.tnc_map.layers.items[0].outFields = ["*"];
+        window.tnc_map.layers.items[1].outFields = ["*"];
         const estrategiaLanding = window.sessionStorage.getItem('estrategia');
         let definitionExpression = null;
         if (estrategiaLanding) {
@@ -139,8 +139,11 @@ class TNCMap {
       const { predio, region } = this.extractIds(response.results);
       
       if(predio) {
-        eventBus.emitEventListeners('predioClicked');
+        //eventBus.emitEventListeners('predioClicked');
         this.query.where = `ID_predio = '${predio}'`;
+        CoberturasRepository.getCoberturasByPredio(predio).then(results => {
+          console.log(results);
+        });
         this.coberturasLayer.queryFeatures(this.query)
         .then((r) => {
           this.treeMap.renderGraphic(r.features);

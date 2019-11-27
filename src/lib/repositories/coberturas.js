@@ -4,7 +4,8 @@ class CoberturasRepository {
     return {
       name: this.TABLE_NAME,
       columns: {
-        OBJECTID: { primaryKey: true, dataType: 'number' }
+        OBJECTID: { primaryKey: true, dataType: 'number' },
+        ID_predio: { dataType: 'string'}
       }
     };
   }
@@ -28,6 +29,11 @@ class CoberturasRepository {
         return window.store.insertRows(this.TABLE_NAME, coberturasData);
       });
     });
+  }
+
+  static async getCoberturasByPredio(predio) {
+    const results = await window.store.select(this.TABLE_NAME, { ID_predio: predio });
+    return !!results ? results : [];
   }
 }
 
