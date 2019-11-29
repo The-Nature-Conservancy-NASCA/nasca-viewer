@@ -16,7 +16,6 @@ class CoberturasRepository {
         query: {
           f: 'json',
           where: '1=1',
-          maxRecordCountFactor: 5,
           outFields: ["OBJECTID", "ID_predio", "ID_cobertura", "corine1", "corine2", "cobertura_proyecto", "verificacion", "porcentaje_area", "fecha_visita", "carbono_biomasa", "carbono_suelos", "carbono_madera", "subcobertura_proyecto"]
         },
         responseType: 'json'

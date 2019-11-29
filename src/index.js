@@ -190,4 +190,4 @@ fetch('/json/config.json').then(response => {
     new Landing();
   });
 
-})
+});

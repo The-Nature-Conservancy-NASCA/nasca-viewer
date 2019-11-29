@@ -96,8 +96,8 @@ class TNCMap {
       });
       
       window.tnc_map.when(() => {
-        window.tnc_map.layers.items[0].outFields = ["*"];
         window.tnc_map.layers.items[1].outFields = ["*"];
+        window.tnc_map.layers.items[2].outFields = ["*"];
         const estrategiaLanding = window.sessionStorage.getItem('estrategia');
         let definitionExpression = null;
         if (estrategiaLanding) {

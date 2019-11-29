@@ -23,6 +23,9 @@
       padding: 0;
       margin: 0;
       height: 100%;
+    }
+
+    #map-div {
       width: calc(100vw - 48rem);
     }
   </style>
@@ -46,9 +49,8 @@
       </div>
       <div class="divider"></div>
       <div class="navigation__options">
-        <i class="options__icon esri-icon-description"></i>
+        <i class="options__icon esri-icon-description js-show-general-info"></i>
         <span class="options__language">ES</span>
-        <i class="options__icon esri-icon-search"></i>
       </div>
     </nav>
   </header>
@@ -92,6 +94,8 @@
       <!-- <div id="resultado-carousel" class="resultados__carousel"></div>  -->
     </section>
   </aside>
+  <div class="modal">
+  </div>
   <script src="js/visor.min.js"></script>
 </body>
 

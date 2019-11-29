@@ -4,6 +4,10 @@
     "estrategias": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/3/query",
     "proyectos": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/4/query",
     "coberturas": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/13/query"
+  },
+  "generalInformation": {
+    "header": "Information",
+    "content": "<p>Este visor, es creado por TNC cuyo objetivo es mostrar la gestion de los proyectos realizados en la region por las estrategias definidas en los proyectos.<br><br>El uso de este visor esta de acuerdo a las politicas de uso de datos definido por TNC el cual especifica el manejo y la propiedad de la informacion aqui expuesta (LINK).<br><br>Si presenta problemas al usar el visor consulte el manual el cual esta disponible en (link)<br>Si esta app pesenta informacion incorrecta  o fallos consulte con (Email) </p><div class=\"images images--centered\"><img src=\"img/tnc-logo.svg\" width=\"150\"><img src=\"img/dreamgis-logo.png\" title=\"DreamGIS S.A.S\"></div>"
   }
-  
+
 }
