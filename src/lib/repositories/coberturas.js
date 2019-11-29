@@ -35,6 +35,11 @@ class CoberturasRepository {
     const results = await window.store.select(this.TABLE_NAME, { ID_predio: predio });
     return !!results ? results : [];
   }
+
+  static async getCoberturasByPredios(predios) {
+    const results = await window.store.select(this.TABLE_NAME, {ID_predio: {in: predios}});
+    return !!results ? results : [];
+  }
 }
 
 CoberturasRepository.TABLE_NAME = 'Coberturas';

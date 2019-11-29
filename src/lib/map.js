@@ -21,22 +21,22 @@ class TNCMap {
           Zoom,
           ScaleBar,
           FeatureLayer) {
-      this.coberturasLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices2/FeatureServer/3"
+      this.prediosLayer = new FeatureLayer({
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/1"
       });
       this.biodiversidadLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices2/FeatureServer/2"
       });
       this.coloresLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServiceV2/FeatureServer/12"
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/12"
       });
-      this.query = this.coberturasLayer.createQuery();
+      this.prediosQuery = this.prediosLayer.createQuery();
+      this.prediosQuery.outFields  = ["Id_predio"];
+      this.prediosQuery.returnGeometry = false; 
       this.bioQuery = this.biodiversidadLayer.createQuery();
       this.colorQuery = this.coloresLayer.createQuery();
-      this.query.returnGeometry = false;
       this.bioQuery.returnGeometry = false;
       this.colorQuery.where = "1=1";
-      this.query.outFields = ["ID_predio", "ID_cobertura", "cobertura_actual", "sub_cobertura_actual", "porcentaje_area"];
       this.bioQuery.outFields = ['ID_region', 'cantidad_individuos', 'grupo_tnc'];
       const sumPopulation = {
         onStatisticField: "grupo_tnc",
@@ -96,8 +96,8 @@ class TNCMap {
       });
       
       window.tnc_map.when(() => {
-        window.tnc_map.layers.items[0].outFields = ["*"];
         window.tnc_map.layers.items[1].outFields = ["*"];
+        window.tnc_map.layers.items[2].outFields = ["*"];
         const estrategiaLanding = window.sessionStorage.getItem('estrategia');
         let definitionExpression = null;
         if (estrategiaLanding) {
@@ -127,29 +127,32 @@ class TNCMap {
       this.coloresLayer.queryFeatures(this.colorQuery)
       .then(r => {
         const colors = this.colorsToObject(r.features);
-        console.log(colors);
         this.treeMap = new TreeMap("#graph__coberturas", colors);
       })
-      this.pie = new Pie('#graph__biodiversidad');
+      this.barChart = new BarChart('#graph__biodiversidad');
     }.bind(this));
   }
 
   mapClick(event) {
     this.view.hitTest(event).then((response) => {
       const { predio, region } = this.extractIds(response.results);
-      
       if(predio) {
-        //eventBus.emitEventListeners('predioClicked');
-        this.query.where = `ID_predio = '${predio}'`;
         CoberturasRepository.getCoberturasByPredio(predio).then(results => {
-          console.log(results);
-        });
-        this.coberturasLayer.queryFeatures(this.query)
-        .then((r) => {
-          this.treeMap.renderGraphic(r.features);
+          this.treeMap.renderGraphic(results);
         });
       }
       else if(region) {
+        this.prediosQuery.where = `ID_region = '${region}'`;
+        this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
+          const prediosIds = [];
+          results.features.forEach(feat => {
+            prediosIds.push(feat.attributes.ID_predio);
+          });
+          CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
+            this.treeMap.renderGraphic(res);
+          });
+        });
+
         eventBus.emitEventListeners('regionClicked');
         window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
