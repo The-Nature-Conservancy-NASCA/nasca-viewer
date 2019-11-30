@@ -4,6 +4,7 @@ const eventBus = new Eventbus();
 class Visor {
 
   constructor() {
+    window.store.loadData();
     window.map = new TNCMap('map-div');
     new ToolBar('toolbar');
     new Carousel('resultado-carousel');

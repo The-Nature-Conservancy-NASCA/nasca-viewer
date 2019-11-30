@@ -1,9 +1,10 @@
 {
   "urls": {
-    "carrusel": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/10/query",
-    "estrategias": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/3/query",
-    "proyectos": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/4/query",
-    "coberturas": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/13/query"
+    "carrusel": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/10/query",
+    "estrategias": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/3/query",
+    "proyectos": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/4/query",
+    "coberturas": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/13/query",
+    "biodiversidad": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/2/query"
   },
   "generalInformation": {
     "header": "Information",
