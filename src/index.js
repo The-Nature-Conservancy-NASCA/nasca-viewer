@@ -8,6 +8,8 @@ class Landing {
   
   constructor() {
     this.loadLandingData();
+    this._ctaBack = document.querySelector('.cta-back');
+    this._ctaForward = document.querySelector('.cta-forward');
   }
   
   registerHandlers() {
@@ -36,23 +38,24 @@ class Landing {
         const proyectoId = currentTarget.dataset.proyecto;
         window.sessionStorage.clear();
         window.sessionStorage.setItem('proyecto', proyectoId);
-        window.location = '/visor.html'
+        window.location = '/visor.html';
       });
     });
 
-    document.querySelector('.cta-back').addEventListener('click', event => {
+    this._ctaBack.addEventListener('click', event => {
       document.querySelector('.estrategias').classList.remove('collapsed');
       document.querySelector('.cta-back').classList.add('hidden');
       this.hideProyectos();
     });
 
-    document.querySelector('.cta-forward').addEventListener('click', event => {
+    this._ctaForward.addEventListener('click', event => {
       if(this.estrategiaVisible()) {
         window.sessionStorage.clear();
       } else {
         window.sessionStorage.clear();
         window.sessionStorage.setItem('estrategia', this.selectedEstrategia);
       }
+      window.location = '/visor.html';
     });
   }
 
@@ -93,6 +96,9 @@ class Landing {
   }
   
   processResponse(responses) {
+    setTimeout(() => {
+      this._ctaForward.classList.remove('hidden');
+    }, 1500);
     const estrategiasResponse = responses[0];
     const proyectosResponse = responses[1];
 
