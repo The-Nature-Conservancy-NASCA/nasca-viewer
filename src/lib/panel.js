@@ -56,6 +56,9 @@ class Panel {
   activatePanel(tab) {
     document.querySelector(`.${PANEL.CLASSES.PANEL_ACTIVE}`).classList.remove(PANEL.CLASSES.PANEL_ACTIVE);
     document.getElementById(`panel-${tab}`).classList.add(PANEL.CLASSES.PANEL_ACTIVE);
+    if(tab === 'biodiversidad') {
+      eventBus.emitEventListeners('biodiversidadClicked');
+    }
   }
 
   _disableTab(tab) {

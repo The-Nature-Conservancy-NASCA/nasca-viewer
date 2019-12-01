@@ -3,6 +3,9 @@ class Carousel {
   constructor (el) {
     this._el = document.getElementById(el);
     this._queryData();
+    eventBus.addEventListener('biodiversidadClicked', event => {
+      this.renderHTML();
+    });
   }
   
   init () {
@@ -37,14 +40,15 @@ class Carousel {
       }
     })
   }
-
+  
   _queryData() {
     CarouselRepository.getData().then(carouselData => {
-      this.renderHTML(carouselData);
+      this._data = carouselData;
     });
   }
   
-  renderHTML(options) {
+  renderHTML() {
+    const options = this._data;
     const template = /* html */`
     <div class="carousel">
       <ul class="carousel__list" data-target="carousel">
@@ -63,8 +67,6 @@ class Carousel {
     `;
     
     this._el.innerHTML = template;
-    setTimeout(() => {
-      this.init();
-    }, 500);
+    this.init();
   }
 }
