@@ -1,14 +1,14 @@
-window.store = new Store();
-const eventBus = new Eventbus();
-
 class Visor {
 
   constructor() {
-    window.store.loadData();
-    window.map = new TNCMap('map-div');
+    eventBus.addEventListener('coberturaLoaded', event => {
+      document.querySelector('.loader').classList.add('hidden');
+    });
+    this._loadData();
     new ToolBar('toolbar');
+    new Panel('panel-resultados');
+    window.map = new TNCMap('map-div');
     new Carousel('resultado-carousel');
-    new Panel();
     const selectEstrategias = new EstrategiaSelector('selector-estrategias');
     const selectProyectos = new ProyectoSelector('selector-proyectos');
     window.modalPopup = new Modal();
@@ -32,20 +32,25 @@ class Visor {
     
   }
 
+  _loadData() {
+    CarouselRepository.loadData();
+    CoberturasRepository.loadData();
+  }
+
 }
 
+const eventBus = new Eventbus();
 fetch('/json/config.json').then(response => {
   response.json().then(config => {
+    window.store = new Store();
     window.tncConfig = config;
     new Visor();
   });
 
 });
 
-
 const changeThemeColor = (newColor) => {
   document.documentElement.style.setProperty('--theme-color', newColor);
   document.documentElement.style.setProperty('--theme-color-hover', pSBC(0.3, newColor));
   document.documentElement.style.setProperty('--theme-color-active', pSBC(-0.5, newColor));
 };
-

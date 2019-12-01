@@ -25,7 +25,9 @@ class CoberturasRepository {
         const coberturasData = response.data.features.map(feature => {
           return feature.attributes;
         });
-        return window.store.insertRows(this.TABLE_NAME, coberturasData);
+        window.store.insertRows(this.TABLE_NAME, coberturasData).then(result => {
+          eventBus.emitEventListeners('coberturaLoaded');
+        });
       });
     });
   }

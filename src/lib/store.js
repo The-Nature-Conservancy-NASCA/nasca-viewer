@@ -40,12 +40,6 @@ class Store {
 
     return results;
   }
-  
-  loadData() {
-    CarouselRepository.loadData();
-    CoberturasRepository.loadData();
-    BiodiversidadRepository.loadData();
-  }
 
   _createConection() {
     this._connection = new JsStore.Instance(new Worker('js/jsstore.worker.js'));
