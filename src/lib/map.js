@@ -115,12 +115,7 @@ class TNCMap {
           definitionExpression = `ID_proyecto='${proyecto}'`;
         }
         
-        const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-        if(definitionExpression) {
-          layer.when(() => {
-            layer.definitionExpression = definitionExpression;
-          });
-        }
+        this._filterLayers(definitionExpression);
           
         this.view.on("click", this.mapClick.bind(this));
       });
@@ -208,14 +203,23 @@ class TNCMap {
   changeEstrategia(estrategiaId) {
     ProyectoRepository.getProyectosOfEstrategia(estrategiaId).then(proyectos => {
       const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
-      const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-      layer.definitionExpression = definitionExpression;
+      this._filterLayers(definitionExpression);
     });
   }
 
   changeProyecto(proyectoId) {
     const definitionExpression = `ID_proyecto='${proyectoId}'`;
-    const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-    layer.definitionExpression = definitionExpression;
+    this._filterLayers(definitionExpression);
+  }
+
+  _filterLayers(definitionExpression) {
+    const layers = window.tnc_map.layers.filter(layer => layer.title === 'Predios' || layer.title === 'Regiones');
+    if(definitionExpression) {
+      layers.forEach(layer => {
+        layer.when(() => {
+          layer.definitionExpression = definitionExpression;
+        });
+      });
+    }
   }
 }
