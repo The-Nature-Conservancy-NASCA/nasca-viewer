@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -9,7 +9,7 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://js.arcgis.com/4.12/"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsstore/dist/jsstore.min.js"></script>
-  <link rel="stylesheet" href="css/visor.css">
+  <link rel="stylesheet" href="/css/visor.css">
   <style>
     :root {
       --theme-color: #555;
@@ -33,16 +33,16 @@
 
 <body>
   <header class="header">
-    <img class="header__logo" src="img/tnc-logo.svg" alt="Logo TNC" width="150">
+    <img class="header__logo" src="/img/tnc-logo.svg" alt="Logo TNC" width="150">
     <nav class="navigation">
       <div class="navigation__menu">
         <ul class="navigation__menu-list">
-          <li class="navigation__item"><a href="/">Initio</a></li>
-          <li class="navigation__item"><a href="#" id="nav-ver-todo">Inicio</a></li>
-          <li class="navigation__item"><a href="#" id="toggle-selector-estrategias">Estrategias</a>
+          <li class="navigation__item"><a href="/en/">Home</a></li>
+          <li class="navigation__item"><a href="#" id="nav-ver-todo">All data</a></li>
+          <li class="navigation__item"><a href="#" id="toggle-selector-estrategias">Strategies</a>
             <div class="navigation__selector" id="selector-estrategias"></div>
           </li>
-          <li class="navigation__item"><a href="#" id="toggle-selector-proyecto">Proyectos</a>
+          <li class="navigation__item"><a href="#" id="toggle-selector-proyecto">Projects</a>
             <div class="navigation__selector" id="selector-proyectos"></div>
           </li>
         </ul>
@@ -50,8 +50,8 @@
       <div class="divider"></div>
       <div class="navigation__options">
         <i class="options__icon esri-icon-description js-show-general-info"></i>
-        <a href="#"><span class="options__language selected">ES</span></a>
-        <a href="/en/visor.html"><span class="options__language">EN</span></a>
+        <a href="/visor.html"><span class="options__language">ES</span></a>
+        <a href="#"><span class="options__language selected">EN</span></a>
       </div>
     </nav>
   </header>
@@ -61,9 +61,9 @@
   <div class="modal">
   </div>
   <div class="loader">
-    <img src="img/loader.gif" alt="loader">
+    <img src="/img/loader.gif" alt="loader">
   </div>
-  <script src="js/visor.min.js"></script>
+  <script src="/js/visor.min.js"></script>
 </body>
 
 </html>

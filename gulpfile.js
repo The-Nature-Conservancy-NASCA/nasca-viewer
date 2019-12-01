@@ -22,7 +22,7 @@ function compileJSLanding(cb) {
 }
 
 function copyHTML(cb) {
-  return src('src/*.html').pipe(dest('dist/'));
+  return src('src/**/*.html').pipe(dest('dist/'));
 }
 
 function copyLibraries(cb) {
@@ -52,6 +52,6 @@ exports.dev = function() {
   watch('src/lib/**/*.js', parallel(compileJsVisor, compileJSLanding));
   watch('src/index.js', compileJSLanding);
   watch('src/visor.js', compileJsVisor);
-  watch('src/*.html', copyHTML);
+  watch('src/**/*.html', copyHTML);
   watch('src/json/*.json', copyJSON);
 }

@@ -60,8 +60,8 @@ class Carousel {
         `).join('')}
       </ul>
       <div class="carousel__buttons">
-        <img class="carousel__button" src="img/keyboard_arrow_left.png" data-action="slideLeft">
-        <img class="carousel__button" src="img/keyboard_arrow_right.png" data-action="slideRight">
+        <img class="carousel__button" src="/img/keyboard_arrow_left.png" data-action="slideLeft">
+        <img class="carousel__button" src="/img/keyboard_arrow_right.png" data-action="slideRight">
       </div>
     </div>
     `;

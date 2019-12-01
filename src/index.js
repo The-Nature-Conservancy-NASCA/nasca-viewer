@@ -1,7 +1,3 @@
-const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer';
-const urlEstrategias = SERVICIO + '/3/query';
-const urlProyectos = SERVICIO + '/4/query'
-
 window.store = new Store();
 
 class Landing {
@@ -38,7 +34,7 @@ class Landing {
         const proyectoId = currentTarget.dataset.proyecto;
         window.sessionStorage.clear();
         window.sessionStorage.setItem('proyecto', proyectoId);
-        window.location = '/visor.html';
+        this._openVisor();
       });
     });
 
@@ -55,8 +51,13 @@ class Landing {
         window.sessionStorage.clear();
         window.sessionStorage.setItem('estrategia', this.selectedEstrategia);
       }
-      window.location = '/visor.html';
+      this._openVisor();
     });
+  }
+
+  _openVisor() {
+    const language = window.navigator.language.slice(0, 2) === 'en' ? '/en/' : '/';
+    window.location = `${language}visor.html`;
   }
 
   estrategiaVisible() {
@@ -88,8 +89,8 @@ class Landing {
         responseType: 'json'
       };
 
-      const estrategiasRequest = esriRequest(urlEstrategias, queryOptions);
-      const proyectosRequest = esriRequest(urlProyectos, queryOptions);
+      const estrategiasRequest = esriRequest(window.tncConfig.urls.estrategias, queryOptions);
+      const proyectosRequest = esriRequest(window.tncConfig.urls.proyectos, queryOptions);
       
       Promise.all([estrategiasRequest, proyectosRequest]).then(this.processResponse.bind(this));
     });
@@ -186,7 +187,8 @@ class Landing {
 
 fetch('/json/config.json').then(response => {
   response.json().then(config => {
-    window.tncConfig = config;
+    const lang = window.navigator.language.slice(0, 2) || document.documentElement.lang;
+    window.tncConfig = config[lang];
     new Landing();
   });
 

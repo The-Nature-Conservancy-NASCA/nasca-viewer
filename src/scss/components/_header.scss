@@ -78,5 +78,9 @@
     color: $font-gray;
     cursor: pointer;
     margin-right: 1.5rem;
+
+    &.selected {
+      font-weight: 700;
+    }
   }
 }

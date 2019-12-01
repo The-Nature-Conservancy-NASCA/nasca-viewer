@@ -1,32 +1,84 @@
 {
-  "urls": {
-    "carrusel": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/10/query",
-    "estrategias": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/3/query",
-    "proyectos": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/4/query",
-    "coberturas": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/13/query",
-    "biodiversidad": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/2/query"
+  "es": {
+    "urls": {
+      "carrusel": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/10/query",
+      "estrategias": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/3/query",
+      "proyectos": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/4/query",
+      "coberturas": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/13/query",
+      "biodiversidad": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/2/query"
+    },
+    "generalInformation": {
+      "header": "Información",
+      "content": "<p>Este visor, es creado por TNC cuyo objetivo es mostrar la gestion de los proyectos realizados en la region por las estrategias definidas en los proyectos.<br><br>El uso de este visor esta de acuerdo a las politicas de uso de datos definido por TNC el cual especifica el manejo y la propiedad de la informacion aqui expuesta (LINK).<br><br>Si presenta problemas al usar el visor consulte el manual el cual esta disponible en (link)<br>Si esta app pesenta informacion incorrecta  o fallos consulte con (Email) </p><div class=\"images images--centered\"><img src=\"img/tnc-logo.svg\" width=\"150\"><img src=\"img/dreamgis-logo.png\" title=\"DreamGIS S.A.S\"></div>"
+    },
+    "specificInformation": {
+      "carbono": {
+        "header": "Carbono",
+        "content": "<p>El dióxido de carbono es capturado de manera natural a través de procesos biológicos, químicos y físicos. Este puede ser capturado por diferentes compartimientos y cada cobertura tiene una capacidad específica para capturar este gas.</p>"
+      },
+      "cobertura": {
+        "header": "Coberturas",
+        "content": "<p>Corresponde a la materia física que cubre la superficie de la tierra. Existen diferentes maneras de agrupar y clasificar las diferentes coberturas de la tierra. En este visor se agrupan las coberturas siguiendo la metodología CORINE o de acuerdo a la clasificación específica para cada uno de los proyectos.</p>"
+      },
+      "biodiversidad": {
+        "header": "Biodiversidad",
+        "content": "<p>La biodiversidad se refiere a la diversidad de plantas y animales en un lugar determinado. En este visor se muestran las especies que a través de númerosos esfuerzos hemos encontrado en las diferentes regiones de los proyectos.</p>"
+      },
+      "implementacion": {
+        "header": "Implementaciones",
+        "content": "<p>Estas implementaciones se refieren a las acciones que estamos tomando en términos de conservación y restauración en cada uno de los predios de nuestros proyectos. Adicionalmente, trabajamos por mejorar las condiciones sociales e incluir a todas las personas interesadas independientemente de su raza, sexo y religión.</p>"
+      }
+    },
+    "strings": {
+      "warning_panel": "Selecciona un predio o región para ver resultados",
+      "capas": "Capas",
+      "leyenda": "Leyenda",
+      "mapa_base": "Mapa base",
+      "carbono": "Carbono",
+      "coberturas": "Coberturas",
+      "implementaciones": "Implement.",
+      "biodiversidad": "Biodiversidad"
+    }
   },
-  "generalInformation": {
-    "header": "Information",
-    "content": "<p>Este visor, es creado por TNC cuyo objetivo es mostrar la gestion de los proyectos realizados en la region por las estrategias definidas en los proyectos.<br><br>El uso de este visor esta de acuerdo a las politicas de uso de datos definido por TNC el cual especifica el manejo y la propiedad de la informacion aqui expuesta (LINK).<br><br>Si presenta problemas al usar el visor consulte el manual el cual esta disponible en (link)<br>Si esta app pesenta informacion incorrecta  o fallos consulte con (Email) </p><div class=\"images images--centered\"><img src=\"img/tnc-logo.svg\" width=\"150\"><img src=\"img/dreamgis-logo.png\" title=\"DreamGIS S.A.S\"></div>"
-  },
-  "specificInformation": {
-    "carbono": {
-      "header": "Carbono",
-      "content": "<p>El dióxido de carbono es capturado de manera natural a través de procesos biológicos, químicos y físicos. Este puede ser capturado por diferentes compartimientos y cada cobertura tiene una capacidad específica para capturar este gas.</p>"
+  "en": {
+    "urls": {
+      "carrusel": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/10/query",
+      "estrategias": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/3/query",
+      "proyectos": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/4/query",
+      "coberturas": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/13/query",
+      "biodiversidad": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/2/query"
     },
-    "cobertura": {
-      "header": "Coberturas",
-      "content": "<p>Corresponde a la materia física que cubre la superficie de la tierra. Existen diferentes maneras de agrupar y clasificar las diferentes coberturas de la tierra. En este visor se agrupan las coberturas siguiendo la metodología CORINE o de acuerdo a la clasificación específica para cada uno de los proyectos.</p>"
+    "generalInformation": {
+      "header": "Information",
+      "content": "<p>This viewer is created by TNC whose objective is to show the management of the projects carried out in the region by the strategies defined in the projects.<br><br>If you have problems using the viewer, consult the manual which is available at (link). <br> If this app has incorrect information or errors, please consult (Email)</p><div class=\"images images--centered\"><img src=\"/img/tnc-logo.svg\" width=\"150\"><img src=\"/img/dreamgis-logo.png\" title=\"DreamGIS S.A.S\"></div>"
     },
-    "biodiversidad": {
-      "header": "Biodiversidad",
-      "content": "<p>La biodiversidad se refiere a la diversidad de plantas y animales en un lugar determinado. En este visor se muestran las especies que a través de númerosos esfuerzos hemos encontrado en las diferentes regiones de los proyectos.</p>"
+    "specificInformation": {
+      "carbono": {
+        "header": "Carbon",
+        "content": "<p>Carbon dioxide is captured naturally through biological, chemical and physical processes. It can be captured by different compartments and each coverage has a specific capacity to capture this gas.</p>"
+      },
+      "cobertura": {
+        "header": "Covers",
+        "content": "<p>It corresponds to the physical matter that covers the surface of the earth. There are different ways of grouping and classifying the different land cover. In this viewer the coverage is grouped following the CORINE methodology or according to the specific classification for each of the projects.</p>"
+      },
+      "biodiversidad": {
+        "header": "Biodiversity",
+        "content": "<p>Biodiversity refers to the diversity of plants and animals in a given place. This viewer shows the species that, through numerous efforts, we have found in the different regions of the projects.</p>"
+      },
+      "implementacion": {
+        "header": "Implementations",
+        "content": "<p>These implementations refer to the actions that we are taking in terms of conservation and restoration in each of the properties of our projects. Additionally, we work to improve social conditions and include all interested persons regardless of race, sex and religion.</p>"
+      }
     },
-    "implementacion": {
-      "header": "Implementaciones",
-      "content": "<p>Estas implementaciones se refieren a las acciones que estamos tomando en términos de conservación y restauración en cada uno de los predios de nuestros proyectos. Adicionalmente, trabajamos por mejorar las condiciones sociales e incluir a todas las personas interesadas independientemente de su raza, sexo y religión.</p>"
+    "strings": {
+      "warning_panel": "Select a plot or region to see results",
+      "capas": "Layers",
+      "leyenda": "Legend",
+      "mapa_base": "Basemap",
+      "carbono": "Carbon",
+      "coberturas": "Covers",
+      "implementaciones": "Implement.",
+      "biodiversidad": "Biodiversity"
     }
   }
-
 }

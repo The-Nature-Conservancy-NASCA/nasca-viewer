@@ -86,28 +86,28 @@ class Panel {
       <header class="panel__header">
         <ul class="panel__tabs">
           <li class="panel__tab panel__tab--active" data-tab='carbono'>
-            Carbono
+            ${window.tncConfig.strings.carbono}
           </li>
           <li class="panel__tab" data-tab='cobertura'>
-            Coberturas
+            ${window.tncConfig.strings.coberturas}
           </li>
           <li class="panel__tab" data-tab='implementacion'>
-            Implementaciones
+            ${window.tncConfig.strings.implementaciones}
           </li>
           <li class="panel__tab" data-tab='biodiversidad'>
-            Biodiversidad
+            ${window.tncConfig.strings.biodiversidad}
           </li>
         </ul>
       </header>
       <section class="resultados">
         <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
           <i class="panel__information esri-icon-description js-show-component-info" data-component="carbono"></i>
-          Select a plot to see details
+          ${window.tncConfig.strings.warning_panel}
         </div>
         <div class="panel__tab-panel" id="panel-biodiversidad">
           <i class="panel__information esri-icon-description js-show-component-info" data-component="biodiversidad"></i>
           <div id="biodiversidad-resultados">
-            Select a plot to see details
+            ${window.tncConfig.strings.warning_panel}
           </div>
           <div id="graph__biodiversidad"></div>
           <div id="tooltip__biodiversidad" class="tooltip"></div>
@@ -120,7 +120,7 @@ class Panel {
         </div>
         <div class="panel__tab-panel" id="panel-implementacion">
           <i class="panel__information esri-icon-description js-show-component-info" data-component="implementacion"></i>
-          Select a plot to see details
+          ${window.tncConfig.strings.warning_panel}
         </div>
       </section>
       `;

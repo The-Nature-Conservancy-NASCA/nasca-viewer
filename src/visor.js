@@ -43,7 +43,8 @@ const eventBus = new Eventbus();
 fetch('/json/config.json').then(response => {
   response.json().then(config => {
     window.store = new Store();
-    window.tncConfig = config;
+    const lang =/* window.navigator.language.slice(0, 2) || */document.documentElement.lang;
+    window.tncConfig = config[lang];
     new Visor();
   });
 

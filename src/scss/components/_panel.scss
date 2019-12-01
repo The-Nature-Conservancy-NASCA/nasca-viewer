@@ -31,7 +31,9 @@
     background-color: var(--theme-color);
     color: $white;
     cursor: pointer;
-    padding: 1.6rem;
+    padding: 1.6rem 0;
+    text-align: center;
+    width: 12rem;
     
     &--active {
       background-color: $white;

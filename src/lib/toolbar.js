@@ -86,40 +86,17 @@ class ToolBar {
         </div>
       </div>
       <div id="menu-capas" class="menu-panel">
-        <h2 class="menu-panel__title">Layers</h2>
+        <h2 class="menu-panel__title">${window.tncConfig.strings.capas}</h2>
         <div class="menu-panel__contenido" id="layerList-map">
         </div>
       </div>
       <div id="menu-leyenda" class="menu-panel">
-        <h2 class="menu-panel__title">Legend</h2>
+        <h2 class="menu-panel__title">${window.tncConfig.strings.leyenda}</h2>
         <div class="menu-panel__contenido" id="leyenda-map">
         </div>
       </div>
-      <template>
-        <div id="menu-info" class="menu-panel">
-          <h2 class="menu-panel__title">Information</h2>
-          <div class="menu-panel__contenido">
-            <ul class="menu-panel__menu">
-              <li class="menu-panel__menu-item" data-info="about">About</li>
-              <li class="menu-panel__menu-item" data-info="links">Links & Science</li>
-              <li class="menu-panel__menu-item" data-info="privacy">Privacy Policy</li>
-              <li class="menu-panel__menu-item" data-info="login">Login</li>
-            </ul>
-          </div>
-        </div>
-        <div id="menu-idioma" class="menu-panel">
-          <h2 class="menu-panel__title">Idioma</h2>
-          <div class="menu-panel__contenido">
-            <ul class="menu-panel__menu">
-              <li class="menu-panel__menu-item" data-language="es">Español</li>
-              <li class="menu-panel__menu-item" data-language="fr">Français</li>
-              <li class="menu-panel__menu-item" data-language="en">English</li>
-            </ul>
-          </div>
-        </div>
-      </template>
       <div id="menu-base" class="menu-panel">
-        <h2 class="menu-panel__title">Basemap</h2>
+        <h2 class="menu-panel__title">${window.tncConfig.strings.mapa_base}</h2>
         <div class="menu-panel__contenido" id="basemap-map"></div>
       </div>
     </div>
