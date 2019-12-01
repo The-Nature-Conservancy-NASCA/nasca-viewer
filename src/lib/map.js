@@ -22,13 +22,13 @@ class TNCMap {
           ScaleBar,
           FeatureLayer) {
       this.prediosLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/1"
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/1"
       });
       this.biodiversidadLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices2/FeatureServer/2"
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/2"
       });
       this.coloresLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer/12"
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/12"
       });
       this.prediosQuery = this.prediosLayer.createQuery();
       this.prediosQuery.outFields  = ["Id_predio"];
@@ -132,7 +132,7 @@ class TNCMap {
         const colors = this.colorsToObject(r.features);
         this.treeMap = new TreeMap("#graph__coberturas", colors);
       })
-      this.barChart = new BarChart('#graph__biodiversidad');
+      this.barChart = new BarChart("#graph__biodiversidad");
     }.bind(this));
   }
 
@@ -152,7 +152,7 @@ class TNCMap {
       if(predio) {
         eventBus.emitEventListeners('predioClicked');
         CoberturasRepository.getCoberturasByPredio(predio).then(results => {
-          this.treeMap.renderGraphic(results);
+          this.treeMap.renderGraphic(results, "project", "predio");
         });
       }
       else if(region) {
@@ -164,9 +164,11 @@ class TNCMap {
             prediosIds.push(feat.attributes.ID_predio);
           });
           CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
-            this.treeMap.renderGraphic(res);
+            this.treeMap.renderGraphic(res, "project", "region");
           });
         });
+      
+        this.barChart.renderGraphic();
 
         window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
