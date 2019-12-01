@@ -1,4 +1,4 @@
-const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer';
+const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer';
 const urlEstrategias = SERVICIO + '/3/query';
 const urlProyectos = SERVICIO + '/4/query'
 
