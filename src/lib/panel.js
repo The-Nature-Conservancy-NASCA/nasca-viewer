@@ -6,7 +6,8 @@ const PANEL = {
   },
   SELECTORS: {
     PANEL_TAB: '.panel__tab-panel',
-    TAB: '.panel__tab'
+    TAB: '.panel__tab',
+    INFO_ICONS: '.js-show-component-info'
   },
   EVENTS: {
     CLICK: 'click'
@@ -18,6 +19,7 @@ class Panel {
   constructor() {
     this._tabs = document.querySelectorAll(PANEL.SELECTORS.TAB);
     this._tabPanels = document.querySelectorAll(PANEL.SELECTORS.PANEL_TAB);
+    this._informationIcons = document.querySelectorAll(PANEL.SELECTORS.INFO_ICONS);
     eventBus.addEventListener('predioClicked', event => {
       this._disableTab('biodiversidad');
     });
@@ -36,6 +38,15 @@ class Panel {
         this.activatePanel(event.currentTarget.dataset.tab);
         document.querySelector(`.${PANEL.CLASSES.TAB_ACTIVE}`).classList.remove(PANEL.CLASSES.TAB_ACTIVE);
         event.currentTarget.classList.add(PANEL.CLASSES.TAB_ACTIVE);
+      });
+    });
+
+    this._informationIcons.forEach(icon => {
+      icon.addEventListener('click', event => {
+        const componente = event.target.dataset.component;
+        if (componente) {
+          window.modalPopup.openModal(window.tncConfig.specificInformation[componente]);
+        }
       });
     });
   }

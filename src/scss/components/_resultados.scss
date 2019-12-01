@@ -54,16 +54,15 @@
 
   }
 
-  &__carousel {
-    width: 100%;
-    margin-bottom: 2rem;
-    padding: 0 3rem;
-  }
-
   &__enlace {
     @extend .button--green;
     align-self: baseline;
   }
+}
+
+
+#resultado-carousel {
+  margin: 2rem auto;
 }
 
 .biodiversidad {
@@ -76,21 +75,31 @@
     border-top: 1px solid $light-gray;
     box-shadow: 0 5px 10px rgba($black, .3);
     color: $font-dark;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     margin-bottom: 3rem;
-    width: 15rem;
+    width: 10rem;
+    transition: transform .2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  &:hover &__card:not(:hover) {
+    transform: scale(.95);
   }
   
   &__card-title {
     font-weight: normal;
-    margin: 1rem;
+    margin: .75rem;
   }
 
   &__card-count {
     background-color: var(--theme-color);
-    padding: 2rem;
+    padding: 1rem;
     width: 100%;
 
     h3 {

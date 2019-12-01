@@ -23,6 +23,9 @@
       padding: 0;
       margin: 0;
       height: 100%;
+    }
+
+    #map-div {
       width: calc(100vw - 48rem);
     }
   </style>
@@ -46,9 +49,8 @@
       </div>
       <div class="divider"></div>
       <div class="navigation__options">
-        <i class="options__icon esri-icon-description"></i>
+        <i class="options__icon esri-icon-description js-show-general-info"></i>
         <span class="options__language">ES</span>
-        <i class="options__icon esri-icon-search"></i>
       </div>
     </nav>
   </header>
@@ -71,12 +73,13 @@
         </li>
       </ul>
     </header>
-    <div class="panel__description"></div>
     <section class="resultados">
       <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
+        <i class="panel__information esri-icon-description js-show-component-info" data-component="carbono"></i>
         Select a plot to see details
       </div>
       <div class="panel__tab-panel" id="panel-biodiversidad">
+        <i class="panel__information esri-icon-description js-show-component-info" data-component="biodiversidad"></i>
         <div id="biodiversidad-resultados">
           Select a plot to see details
         </div>
@@ -85,15 +88,19 @@
         <div id="resultado-carousel"></div>
       </div>
       <div class="panel__tab-panel" id="panel-cobertura">
+        <i class="panel__information esri-icon-description js-show-component-info" data-component="cobertura"></i>
         <div id="graph__coberturas"></div>
         <div id="tooltip__coberturas" class="tooltip"></div>
       </div>
       <div class="panel__tab-panel" id="panel-implementacion">
+        <i class="panel__information esri-icon-description js-show-component-info" data-component="implementacion"></i>
         Select a plot to see details
       </div>
       <!-- <div id="resultado-carousel" class="resultados__carousel"></div>  -->
     </section>
   </aside>
+  <div class="modal">
+  </div>
   <script src="js/visor.min.js"></script>
 </body>
 

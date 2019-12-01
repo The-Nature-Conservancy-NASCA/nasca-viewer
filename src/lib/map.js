@@ -98,13 +98,16 @@ class TNCMap {
       window.tnc_map.when(() => {
         window.tnc_map.layers.items[1].outFields = ["*"];
         window.tnc_map.layers.items[2].outFields = ["*"];
-        const estrategiaLanding = window.sessionStorage.getItem('estrategia');
+        const estrategiaInitial = this._getEstrategiaInitial();
         let definitionExpression = null;
-        if (estrategiaLanding) {
-          EstrategiaRepository.getColor(estrategiaLanding).then(color => { changeThemeColor(color); });
-          // TODO: Lógica para mostrar predios de los propyectos de la estrategia
+
+        if (estrategiaInitial) {
+          EstrategiaRepository.getColor(estrategiaInitial).then(color => { changeThemeColor(color); });
+          ProyectoRepository.getProyectosOfEstrategia(estrategiaInitial).then(proyectos => {
+            definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
+          });
         }
-        const proyecto = window.sessionStorage.getItem('proyecto');
+        const proyecto = this._getProyectoInitial();
         if(proyecto) {
           ProyectoRepository.getColor(proyecto).then(color => {
             changeThemeColor(color);
@@ -115,7 +118,7 @@ class TNCMap {
         const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
         if(definitionExpression) {
           layer.when(() => {
-            layer.definitionExpression = definition;
+            layer.definitionExpression = definitionExpression;
           });
         }
           
@@ -133,15 +136,27 @@ class TNCMap {
     }.bind(this));
   }
 
+  _getEstrategiaInitial() {
+    const estrategia = Urls.queryParam('estrategia');
+    return estrategia ? estrategia : window.sessionStorage.getItem('estrategia');
+  }
+
+  _getProyectoInitial() {
+    const proyecto = Urls.queryParam('proyecto');
+    return proyecto ? proyecto : window.sessionStorage.getItem('proyecto'); 
+  }
+
   mapClick(event) {
     this.view.hitTest(event).then((response) => {
       const { predio, region } = this.extractIds(response.results);
       if(predio) {
+        eventBus.emitEventListeners('predioClicked');
         CoberturasRepository.getCoberturasByPredio(predio).then(results => {
           this.treeMap.renderGraphic(results, "project", "predio");
         });
       }
       else if(region) {
+        eventBus.emitEventListeners('regionClicked');
         this.prediosQuery.where = `ID_region = '${region}'`;
         this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
           const prediosIds = [];
@@ -155,11 +170,12 @@ class TNCMap {
       
         this.barChart.renderGraphic();
 
-        eventBus.emitEventListeners('regionClicked');
         window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
         this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
           this._biodiversidad.showSpeciesCards(results.features);
+          d3.selectAll('.biodiversidad__card')
+          .on('click', this.groupByLandCover)
         }).catch(error => {
           console.error(error);
         });
@@ -184,45 +200,17 @@ class TNCMap {
     return { predio, region };
   }
 
-  showBiodiversidad(features) {
-    let html = '<section class="biodiversidad">';
-    features.forEach(feature => {
-      const {cantidad, grupo_tnc} = feature.attributes;
-      console.log(grupo_tnc);
-      if (grupo_tnc !== null) {
-        html += `<div class="biodiversidad__card" data-grupo="${grupo_tnc}">
-        <h4 class="biodiversidad__card-title">${grupo_tnc}</h4>
-        <h3 class="biodiversidad__card-count">${cantidad}</h3>
-        </div>`;
-      }
-    });
-    html += '</section>';
-    document.getElementById('biodiversidad-resultados').innerHTML = html;
-    d3.selectAll('.biodiversidad__card')
-      .on('click', this.groupByLandCover)
-  }
-
-  createDefinitionExpression() {
-    const estrategia = window.sessionStorage.getItem('estrategia');
-    if (estrategia) {
-      return `ID_estrategia='${estrategia}'`;
-    }
-    const proyecto = window.sessionStorage.getItem('proyecto');
-    if(proyecto) {
-      return `ID_proyecto='${proyecto}'`;
-    }
-    return undefined;
-  }
-
   groupByLandCover() {
     console.log(this);
     console.log(window.sessionStorage.getItem('region'))
   }
   
   changeEstrategia(estrategiaId) {
-    const definitionExpression = `ID_estrategia='${estrategiaId}'`;
-    const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-    layer.definitionExpression = definitionExpression;
+    ProyectoRepository.getProyectosOfEstrategia(estrategiaId).then(proyectos => {
+      const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
+      const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
+      layer.definitionExpression = definitionExpression;
+    });
   }
 
   changeProyecto(proyectoId) {

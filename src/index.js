@@ -7,13 +7,7 @@ window.store = new Store();
 class Landing {
   
   constructor() {
-    this.loadData();
     this.loadLandingData();
-  }
-
-  loadData() {
-    CarouselRepository.loadData();
-    CoberturasRepository.loadData();
   }
   
   registerHandlers() {
@@ -190,4 +184,4 @@ fetch('/json/config.json').then(response => {
     new Landing();
   });
 
-})
+});
