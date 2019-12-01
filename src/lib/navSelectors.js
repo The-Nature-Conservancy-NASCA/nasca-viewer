@@ -10,7 +10,7 @@ class EstrategiaSelector {
   }
 
   _renderHTML(options) {
-    const markup = `
+    const markup = /* html */`
       <ul class="selector selector-estrategias">
         ${options.map(estrategia => 
           `<li class="js-selector-item" 

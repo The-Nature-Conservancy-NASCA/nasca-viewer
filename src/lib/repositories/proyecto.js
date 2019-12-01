@@ -31,6 +31,16 @@ class ProyectoRepository {
     }
   }
 
+  static async getProyectosOfEstrategia(estrategia) {
+    const results = await window.store.select(this.TABLE_NAME, {
+      ID_estrategia: estrategia
+    });
+
+    if (results && results.length > 1) {
+      return results.map(proyecto => proyecto.ID_proyecto);
+    }
+  }
+
   static async getColor(id) {
     const result = await window.store.select(this.TABLE_NAME, {
       ID_proyecto: id

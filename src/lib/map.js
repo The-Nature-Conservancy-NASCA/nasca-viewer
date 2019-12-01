@@ -103,7 +103,9 @@ class TNCMap {
 
         if (estrategiaInitial) {
           EstrategiaRepository.getColor(estrategiaInitial).then(color => { changeThemeColor(color); });
-          // TODO: Lógica para mostrar predios de los propyectos de la estrategia
+          ProyectoRepository.getProyectosOfEstrategia(estrategiaInitial).then(proyectos => {
+            definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
+          });
         }
         const proyecto = this._getProyectoInitial();
         if(proyecto) {
@@ -196,27 +198,17 @@ class TNCMap {
     return { predio, region };
   }
 
-  createDefinitionExpression() {
-    const estrategia = window.sessionStorage.getItem('estrategia');
-    if (estrategia) {
-      return `ID_estrategia='${estrategia}'`;
-    }
-    const proyecto = window.sessionStorage.getItem('proyecto');
-    if(proyecto) {
-      return `ID_proyecto='${proyecto}'`;
-    }
-    return undefined;
-  }
-
   groupByLandCover() {
     console.log(this);
     console.log(window.sessionStorage.getItem('region'))
   }
   
   changeEstrategia(estrategiaId) {
-    const definitionExpression = `ID_estrategia='${estrategiaId}'`;
-    const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-    layer.definitionExpression = definitionExpression;
+    ProyectoRepository.getProyectosOfEstrategia(estrategiaId).then(proyectos => {
+      const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
+      const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
+      layer.definitionExpression = definitionExpression;
+    });
   }
 
   changeProyecto(proyectoId) {
