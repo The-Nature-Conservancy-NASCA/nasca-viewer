@@ -54,16 +54,15 @@
 
   }
 
-  &__carousel {
-    width: 100%;
-    margin-bottom: 2rem;
-    padding: 0 3rem;
-  }
-
   &__enlace {
     @extend .button--green;
     align-self: baseline;
   }
+}
+
+
+#resultado-carousel {
+  margin: 2rem auto;
 }
 
 .biodiversidad {

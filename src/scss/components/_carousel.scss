@@ -1,10 +1,10 @@
 .carousel {
   box-shadow: 0 5px 1rem rgba(0, 0, 0, .4);
-  height: 200px;
+  height: 12rem;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
-  width: 100%;
+  width: 50%;
 
   &__buttons {
     align-items: center;
@@ -29,7 +29,7 @@
   &__card {
     background: black;
     display: inline-block;
-    height: 200px;
+    height: 12rem;
     min-width: 100%;
     position: relative;
 
@@ -38,7 +38,7 @@
     }
 
     p.carousel__text {
-      bottom: 1.5rem;
+      bottom: 1rem;
       left: 1rem;
       position: absolute;
       color: #fff;

@@ -11,7 +11,7 @@ class Visor {
     new Panel();
     const selectEstrategias = new EstrategiaSelector('selector-estrategias');
     const selectProyectos = new ProyectoSelector('selector-proyectos');
-    const modalPopup = new Modal();
+    window.modalPopup = new Modal();
   
     document.getElementById('nav-ver-todo').addEventListener('click', event => {
       const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
@@ -19,7 +19,7 @@ class Visor {
     });
   
     document.querySelector('.js-show-general-info').addEventListener('click', event => {
-      modalPopup.openModal(window.tncConfig.generalInformation);
+      window.modalPopup.openModal(window.tncConfig.generalInformation);
     });
   
     EstrategiaRepository.listEstrategias().then(estrategias => {
