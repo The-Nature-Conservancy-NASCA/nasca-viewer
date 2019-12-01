@@ -37,7 +37,8 @@
       "carbono": "Carbono",
       "coberturas": "Coberturas",
       "implementaciones": "Implement.",
-      "biodiversidad": "Biodiversidad"
+      "biodiversidad": "Biodiversidad",
+      "buscar": "Buscar"
     }
   },
   "en": {
@@ -78,7 +79,8 @@
       "carbono": "Carbon",
       "coberturas": "Covers",
       "implementaciones": "Implement.",
-      "biodiversidad": "Biodiversity"
+      "biodiversidad": "Biodiversity",
+      "buscar": "Search"
     }
   }
 }

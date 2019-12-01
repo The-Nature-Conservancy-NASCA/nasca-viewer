@@ -10,6 +10,7 @@ class TNCMap {
       'esri/widgets/Search',
       'esri/widgets/Zoom',
       'esri/widgets/ScaleBar',
+      'esri/tasks/Locator',
       'esri/layers/FeatureLayer'],
       function(
           WebMap,
@@ -20,6 +21,7 @@ class TNCMap {
           Search,
           Zoom,
           ScaleBar,
+          Locator,
           FeatureLayer) {
       this.prediosLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/1"
@@ -83,7 +85,23 @@ class TNCMap {
       });
 
       const search = new Search({
+        sources: [{
+          locator: new Locator({ url: 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'}),
+          countryCode: 'COL',
+          singleLineFieldName: 'SingleLine',
+          name: 'Custom Geocoding Service',
+          localSearchOptions: {
+            minScale: 300000,
+            distance: 50000
+          },
+          placeholder: window.tncConfig.strings.buscar,
+          maxResults: 3,
+          maxSuggestions: 6,
+          suggestionsEnabled: true,
+          minSuggestCharacters: 0
+        }],
         view: this.view,
+        includeDefaultSources: false,
         container: 'search-map'
       });
       
