@@ -26,6 +26,12 @@ class TNCMap {
       this.prediosLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/1"
       });
+      this.carbonoLayer = new FeatureLayer({
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/11/query"
+      });
+      this.implementacionesLayer = new FeatureLayer({
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/8"
+      });
       this.biodiversidadLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/2"
       });
@@ -35,6 +41,10 @@ class TNCMap {
       this.prediosQuery = this.prediosLayer.createQuery();
       this.prediosQuery.outFields  = ["Id_predio"];
       this.prediosQuery.returnGeometry = false;
+      this.carbonoQuery = this.carbonoLayer.createQuery();
+      this.carbonoQuery.outFields = ["*"];
+      this.implementacionesQuery = this.implementacionesLayer.createQuery();
+      this.implementacionesQuery.outFields = ["*"];
       this.biodiversityQuery = this.biodiversidadLayer.createQuery();
       this.biodiversityQuery.returnGeometry = false;
       this.biodiversityGroups = ["grupo_tnc", "cobertura"];
@@ -149,7 +159,9 @@ class TNCMap {
         const colors = this.colorsToObject(r.features);
         this.treeMap = new TreeMap("#graph__coberturas", colors);
       })
-      this.barChart = new BarChart("#graph__biodiversidad");
+      this.stackedAreaChart = new StackedAreaChart("#graph__carbono");
+      this.barChart = new BarChart("#graph__implementaciones");
+      this.stackedBarChart = new StackedBarChart("#graph__biodiversidad");
     }.bind(this));
   }
 
@@ -173,6 +185,18 @@ class TNCMap {
             this.treeMap.renderGraphic(results, "project", "predio", years, years[0], true);
           });
         });
+        
+        this.implementacionesQuery.where = `ID_predio = '${predio}'`;
+        this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
+          const feat = result.features[0].attributes;
+          const data = [
+            {"name": "Manejo Sostenible", "value": feat.area_manejo_sostenible},
+            {"name": "Bosque", "value": feat.area_bosque},
+            {"name": "Restauración", "value": feat.area_restauracion},
+            {"name": "Producción Sostenible", "value": feat.areas_p_sostenibles}
+          ]
+          this.barChart.renderGraphic(data);
+        });
       }
       else if(region) {
         eventBus.emitEventListeners('regionClicked');
@@ -185,12 +209,36 @@ class TNCMap {
           CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
             CoberturasRepository.getUniqueYearsByPredios(prediosIds).then(years => {
               this.treeMap.renderGraphic(res, "project", "region", years, years[0], true);
-            })
+            });
+          });
+
+          const prediosList = prediosIds.map(el => `'${el}'`).join(",");
+          this.implementacionesQuery.where = `ID_predio in (${prediosList})`;
+          this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
+            const data = [
+              {"name": "Manejo Sostenible", "value": 0},
+              {"name": "Bosque", "value": 0},
+              {"name": "Restauración", "value": 0},
+              {"name": "Producción Sostenible", "value": 0}
+            ]
+            result.features.forEach(el => {
+              const feat = el.attributes;
+              data[0].value += feat.area_manejo_sostenible;
+              data[1].value += feat.area_bosque;
+              data[2].value += feat.area_restauracion;
+              data[3].value += feat.areas_p_sostenibles;
+            });
+            this.barChart.renderGraphic(data);
           });
         });
-      
+
+        // this.carbonoQuery.where = `ID_region = '${region}'`;
+        // this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
+        //   this.stackedAreaChart.renderGraphic(result.features);
+        // });
+
         this.getBiodiversityPerLandcoverData(region).then(res => {
-          this.barChart.renderGraphic(res.counts, res.keys);
+          this.stackedBarChart.renderGraphic(res.counts, res.keys);
         });
     
         window.sessionStorage.region = region;

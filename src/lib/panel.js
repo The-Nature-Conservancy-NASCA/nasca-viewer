@@ -103,6 +103,8 @@ class Panel {
         <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
           <i class="panel__information esri-icon-description js-show-component-info" data-component="carbono"></i>
           ${window.tncConfig.strings.warning_panel}
+          <div id="graph__carbono"></div>
+          <div id="tooltip__carbono" class="tooltip"></div>
         </div>
         <div class="panel__tab-panel" id="panel-biodiversidad">
           <i class="panel__information esri-icon-description js-show-component-info" data-component="biodiversidad"></i>
@@ -122,6 +124,8 @@ class Panel {
         <div class="panel__tab-panel" id="panel-implementacion">
           <i class="panel__information esri-icon-description js-show-component-info" data-component="implementacion"></i>
           ${window.tncConfig.strings.warning_panel}
+          <div id="graph__implementaciones"></div>
+          <div id="tooltip__implementaciones" class="tooltip"></div>
         </div>
       </section>
       `;

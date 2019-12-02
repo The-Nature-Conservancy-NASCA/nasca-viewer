@@ -204,7 +204,7 @@ class TreeMap {
   }
 }
 
-class BarChart {
+class StackedBarChart {
     constructor (el) {
       this.margin = {top: 10, right: 10, bottom: 10, left: 35};
       this.offset = {left: 10, bottom: 10};
@@ -248,7 +248,7 @@ class BarChart {
 
     }
 
-    _renderBarChart(data) {
+    _renderStackedBarChart(data) {
 
       this.barGroup.selectAll("*")
                   .remove();
@@ -319,7 +319,7 @@ class BarChart {
                               `;
                               d3.select("#tooltip__biodiversidad")
                                 .style("left", `${coordinates[0]}px`)
-                                .style("top", `${coordinates[1] + 325}px`)
+                                .style("top", `${coordinates[1] + 150}px`)
                                 .style("display", "block")
                                 .style("font-size", "11px")
                                 .html(tooltipContent);
@@ -328,7 +328,7 @@ class BarChart {
                               const coordinates = d3.mouse(this);
                               d3.select("#tooltip__biodiversidad")
                                 .style("left", `${coordinates[0]}px`)
-                                .style("top", `${coordinates[1] + 325}px`);
+                                .style("top", `${coordinates[1] + 150}px`);
                             })
                             .on("mouseout", function () {
                               that.barGroup.selectAll("rect")
@@ -365,6 +365,225 @@ class BarChart {
 
     renderGraphic(data, keys) {
       this.labels = keys;
-      this._renderBarChart(data);
+      this._renderStackedBarChart(data);
     }
+}
+
+class BarChart {
+  constructor (el) {
+    this.margin = {top: 10, right: 10, bottom: 10, left: 55};
+    this.offset = {left: 10, bottom: 10};
+    this.el = d3.select(el);
+
+    // compute width and height based on parent div
+    this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
+    this.height = parseInt(this.el.style("height")) - this.margin.top - this.margin.bottom;
+
+    this.color = d3.scaleOrdinal(d3.schemeCategory10);
+    this.factor = 0.5;
+
+    this.barGroup = d3.select(el)
+                      .append("svg")
+                        .attr("class", "bar")
+                        .attr("width", this.width + this.margin.left + this.margin.right)
+                        .attr("height", this.height + this.margin.top + this.margin.bottom)
+                      .append("g")
+                        .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+  }
+
+  _renderBarChart(data) {
+
+    this.barGroup.selectAll("*")
+                  .remove();
+
+    const xScale = d3.scaleBand()
+      .domain(d3.range(data.length))
+      .range([this.margin.bottom + this.offset.bottom, this.height])
+      .paddingInner(0.05);
+
+    const yScale = d3.scaleLinear()
+      .domain([0, d3.max(data, d => d.value)])
+      .range([0, this.width - this.margin.left - this.offset.left]);
+
+    var xAxis = d3.axisBottom()
+      .scale(yScale)
+      .ticks(5);
+
+    var yAxis = d3.axisLeft()
+      .scale(xScale)
+      .tickFormat((d, i) => data[i].name);
+
+
+    const that = this;
+
+    this.barGroup.selectAll("rect")
+      .data(data)
+      .enter()
+      .append("rect")
+        .on("mouseover", function (d) {
+          that.barGroup.selectAll("rect")
+                            .attr("fill-opacity", 0.3);
+          d3.select(this)
+            .attr("stroke", "black")
+            .attr("fill-opacity", 0.75);
+      
+          const coordinates = d3.mouse(this);
+          const tooltipContent = `
+          <span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> ha</span>
+          `;
+          d3.select("#tooltip__implementaciones")
+            .style("left", `${coordinates[0]}px`)
+            .style("top", `${coordinates[1] + 90}px`)
+            .style("display", "block")
+            .style("font-size", "11px")
+            .html(tooltipContent);
+        })
+        .on("mousemove", function () {
+          const coordinates = d3.mouse(this);
+          d3.select("#tooltip__implementaciones")
+            .style("left", `${coordinates[0]}px`)
+            .style("top", `${coordinates[1] + 90}px`);
+        })
+        .on("mouseout", function () {
+          that.barGroup.selectAll("rect")
+                .attr("fill-opacity", 0.75);
+
+          d3.select(this)
+            .attr("stroke", "none");
+
+          d3.select("#tooltip__implementaciones")
+            .style("display", "none");
+        })
+        .attr("y", (d, i) => (xScale(i) - this.margin.bottom - this.offset.bottom) + ((xScale.bandwidth() * (1 - this.factor)) / 2))
+        .attr("x", d => this.margin.left + this.offset.left)
+        .attr("height", xScale.bandwidth() * this.factor)
+        .attr("fill", d => this.color(d.name))
+        .transition()
+        .attr("width", d => yScale(d.value));
+
+    this.barGroup.append("g")
+                  .attr("class", "axis")
+                  .attr("transform", `translate(${this.margin.left}, ${-this.margin.bottom - this.offset.bottom})`)
+                  .call(yAxis);
+
+    this.barGroup.append("g")
+                  .attr("class", "axis")
+                  .attr("transform", `translate(${this.margin.left + this.offset.left}, ${this.height - this.margin.bottom})`)
+                  .call(xAxis);
+  }
+
+  renderGraphic(data) {
+    this._renderBarChart(data);
+  }
+}
+
+class StackedAreaChart {
+  constructor (el) {
+    this.margin = {top: 10, right: 10, bottom: 10, left: 10};
+    this.offset = {left: 10, bottom: 10};
+    this.el = d3.select(el);
+
+    // compute width and height based on parent div
+    this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
+    this.height = parseInt(this.el.style("height")) - this.margin.top - this.margin.bottom;
+
+    this.color = d3.scaleOrdinal(d3.schemeCategory10);
+    this.factor = 0.5;
+
+    this.areaGroup = d3.select(el)
+                      .append("svg")
+                        .attr("class", "area")
+                        .attr("width", this.width + this.margin.left + this.margin.right)
+                        .attr("height", this.height + this.margin.top + this.margin.bottom)
+                      .append("g")
+                        .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+    
+    this.domain = {
+      0: "Biomasa",
+      1: "Suelos",
+      2: "Madera"
+    };
+  }
+
+  _renderStackedAreaChart(data) {
+    xScale = d3.scaleTime()
+      .domain([d3.min(data, d => d.year), d3.max(data, d => d.year)])
+      .range([this.margin.left, this.width - this.margin.right]);
+
+    yScale = d3.scaleLinear()
+      .domain([0, d3.max(data, d => Object.values(d).reduce((a, b) => a + b, 0))])
+      .range([this.height - this.margin.bottom, this.margin.bottom / 2])
+      .nice();
+    
+    xAxis = d3.axisBottom()
+      .scale(xScale)
+      .ticks(10);
+
+    yAxis = d3.axisRight()
+          .scale(yScale)
+          .ticks(5);
+
+    const stack = d3.stack()
+      .keys(Object.keys(this.domain))
+      .order(d3.stackOrderDescending);
+    const series = stack(dataset);
+
+    const area = d3.area()
+      .x(d => xScale(d.year))
+      .y0(d => yScale(d[0]))
+      .y1(d => yScale(d[1]));
+
+     //Create areas
+    this.areaGroup.selectAll("path")
+      .data(series)
+      .enter()
+      .append("path")
+        .attr("class", "area")
+        .attr("d", area)
+        .attr("fill", (d, i) => d3.schemeCategory20[i])
+      .append("title")  //Make tooltip
+          text(d => d.key);
+
+    this.areaGroup.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + (h - padding) + ")")
+      .call(xAxis);
+
+    this.areaGroup.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(" + (w - padding * 2) + ",0)")
+      .call(yAxis);
+  }
+
+  _formatData(features) {
+    const startYear = new Date(features[0].attributes.fecha).getFullYear();
+    this.years = d3.range(startYear, startYear + 21);
+    const data = [];
+    features.forEach((feat, i) => {
+      const attrs = feat.attributes;
+      const comp = this.domain[attrs.comportamiento];
+      for (let j = 0; j <= 20; j++) {
+        const t = `T${j}`;
+        const year = this.years[j];
+        if (i == 0) {
+          const obj = {"year": year};
+          obj[comp] = attrs[t];
+          data.push(obj);
+        } else {
+          const obj = data.filter(el => el.year == year)[0];
+          if (comp in obj) {
+            obj[comp] += attrs[t];
+          } else {
+            obj[comp] = attrs[t];
+          }
+        }
+      }
+    });
+    return data;
+  }
+
+  renderGraphic(features) {
+    const data = this._formatData(features);
+    // this._renderStackedAreaChart(data);
+  }
 }
