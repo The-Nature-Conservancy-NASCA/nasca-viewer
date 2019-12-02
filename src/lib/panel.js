@@ -116,6 +116,7 @@ class Panel {
         <div class="panel__tab-panel" id="panel-cobertura">
           <i class="panel__information esri-icon-description js-show-component-info" data-component="cobertura"></i>
           <div id="graph__coberturas"></div>
+          <select name="time__coberturas" id="time__coberturas" class="time__select"></select>
           <div id="tooltip__coberturas" class="tooltip"></div>
         </div>
         <div class="panel__tab-panel" id="panel-implementacion">

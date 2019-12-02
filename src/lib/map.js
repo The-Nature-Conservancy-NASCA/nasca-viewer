@@ -137,7 +137,7 @@ class TNCMap {
           definitionExpression = `ID_proyecto='${proyecto}'`;
         }
         
-        this._filterLayers(definitionExpression);
+        this.filterLayers(definitionExpression);
           
         this.view.on("click", this.mapClick.bind(this));
       });
@@ -189,25 +189,10 @@ class TNCMap {
           });
         });
       
-        this.getBiodiversityPerLandcoverData(region);
-        this.barChart.renderGraphic();
-        // BiodiversidadRepository.getRegionData(region).then(feats => {
-        //   const data = {};
-        //   feats.forEach(el => {
-        //     const key = el.grupo_tnc;
-        //     const cover = el.cobertura;
-        //     if (!key in data) {
-        //       data[key] = {};
-        //     }
-        //     if (cover in data[key]) {
-        //       data[key][cover] += 1;
-        //     } else {
-        //       data[key][cover] = 1;
-        //     }
-        //   });
-        //   console.log(data);
-        // })
-
+        this.getBiodiversityPerLandcoverData(region).then(res => {
+          this.barChart.renderGraphic(res.counts, res.keys);
+        });
+    
         window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
         this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
@@ -239,45 +224,71 @@ class TNCMap {
   }
 
   getBiodiversityPerLandcoverData(region) {
-    const startingWhere = `ID_region = '${region}'`
-    this.biodiversityQuery.where = startingWhere;
-    this.biodiversityQuery.outFields = this.biodiversityGroups;
-    this.biodiversityQuery.returnDistinctValues = true;
-    this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(result => {
-      this.biodiversityQuery.outFields = this.biodiversityCountField;
-      this.biodiversityQuery.returnCountOnly = true;
-      const promises = [];
-      const data = [];
-      result.features.forEach(el => {
-        this.biodiversityQuery.where = `${startingWhere} AND grupo_tnc = '${el.attributes.grupo_tnc}' AND cobertura = '${el.attributes.cobertura}'`;
-        promises.push(this.biodiversidadLayer.queryFeatures(this.biodiversityQuery));
-      });
-      Promise.all(promises).then(values => {
-        console.log(values);
+    const promise = new Promise ((resolve, reject) => {
+      const startingWhere = `ID_region = '${region}'`
+      this.biodiversityQuery.where = startingWhere;
+      this.biodiversityQuery.outFields = this.biodiversityGroups;
+      this.biodiversityQuery.returnDistinctValues = true;
+      this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(result => {
+        this.biodiversityQuery.outFields = this.biodiversityCountField;
+        this.biodiversityQuery.returnCountOnly = true;
+        const promises = [];
+        const idx = [];
+        result.features.forEach(el => {
+          this.biodiversityQuery.where = `${startingWhere} AND grupo_tnc = '${el.attributes.grupo_tnc}' AND cobertura = '${el.attributes.cobertura}'`;
+          promises.push(this.biodiversidadLayer.queryFeatures(this.biodiversityQuery));
+          idx.push({"grupo_tnc": el.attributes.grupo_tnc, "cobertura": el.attributes.cobertura});
+        });
+        const data = [];
+        Promise.all(promises).then(values => {
+          values.forEach((el, i) => {
+            const grupo_tnc = idx[i].grupo_tnc;
+            const cobertura = idx[i].cobertura;
+            const count = el.features.length;
+            const groupExists = !!data.filter(item => item.name === grupo_tnc).length;
+            if (!groupExists) {
+              const obj = {
+                "name": grupo_tnc, 
+                "values": {}
+              };
+              obj.values[cobertura] = count;
+              data.push(obj);
+            } else {
+              const group = data.filter(item => item.name === grupo_tnc)[0];
+              group.values[cobertura] = count;
+            }
+          });
+          const keys = [];
+          const counts = [];
+          data.forEach(el => {
+            keys.push(el.name);
+            counts.push(el.values);
+          });
+          resolve({keys, counts});
+        });
       });
     });
+    return promise;
   }
   
   changeEstrategia(estrategiaId) {
     ProyectoRepository.getProyectosOfEstrategia(estrategiaId).then(proyectos => {
       const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
-      this._filterLayers(definitionExpression);
+      this.filterLayers(definitionExpression);
     });
   }
 
   changeProyecto(proyectoId) {
     const definitionExpression = `ID_proyecto='${proyectoId}'`;
-    this._filterLayers(definitionExpression);
+    this.filterLayers(definitionExpression);
   }
 
-  _filterLayers(definitionExpression) {
+  filterLayers(definitionExpression) {
     const layers = window.tnc_map.layers.filter(layer => layer.title === 'Predios' || layer.title === 'Regiones');
-    if(definitionExpression) {
-      layers.forEach(layer => {
-        layer.when(() => {
-          layer.definitionExpression = definitionExpression;
-        });
+    layers.forEach(layer => {
+      layer.when(() => {
+        layer.definitionExpression = definitionExpression;
       });
-    }
+    });
   }
 }

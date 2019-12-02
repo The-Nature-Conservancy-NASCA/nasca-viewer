@@ -225,25 +225,26 @@ class BarChart {
                         .append("g")
                           .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
-      this.data = [
-        {
-          "pastos": 150,
-          "bosques": 75,
-          "artifical": 5
-        },
-        {
-          "pastos": 3,
-          "bosques": 34,
-          "aguas": 5
-        },
-        {
-          "pastos": 45,
-          "bosques": 90,
-          "artifical": 7
-        }
-      ];
+      this.labels;
+      // this.data = [
+      //   {
+      //     "pastos": 150,
+      //     "bosques": 75,
+      //     "artifical": 5
+      //   },
+      //   {
+      //     "pastos": 3,
+      //     "bosques": 34,
+      //     "aguas": 5
+      //   },
+      //   {
+      //     "pastos": 45,
+      //     "bosques": 90,
+      //     "artifical": 7
+      //   }
+      // ];
 
-      this.labels = ["Escarabajos", "Aves", "Mamíferos"];
+      // this.labels = ["Escarabajos", "Aves", "Mamíferos"];
 
     }
 
@@ -362,7 +363,8 @@ class BarChart {
         .call(xAxis);
     }
 
-    renderGraphic() {
-      this._renderBarChart(this.data);
+    renderGraphic(data, keys) {
+      this.labels = keys;
+      this._renderBarChart(data);
     }
 }

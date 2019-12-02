@@ -14,8 +14,7 @@ class Visor {
     window.modalPopup = new Modal();
   
     document.getElementById('nav-ver-todo').addEventListener('click', event => {
-      const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-      layer.definitionExpression = '';
+      window.map.filterLayers('');
     });
   
     document.querySelector('.js-show-general-info').addEventListener('click', event => {
