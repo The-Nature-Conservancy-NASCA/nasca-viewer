@@ -58,7 +58,7 @@ class Store {
   }
 
   _createConection() {
-    this._connection = new JsStore.Instance(new Worker('js/jsstore.worker.js'));
+    this._connection = new JsStore.Instance(new Worker('/js/jsstore.worker.js'));
   }
 
   async _createDatabase() {

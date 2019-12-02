@@ -10,6 +10,7 @@ class TNCMap {
       'esri/widgets/Search',
       'esri/widgets/Zoom',
       'esri/widgets/ScaleBar',
+      'esri/tasks/Locator',
       'esri/layers/FeatureLayer'],
       function(
           WebMap,
@@ -20,6 +21,7 @@ class TNCMap {
           Search,
           Zoom,
           ScaleBar,
+          Locator,
           FeatureLayer) {
       this.prediosLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/1"
@@ -87,7 +89,23 @@ class TNCMap {
       });
 
       const search = new Search({
+        sources: [{
+          locator: new Locator({ url: 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'}),
+          countryCode: 'COL',
+          singleLineFieldName: 'SingleLine',
+          name: 'Custom Geocoding Service',
+          localSearchOptions: {
+            minScale: 300000,
+            distance: 50000
+          },
+          placeholder: window.tncConfig.strings.buscar,
+          maxResults: 3,
+          maxSuggestions: 6,
+          suggestionsEnabled: true,
+          minSuggestCharacters: 0
+        }],
         view: this.view,
+        includeDefaultSources: false,
         container: 'search-map'
       });
       
@@ -119,12 +137,7 @@ class TNCMap {
           definitionExpression = `ID_proyecto='${proyecto}'`;
         }
         
-        const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-        if(definitionExpression) {
-          layer.when(() => {
-            layer.definitionExpression = definitionExpression;
-          });
-        }
+        this._filterLayers(definitionExpression);
           
         this.view.on("click", this.mapClick.bind(this));
       });
@@ -248,14 +261,23 @@ class TNCMap {
   changeEstrategia(estrategiaId) {
     ProyectoRepository.getProyectosOfEstrategia(estrategiaId).then(proyectos => {
       const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
-      const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-      layer.definitionExpression = definitionExpression;
+      this._filterLayers(definitionExpression);
     });
   }
 
   changeProyecto(proyectoId) {
     const definitionExpression = `ID_proyecto='${proyectoId}'`;
-    const layer = window.tnc_map.layers.find(layer => layer.title === 'Predios');
-    layer.definitionExpression = definitionExpression;
+    this._filterLayers(definitionExpression);
+  }
+
+  _filterLayers(definitionExpression) {
+    const layers = window.tnc_map.layers.filter(layer => layer.title === 'Predios' || layer.title === 'Regiones');
+    if(definitionExpression) {
+      layers.forEach(layer => {
+        layer.when(() => {
+          layer.definitionExpression = definitionExpression;
+        });
+      });
+    }
   }
 }

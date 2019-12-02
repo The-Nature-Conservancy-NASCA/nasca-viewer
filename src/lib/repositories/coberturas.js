@@ -59,7 +59,9 @@ class CoberturasRepository {
             porcentaje_region
           };
         });
-        return window.store.insertRows(this.TABLE_NAME, coberturasData);
+        window.store.insertRows(this.TABLE_NAME, coberturasData).then(result => {
+          eventBus.emitEventListeners('coberturaLoaded');
+        });
       });
     });
   }

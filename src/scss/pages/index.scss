@@ -51,8 +51,10 @@
   }
 
   &__icon {
-    width: 65%;
+    height: 38rem;
     margin-bottom: 5rem;
+    object-fit: contain;
+    width: 38rem;
   }
 
   &__description {
@@ -63,17 +65,6 @@
 .content {
   position: relative;
   top: $alto-header;
-
-  &.hidden {
-    display: none;
-  }
-}
-
-.loader {
-  align-items: center;
-  display: flex;
-  height: 100vh;
-  justify-content: center;
 
   &.hidden {
     display: none;
@@ -140,18 +131,21 @@
   }
 
 }
-
-.cta-back {
+.cta-landing {
+  @include flexCentered;
+  background-color: $theme-tierras;
+  border-radius: 50%;
   bottom: 2rem;
+  box-shadow: 0 0 20px rgba($black, .8);
   cursor: pointer;
-  left: 3rem;
   position: absolute;
-  transform: rotateZ(180deg) scaleY(0.75);
   transition: transform .3s ease;
+  width: 8rem;
+  padding: 1rem;
   z-index: 5;
 
-  &:hover {
-    transform: rotateZ(180deg) scaleY(0.75) translateY(5px);
+  img {
+    height: 8rem;
   }
 
   &.hidden {
@@ -159,16 +153,20 @@
   }
 }
 
-.cta-forward {
-  bottom: 2rem;
-  cursor: pointer;
-  right: 3rem;
-  position: absolute;
+.cta-back {
+  left: 3rem;
   transform: scaleY(0.75);
-  transition: transform .3s ease;
-  z-index: 5;
 
   &:hover {
     transform: scaleY(0.75) translateY(-5px);
+  }
+}
+
+.cta-forward {
+  right: 3rem;
+  transform: rotateZ(180deg) scaleY(0.75);
+
+  &:hover {
+    transform: rotateZ(180deg) scaleY(0.75) translateY(5px);
   }
 }

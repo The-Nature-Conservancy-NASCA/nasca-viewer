@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es-419">
+<html lang="es">
 
 <head>
   <meta charset="utf-8">
@@ -37,12 +37,12 @@
     <nav class="navigation">
       <div class="navigation__menu">
         <ul class="navigation__menu-list">
-          <li class="navigation__item"><a href="/">Home</a></li>
-          <li class="navigation__item"><a href="#" id="nav-ver-todo">All data</a></li>
-          <li class="navigation__item"><a href="#" id="toggle-selector-estrategias">Strategies</a>
+          <li class="navigation__item"><a href="/">Initio</a></li>
+          <li class="navigation__item"><a href="#" id="nav-ver-todo">Inicio</a></li>
+          <li class="navigation__item"><a href="#" id="toggle-selector-estrategias">Estrategias</a>
             <div class="navigation__selector" id="selector-estrategias"></div>
           </li>
-          <li class="navigation__item"><a href="#" id="toggle-selector-proyecto">Projects</a>
+          <li class="navigation__item"><a href="#" id="toggle-selector-proyecto">Proyectos</a>
             <div class="navigation__selector" id="selector-proyectos"></div>
           </li>
         </ul>
@@ -50,7 +50,8 @@
       <div class="divider"></div>
       <div class="navigation__options">
         <i class="options__icon esri-icon-description js-show-general-info"></i>
-        <span class="options__language">ES</span>
+        <a href="#"><span class="options__language selected">ES</span></a>
+        <a href="/en/visor.html"><span class="options__language">EN</span></a>
       </div>
     </nav>
   </header>
@@ -100,7 +101,11 @@
       <!-- <div id="resultado-carousel" class="resultados__carousel"></div>  -->
     </section>
   </aside>
+  <aside id="panel-resultados" class="panel"></aside>
   <div class="modal">
+  </div>
+  <div class="loader">
+    <img src="img/loader.gif" alt="loader">
   </div>
   <script src="js/visor.min.js"></script>
 </body>

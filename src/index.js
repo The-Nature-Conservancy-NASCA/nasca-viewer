@@ -1,13 +1,11 @@
-const SERVICIO = 'https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServicesV3/FeatureServer';
-const urlEstrategias = SERVICIO + '/3/query';
-const urlProyectos = SERVICIO + '/4/query'
-
 window.store = new Store();
 
 class Landing {
   
   constructor() {
     this.loadLandingData();
+    this._ctaBack = document.querySelector('.cta-back');
+    this._ctaForward = document.querySelector('.cta-forward');
   }
   
   registerHandlers() {
@@ -36,24 +34,30 @@ class Landing {
         const proyectoId = currentTarget.dataset.proyecto;
         window.sessionStorage.clear();
         window.sessionStorage.setItem('proyecto', proyectoId);
-        window.location = '/visor.html'
+        this._openVisor();
       });
     });
 
-    document.querySelector('.cta-back').addEventListener('click', event => {
+    this._ctaBack.addEventListener('click', event => {
       document.querySelector('.estrategias').classList.remove('collapsed');
       document.querySelector('.cta-back').classList.add('hidden');
       this.hideProyectos();
     });
 
-    document.querySelector('.cta-forward').addEventListener('click', event => {
+    this._ctaForward.addEventListener('click', event => {
       if(this.estrategiaVisible()) {
         window.sessionStorage.clear();
       } else {
         window.sessionStorage.clear();
         window.sessionStorage.setItem('estrategia', this.selectedEstrategia);
       }
+      this._openVisor();
     });
+  }
+
+  _openVisor() {
+    const language = window.navigator.language.slice(0, 2) === 'en' ? '/en/' : '/';
+    window.location = `${language}visor.html`;
   }
 
   estrategiaVisible() {
@@ -85,14 +89,17 @@ class Landing {
         responseType: 'json'
       };
 
-      const estrategiasRequest = esriRequest(urlEstrategias, queryOptions);
-      const proyectosRequest = esriRequest(urlProyectos, queryOptions);
+      const estrategiasRequest = esriRequest(window.tncConfig.urls.estrategias, queryOptions);
+      const proyectosRequest = esriRequest(window.tncConfig.urls.proyectos, queryOptions);
       
       Promise.all([estrategiasRequest, proyectosRequest]).then(this.processResponse.bind(this));
     });
   }
   
   processResponse(responses) {
+    setTimeout(() => {
+      this._ctaForward.classList.remove('hidden');
+    }, 1500);
     const estrategiasResponse = responses[0];
     const proyectosResponse = responses[1];
 
@@ -180,7 +187,8 @@ class Landing {
 
 fetch('/json/config.json').then(response => {
   response.json().then(config => {
-    window.tncConfig = config;
+    const lang = window.navigator.language.slice(0, 2) || document.documentElement.lang;
+    window.tncConfig = config[lang];
     new Landing();
   });
 
