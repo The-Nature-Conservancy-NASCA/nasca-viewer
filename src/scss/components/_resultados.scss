@@ -1,0 +1,112 @@
+.resultados {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__title {
+    align-self: baseline;
+    font-size: 2.5rem;
+    border-bottom: 1px solid $dark-green;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  &__table {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    
+    table {
+      width: 100%;
+    }
+
+    &-headings {
+      background-color: $light-green;
+      color: $white;
+      text-align: left;
+    }
+    
+    &-heading {
+      padding: .5rem 1rem;
+
+      &:last-child {
+        padding-left: 3rem;
+      }
+    }
+
+    &-row {
+      color: $font-dark;
+      text-align: left;
+
+      &:nth-child(even) {
+        background-color: $light-gray;
+      }
+    }
+
+    &-cell {
+      padding: 3px 1rem;
+
+      &:last-child {
+        padding-left: 3rem;
+      }
+    }
+
+  }
+
+  &__enlace {
+    @extend .button--green;
+    align-self: baseline;
+  }
+}
+
+
+#resultado-carousel {
+  margin: 2rem auto;
+}
+
+.biodiversidad {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  
+  &__card {
+    align-items: center;
+    border-top: 1px solid $light-gray;
+    box-shadow: 0 5px 10px rgba($black, .3);
+    color: $font-dark;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    width: 10rem;
+    transition: transform .2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  &:hover &__card:not(:hover) {
+    transform: scale(.95);
+  }
+  
+  &__card-title {
+    font-weight: normal;
+    margin: .75rem;
+  }
+
+  &__card-count {
+    background-color: var(--theme-color);
+    padding: 1rem;
+    width: 100%;
+
+    h3 {
+      color: $white;
+      font-size: 3rem;
+      font-weight: 100;
+      text-align: center;
+    }
+  }
+}

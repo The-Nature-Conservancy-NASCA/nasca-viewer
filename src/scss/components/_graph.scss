@@ -1,0 +1,51 @@
+.treemap, .legend {
+    rect, text {
+      -moz-transition: all 0.25s;
+      -o-transition: all 0.25s;
+      -webkit-transition: all 0.25s;
+      transition: all 0.25s;
+    }
+
+    // rect:hover {
+    //   stroke: black;
+    //   fill-opacity: 0.8;
+    // }
+}
+
+.legend {
+  g g {
+    pointer-events: all;
+  }
+}
+
+.tooltip {
+  position: absolute;
+  height: auto;
+  padding: 5px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  display: none;
+
+  .tooltip__title {
+    font-weight: bold;
+  }
+}
+
+#graph__coberturas {
+  svg {
+    display: block;
+    margin: auto
+  }
+}
+
+#graph__biodiversidad {
+  width: 400px;
+  height: 150px;
+}
+
+#time__coberturas {
+  visibility: hidden;
+}
+

@@ -1,0 +1,172 @@
+@import "../base/index";
+@import "../utils/index";
+@import "../components/header";
+
+@keyframes card-intro {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.card {
+  align-items: center;
+  background-color: #000;
+  color: $white;
+  cursor: pointer;
+  display: flex;
+  flex-basis: 100%;
+  flex-direction: column;
+  max-width: 50%;
+  position: relative;
+  transform-origin: bottom;
+  justify-content: flex-end;
+  transition: color, background-color .4s ease;
+
+  &.hover {
+    .card-background {
+      opacity: 0;
+    }
+
+    .card__title {
+      border-bottom-color: $white !important;
+    }
+  }
+
+  &__text {
+    margin-bottom: 15rem;
+    width: 100%;
+    z-index: 5;
+  }
+  
+  &__title {
+    font-size: 4.5rem;
+    font-weight: 100;
+    padding-bottom: 1.6rem;
+    margin-bottom: 2.6rem;
+    width: calc(100% - 6rem);
+    margin: auto;
+  }
+
+  &__icon {
+    height: 38rem;
+    margin-bottom: 5rem;
+    object-fit: contain;
+    width: 38rem;
+  }
+
+  &__description {
+    padding: 3rem;
+  }
+}
+
+.content {
+  position: relative;
+  top: $alto-header;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.card-background {
+  top: 0;
+  left: 0;
+  max-width: 50%;
+  position: absolute;
+  transition: opacity .3s;
+
+  img {
+    height: $alto-contenido;
+    object-fit: cover;
+    width: 200%;
+  }
+}
+
+.card-overlay {
+  background-color: rgba($black, .5);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  z-index: 2;
+  width: 200%;
+}
+
+.estrategias {
+  display: flex;
+  justify-content: center;
+  height: $alto-contenido;
+  transition: margin-top .2s ease;
+
+  .estrategia.card {
+    @include animationDelay;
+    animation: card-intro 1s forwards;
+    overflow: hidden;
+    transform: scaleY(0);
+
+    &:hover {
+      
+      .estrategias__title {
+        border-color: $white;
+      }
+    }
+    
+  }
+
+  &.collapsed {
+    margin-top: calc(-100vh + #{$alto-header});
+    //height: 0;
+  }
+}
+
+.proyectos {
+  display: flex;
+  justify-content: center;
+  height: $alto-contenido;
+
+  &.hidden {
+    display: none;
+  }
+
+}
+.cta-landing {
+  @include flexCentered;
+  background-color: $theme-tierras;
+  border-radius: 50%;
+  bottom: 2rem;
+  box-shadow: 0 0 20px rgba($black, .8);
+  cursor: pointer;
+  position: absolute;
+  transition: transform .3s ease;
+  width: 8rem;
+  padding: 1rem;
+  z-index: 5;
+
+  img {
+    height: 8rem;
+  }
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.cta-back {
+  left: 3rem;
+  transform: scaleY(0.75);
+
+  &:hover {
+    transform: scaleY(0.75) translateY(-5px);
+  }
+}
+
+.cta-forward {
+  right: 3rem;
+  transform: rotateZ(180deg) scaleY(0.75);
+
+  &:hover {
+    transform: rotateZ(180deg) scaleY(0.75) translateY(5px);
+  }
+}

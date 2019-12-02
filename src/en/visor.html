@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>TNC Visualización</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.12/esri/themes/light/main.css">
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://js.arcgis.com/4.12/"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsstore/dist/jsstore.min.js"></script>
+  <link rel="stylesheet" href="/css/visor.css">
+  <style>
+    :root {
+      --theme-color: #555;
+      --theme-color-hover: #777;
+      --theme-color-active: #333;
+    }
+
+    html,
+    body,
+    #map-div {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+
+    #map-div {
+      width: calc(100vw - 48rem);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <img class="header__logo" src="/img/tnc-logo.svg" alt="Logo TNC" width="150">
+    <nav class="navigation">
+      <div class="navigation__menu">
+        <ul class="navigation__menu-list">
+          <li class="navigation__item"><a href="/en/">Home</a></li>
+          <li class="navigation__item"><a href="#" id="nav-ver-todo">All data</a></li>
+          <li class="navigation__item"><a href="#" id="toggle-selector-estrategias">Strategies</a>
+            <div class="navigation__selector" id="selector-estrategias"></div>
+          </li>
+          <li class="navigation__item"><a href="#" id="toggle-selector-proyecto">Projects</a>
+            <div class="navigation__selector" id="selector-proyectos"></div>
+          </li>
+        </ul>
+      </div>
+      <div class="divider"></div>
+      <div class="navigation__options">
+        <i class="options__icon esri-icon-description js-show-general-info"></i>
+        <a href="/visor.html"><span class="options__language">ES</span></a>
+        <a href="#"><span class="options__language selected">EN</span></a>
+      </div>
+    </nav>
+  </header>
+  <div id="toolbar"></div>
+  <div id="map-div"></div>
+  <aside id="panel-resultados" class="panel"></aside>
+  <div class="modal">
+  </div>
+  <div class="loader">
+    <img src="/img/loader.gif" alt="loader">
+  </div>
+  <script src="/js/visor.min.js"></script>
+</body>
+
+</html>

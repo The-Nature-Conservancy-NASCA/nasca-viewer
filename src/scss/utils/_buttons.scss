@@ -1,0 +1,22 @@
+.button {
+  color: $white;
+  border: none;
+  padding: .8rem 1.5rem;
+  box-shadow: 0 2px 1rem rgba($black, .4);
+  transition: all .2s ease;
+
+  &:hover {
+    transform: translateY(-0.5px);
+    box-shadow: 0 4px 1.4rem rgba($black, .4);
+  }
+
+  &--green {
+    @extend .button;
+
+    background-color: $light-green;
+
+    &:hover {
+      background-color: $light-green-hover;
+    }
+  }
+}
