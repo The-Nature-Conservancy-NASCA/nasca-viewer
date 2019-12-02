@@ -19,10 +19,15 @@ class TreeMap {
                           .attr("value", "corine")
                           .style("visibility", "hidden")
                           .text("Corine");
-
+          
     this.features;
+    this.years;
+    this.year;
+    this.scheme;
     this.buttons = d3.select(el)
                     .selectAll("button");
+    this.yearSelect = d3.select("#time__coberturas");
+
 
     this.treeMapGroup = d3.select(el)
                           .append("svg")
@@ -34,8 +39,13 @@ class TreeMap {
 
     const that = this;
     this.buttons.on("click", function () {
-      that.renderGraphic(that.features, this.value, that.level);
-      });
+      that.scheme = this.value;
+      that.renderGraphic(that.features, that.scheme, that.level, that.years, that.year);
+    });
+    this.yearSelect.on("change", function() {
+      that.year = this.value;
+      that.renderGraphic(that.features, that.scheme, that.level, that.years, that.year);
+    })
 
     this.constants = {
       NAME: "coberturas",
@@ -49,34 +59,36 @@ class TreeMap {
     };
   }
 
-  _stratify (features, name, parentLabel, childLabel, valueField, idField) {
+  _stratify (features, name, parentLabel, childLabel, valueField, idField, year) {
     const data = {"name": name, "children": []};
     for (let feat of features) {
-      const parentExists = !!data.children.filter(child => child.name === feat[parentLabel]).length;
-      if (parentExists) {
-        const parent = data.children.filter(child => child.name === feat[parentLabel])[0]
-        const childrenExists = !!parent.children.filter(child => child.name === feat[childLabel]).length;
-        if (childrenExists) {
-          const childEl = parent.children.filter(child => child.name === feat[childLabel])[0];
-          childEl.value += feat[valueField];
+      if (feat.visita == year) {
+        const parentExists = !!data.children.filter(child => child.name === feat[parentLabel]).length;
+        if (parentExists) {
+          const parent = data.children.filter(child => child.name === feat[parentLabel])[0]
+          const childrenExists = !!parent.children.filter(child => child.name === feat[childLabel]).length;
+          if (childrenExists) {
+            const childEl = parent.children.filter(child => child.name === feat[childLabel])[0];
+            childEl.value += feat[valueField];
+          } else {
+            const obj = {
+              "name": feat[childLabel],
+              "id": feat[idField],
+              "value": feat[valueField]
+            };
+            parent.children.push(obj);
+          }
         } else {
           const obj = {
-            "name": feat[childLabel],
-            "id": feat[idField],
-            "value": feat[valueField]
+            "name": feat[parentLabel],
+            "children": [{
+              "name": feat[childLabel],
+              "id": feat[idField],
+              "value": feat[valueField]
+            }]
           };
-          parent.children.push(obj);
+          data.children.push(obj);
         }
-      } else {
-        const obj = {
-          "name": feat[parentLabel],
-          "children": [{
-            "name": feat[childLabel],
-            "id": feat[idField],
-            "value": feat[valueField]
-          }]
-        };
-        data.children.push(obj);
       }
     }
     return data;
@@ -156,8 +168,14 @@ class TreeMap {
                     
   }
 
-  renderGraphic (features, scheme, level) {
+  renderGraphic (features, scheme, level, years, year, isFirstRender=false) {
+    if (isFirstRender) {
+      this._appendOptions(this.yearSelect, years);
+      this.scheme = scheme;
+      this.years = years;
+    }
     this.level = level;
+    this.year = year;
     let valueField;
     if (level === "predio") {
       valueField = this.constants.VALUE_FIELD;
@@ -167,11 +185,22 @@ class TreeMap {
     this.features = features;
     let data;
     if (scheme === "project") {
-      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL, this.constants.CHILD_LABEL, valueField, this.constants.ID_FIELD);
+      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL, this.constants.CHILD_LABEL, valueField, this.constants.ID_FIELD, year);
     } else if (scheme === "corine") {
-      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL_ALT, this.constants.CHILD_LABEL_ALT, valueField, this.constants.ID_FIELD);
+      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL_ALT, this.constants.CHILD_LABEL_ALT, valueField, this.constants.ID_FIELD, year);
     }
     this._renderTreeMap(data);
+  }
+
+  _appendOptions(el, options) {
+    el.selectAll("option").remove();
+    el.selectAll("option")
+      .data(options)
+      .enter()
+      .append("option")
+        .attr("value", d => d)
+        .text(d => d);
+    el.style("visibility", "visible");
   }
 }
 

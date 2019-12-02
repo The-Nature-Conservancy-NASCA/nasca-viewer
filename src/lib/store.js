@@ -40,6 +40,16 @@ class Store {
 
     return results;
   }
+
+  async groupBy(table, where, field) {
+    const results = await this._connection.select({
+      from: table,
+      where: where,
+      groupBy: field
+    });
+
+    return results;
+  }
   
   loadData() {
     CarouselRepository.loadData();
@@ -71,7 +81,7 @@ class Store {
       ProyectoRepository.getTabla(),
       CarouselRepository.getTabla(),
       CoberturasRepository.getTabla(),
-      BiodiversidadRepository.getTabla()
+      // BiodiversidadRepository.getTabla()
     ];
   }
 }

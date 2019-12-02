@@ -53,6 +53,21 @@ class BiodiversidadRepository {
     
     return !!results ? results : [];
   }
+
+  static async getRegionData (region) {
+    const results = await window.store.select(this.TABLE_NAME, {ID_region: region});
+    
+    return !!results ? results : [];
+  }
+
+  static async getUniqueSpeciesPerGroupAndCover () {
+    const results = await window.store.count(this.TABLE_NAME, {nombre_comun: {
+      groupBy: ["grupo_tnc", "cobertura"],
+      distinct: true
+    }});
+    return !!results ? results : [];
+  }
+
 }
 
 BiodiversidadRepository.TABLE_NAME = 'Biodiversidad';

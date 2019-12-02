@@ -32,7 +32,11 @@ class TNCMap {
       });
       this.prediosQuery = this.prediosLayer.createQuery();
       this.prediosQuery.outFields  = ["Id_predio"];
-      this.prediosQuery.returnGeometry = false; 
+      this.prediosQuery.returnGeometry = false;
+      this.biodiversityQuery = this.biodiversidadLayer.createQuery();
+      this.biodiversityQuery.returnGeometry = false;
+      this.biodiversityGroups = ["grupo_tnc", "cobertura"];
+      this.biodiversityCountField = "genero";
       this.bioQuery = this.biodiversidadLayer.createQuery();
       this.colorQuery = this.coloresLayer.createQuery();
       this.bioQuery.returnGeometry = false;
@@ -150,9 +154,11 @@ class TNCMap {
     this.view.hitTest(event).then((response) => {
       const { predio, region } = this.extractIds(response.results);
       if(predio) {
-        eventBus.emitEventListeners('predioClicked');
-        CoberturasRepository.getCoberturasByPredio(predio).then(results => {
-          this.treeMap.renderGraphic(results, "project", "predio");
+        // eventBus.emitEventListeners('predioClicked');
+        CoberturasRepository.getUniqueYearsByPredio(predio).then(years => {
+          CoberturasRepository.getCoberturasByPredio(predio).then(results => {
+            this.treeMap.renderGraphic(results, "project", "predio", years, years[0], true);
+          });
         });
       }
       else if(region) {
@@ -164,11 +170,30 @@ class TNCMap {
             prediosIds.push(feat.attributes.ID_predio);
           });
           CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
-            this.treeMap.renderGraphic(res, "project", "region");
+            CoberturasRepository.getUniqueYearsByPredios(prediosIds).then(years => {
+              this.treeMap.renderGraphic(res, "project", "region", years, years[0], true);
+            })
           });
         });
       
+        this.getBiodiversityPerLandcoverData(region);
         this.barChart.renderGraphic();
+        // BiodiversidadRepository.getRegionData(region).then(feats => {
+        //   const data = {};
+        //   feats.forEach(el => {
+        //     const key = el.grupo_tnc;
+        //     const cover = el.cobertura;
+        //     if (!key in data) {
+        //       data[key] = {};
+        //     }
+        //     if (cover in data[key]) {
+        //       data[key][cover] += 1;
+        //     } else {
+        //       data[key][cover] = 1;
+        //     }
+        //   });
+        //   console.log(data);
+        // })
 
         window.sessionStorage.region = region;
         this.bioQuery.where = `ID_region = '${region}'`;
@@ -200,9 +225,24 @@ class TNCMap {
     return { predio, region };
   }
 
-  groupByLandCover() {
-    console.log(this);
-    console.log(window.sessionStorage.getItem('region'))
+  getBiodiversityPerLandcoverData(region) {
+    const startingWhere = `ID_region = '${region}'`
+    this.biodiversityQuery.where = startingWhere;
+    this.biodiversityQuery.outFields = this.biodiversityGroups;
+    this.biodiversityQuery.returnDistinctValues = true;
+    this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(result => {
+      this.biodiversityQuery.outFields = this.biodiversityCountField;
+      this.biodiversityQuery.returnCountOnly = true;
+      const promises = [];
+      const data = [];
+      result.features.forEach(el => {
+        this.biodiversityQuery.where = `${startingWhere} AND grupo_tnc = '${el.attributes.grupo_tnc}' AND cobertura = '${el.attributes.cobertura}'`;
+        promises.push(this.biodiversidadLayer.queryFeatures(this.biodiversityQuery));
+      });
+      Promise.all(promises).then(values => {
+        console.log(values);
+      });
+    });
   }
   
   changeEstrategia(estrategiaId) {
