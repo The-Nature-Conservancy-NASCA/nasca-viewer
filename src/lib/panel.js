@@ -71,7 +71,7 @@ class Panel {
     const tabElement = document.querySelector(`${PANEL.SELECTORS.TAB}[data-tab="${tab}"`);
     tabElement.classList.remove(PANEL.CLASSES.TAB_DISABLED);
     tabElement.addEventListener(PANEL.EVENTS.CLICK, event => {
-      if (tab.classList.contains(PANEL.CLASSES.TAB_DISABLED)) {
+      if (tabElement.classList.contains(PANEL.CLASSES.TAB_DISABLED)) {
         return;
       }
       this.activatePanel(event.currentTarget.dataset.tab);
