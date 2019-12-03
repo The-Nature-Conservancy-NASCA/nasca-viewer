@@ -232,10 +232,10 @@ class TNCMap {
           });
         });
 
-        // this.carbonoQuery.where = `ID_region = '${region}'`;
-        // this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
-        //   this.stackedAreaChart.renderGraphic(result.features);
-        // });
+        this.carbonoQuery.where = `ID_region = '${region}'`;
+        this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
+          this.stackedAreaChart.renderGraphic(result.features, null);
+        });
 
         this.getBiodiversityPerLandcoverData(region).then(res => {
           this.stackedBarChart.renderGraphic(res.counts, res.keys);
