@@ -47,12 +47,20 @@
   }
 
   &__tab-panel {
+    align-items: center;
     display: none;
+    flex-direction: column;
+    height: calc(100vh - 110px);
+    justify-content: space-evenly;
     padding: 0 3rem;
     width: 100%;
 
+    > * {
+      width: 100%;
+    }
+
     &--active {
-      display: block;
+      display: flex;
     }
   }
 
@@ -61,7 +69,7 @@
     cursor: pointer;
     font-size: 20px;
     position: absolute;
-    right: 1rem;
+    right: -1rem;
     top: 6rem;
   }
 }
