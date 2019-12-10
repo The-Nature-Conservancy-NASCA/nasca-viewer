@@ -53,8 +53,7 @@ class TreeMap {
       PARENT_LABEL_ALT: "corine1",
       CHILD_LABEL: "subcobertura_proyecto",
       CHILD_LABEL_ALT: "corine2",
-      VALUE_FIELD: "porcentaje_area",
-      VALUE_FIELD_ALT: "porcentaje_region",
+      VALUE_FIELD: "area",
       ID_FIELD: "ID_cobertura"
     };
   }
@@ -127,7 +126,7 @@ class TreeMap {
                         const coordinates = d3.mouse(this);
                         const tooltipContent = `
                         <span class="tooltip__title">${d.parent.data.name}</span><br>
-                        <span class="tooltip__subtitle">${d.data.name}</span>: <span class="tooltip__value">${Math.round(d.data.value * 100)}%</span>
+                        <span class="tooltip__subtitle">${d.data.name}</span>: <span class="tooltip__value">${Math.round(d.data.value)} ha</span>
                         `;
                         d3.select("#tooltip__coberturas")
                           .style("left", `${coordinates[0]}px`)
@@ -176,12 +175,7 @@ class TreeMap {
     }
     this.level = level;
     this.year = year;
-    let valueField;
-    if (level === "predio") {
-      valueField = this.constants.VALUE_FIELD;
-    } else if (level === "region") {
-      valueField = this.constants.VALUE_FIELD_ALT;
-    }
+    const valueField = this.constants.VALUE_FIELD;
     this.features = features;
     let data;
     if (scheme === "project") {

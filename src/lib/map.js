@@ -208,6 +208,7 @@ class TNCMap {
           });
           CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
             CoberturasRepository.getUniqueYearsByPredios(prediosIds).then(years => {
+              console.log(res);
               this.treeMap.renderGraphic(res, "project", "region", years, years[0], true);
             });
           });

@@ -16,7 +16,7 @@ class CoberturasRepository {
         query: {
           f: 'json',
           where: '1=1',
-          outFields: ["OBJECTID", "ID_predio", "ID_cobertura", "corine1", "corine2", "cobertura_proyecto", "verificacion", "porcentaje_area", "fecha_visita", "carbono_biomasa", "carbono_suelos", "carbono_madera", "subcobertura_proyecto", "porcentaje_region"]
+          outFields: ["OBJECTID", "ID_predio", "ID_cobertura", "corine1", "corine2", "cobertura_proyecto", "verificacion", "fecha_visita", "carbono_biomasa", "carbono_suelos", "carbono_madera", "subcobertura_proyecto", "area"]
         },
         responseType: 'json'
       };
@@ -31,13 +31,12 @@ class CoberturasRepository {
             corine2,
             cobertura_proyecto,
             verificacion,
-            porcentaje_area,
             fecha_visita,
             carbono_biomasa,
             carbono_suelos,
             carbono_madera,
             subcobertura_proyecto,
-            porcentaje_region
+            area
           } = feature.attributes;
           
           const visita = new Date(fecha_visita).getFullYear();
@@ -50,13 +49,12 @@ class CoberturasRepository {
             corine2,
             cobertura_proyecto,
             verificacion,
-            porcentaje_area,
             visita,
             carbono_biomasa,
             carbono_suelos,
             carbono_madera,
             subcobertura_proyecto,
-            porcentaje_region
+            area
           };
         });
         window.store.insertRows(this.TABLE_NAME, coberturasData).then(result => {
