@@ -1,10 +1,10 @@
 .carousel {
   box-shadow: 0 5px 1rem rgba(0, 0, 0, .4);
-  height: 12rem;
+  height: 12em;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
-  width: 50%;
+  width: 75%;
 
   &__buttons {
     align-items: center;
@@ -38,7 +38,7 @@
     }
 
     p.carousel__text {
-      bottom: 1rem;
+      bottom: -6rem;
       left: 1rem;
       position: absolute;
       color: #fff;
