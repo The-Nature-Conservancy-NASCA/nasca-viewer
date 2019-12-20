@@ -679,8 +679,8 @@ class PieChart {
     this.el = d3.select(el);
 
     // compute width and height based on parent div
-    this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
-    this.height = parseInt(this.el.style("height")) - this.margin.top - this.margin.bottom;
+    this.width = parseInt(this.el.style("width"));
+    this.height = parseInt(this.el.style("height"));
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.svg = d3.select(el)
       .append("svg")

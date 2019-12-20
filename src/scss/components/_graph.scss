@@ -46,14 +46,30 @@
 }
 
 .group__graphic {
-  width: 150px;
-  height: 150px;
+  width: 115px;
+  height: 115px;
+  position: relative;
+}
+
+.group__header {
+  text-align: center;
+}
+
+.group__container {
+  margin-bottom: 1.6rem;
 }
 
 .biodiversity__icon {
+  @include positionCentered;
   width: 50px;
 }
 
 #time__coberturas {
   visibility: hidden;
+}
+
+#container__biodiversidad {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
