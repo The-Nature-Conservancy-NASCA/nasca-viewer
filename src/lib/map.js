@@ -38,6 +38,9 @@ class TNCMap {
       this.coloresLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/12"
       });
+      this.bioIconsLayer = new FeatureLayer({
+        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/iconos_biodiversidad/FeatureServer/0"
+      });
       this.prediosQuery = this.prediosLayer.createQuery();
       this.prediosQuery.outFields  = ["Id_predio"];
       this.prediosQuery.returnGeometry = false;
@@ -51,6 +54,9 @@ class TNCMap {
       this.biodiversityCountField = "genero";
       this.bioQuery = this.biodiversidadLayer.createQuery();
       this.colorQuery = this.coloresLayer.createQuery();
+      this.bioIconsQuery = this.bioIconsLayer.createQuery();
+      this.bioIconsQuery.outFields = ["*"];
+      this.bioIconsQuery.returnGeometry = false;
       this.bioQuery.returnGeometry = false;
       this.colorQuery.where = "1=1";
       this.bioQuery.outFields = ['ID_region', 'cantidad_individuos', 'grupo_tnc'];
@@ -161,7 +167,6 @@ class TNCMap {
       })
       this.stackedAreaChart = new StackedAreaChart("#graph__carbono");
       this.barChart = new BarChart("#graph__implementaciones");
-      this.stackedBarChart = new StackedBarChart("#graph__biodiversidad");
     }.bind(this));
   }
 
@@ -208,7 +213,6 @@ class TNCMap {
           });
           CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
             CoberturasRepository.getUniqueYearsByPredios(prediosIds).then(years => {
-              console.log(res);
               this.treeMap.renderGraphic(res, "project", "region", years, years[0], true);
             });
           });
@@ -239,18 +243,49 @@ class TNCMap {
         });
 
         this.getBiodiversityPerLandcoverData(region).then(res => {
-          this.stackedBarChart.renderGraphic(res.counts, res.keys);
+          d3.selectAll(".group__container").remove();
+          res.forEach(el => {
+            const group = el.name;
+            this.biodiversityQuery.where = `ID_region = '${region}' AND grupo_tnc = '${group}'`;
+            this.biodiversityQuery.returnDistinctValues = true;
+            this.biodiversityQuery.returnCountOnly = false;
+            this.biodiversityQuery.outFields = ["especie"];
+            this.bioIconsQuery.where = `grupo_tnc = '${group}'`;
+            this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(species => {
+              this.bioIconsLayer.queryFeatures(this.bioIconsQuery).then(icon => {
+                const iconUrl = icon.features[0].attributes.url;
+                const count = species.features.length;
+                const groupContainer = d3.select("#container__biodiversidad")
+                .append("div")
+                  .attr("class", "group__container");
+                const header = groupContainer.append("div").attr("class", "group__header");
+                header.append("h6").text(group);
+                header.append("h6").text(count);
+                const graphic = groupContainer
+                  .append("div")
+                    .attr("class", "group__graphic")
+                    .attr("id", `graph__${group}`);
+                const width = parseInt(d3.select(`#graph__${group}`).style("width"));
+                graphic.append("img")
+                  .attr("src", iconUrl)
+                  .attr("class", "biodiversity__icon");
+                const pieChart = new PieChart(`#graph__${group}`);
+                pieChart.renderGraphic(el.values);
+              });
+            });
+          });
+          // this.stackedBarChart.renderGraphic(res.counts, res.keys);
         });
     
-        window.sessionStorage.region = region;
-        this.bioQuery.where = `ID_region = '${region}'`;
-        this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
-          this._biodiversidad.showSpeciesCards(results.features);
-          d3.selectAll('.biodiversidad__card')
-          .on('click', this.groupByLandCover)
-        }).catch(error => {
-          console.error(error);
-        });
+        // window.sessionStorage.region = region;
+        // this.bioQuery.where = `ID_region = '${region}'`;
+        // this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
+        //   this._biodiversidad.showSpeciesCards(results.features);
+        //   d3.selectAll('.biodiversidad__card')
+        //   .on('click', this.groupByLandCover)
+        // }).catch(error => {
+        //   console.error(error);
+        // });
       }
     });
   }
@@ -298,22 +333,22 @@ class TNCMap {
             if (!groupExists) {
               const obj = {
                 "name": grupo_tnc, 
-                "values": {}
+                "values": []
               };
-              obj.values[cobertura] = count;
+              obj.values.push({
+                "name": cobertura,
+                "value": count
+              });
               data.push(obj);
             } else {
               const group = data.filter(item => item.name === grupo_tnc)[0];
-              group.values[cobertura] = count;
+              group.values.push({
+                "name": cobertura,
+                "value": count
+              });
             }
           });
-          const keys = [];
-          const counts = [];
-          data.forEach(el => {
-            keys.push(el.name);
-            counts.push(el.values);
-          });
-          resolve({keys, counts});
+          resolve(data);
         });
       });
     });

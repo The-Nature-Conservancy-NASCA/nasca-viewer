@@ -111,7 +111,7 @@ class Panel {
           <div id="biodiversidad-resultados">
             ${window.tncConfig.strings.warning_panel}
           </div>
-          <div id="graph__biodiversidad"></div>
+          <div id="container__biodiversidad"></div>
           <div id="tooltip__biodiversidad" class="tooltip"></div>
           <div id="resultado-carousel"></div>
         </div>

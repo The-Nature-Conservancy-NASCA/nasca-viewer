@@ -527,8 +527,6 @@ class StackedAreaChart {
   }
 
   _renderStackedAreaChart(data) {
-    console.log(data);
-
     this.buttons.style("visibility", "visible");
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     this.areaGroup.selectAll("*")
@@ -672,5 +670,76 @@ class StackedAreaChart {
     this.features = features;
     const data = this._formatData(features, field);
     this._renderStackedAreaChart(data);
+  }
+}
+
+class PieChart {
+  constructor (el) {
+    this.margin = {top: 10, right: 10, bottom: 10, left: 25};
+    this.el = d3.select(el);
+
+    // compute width and height based on parent div
+    this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
+    this.height = parseInt(this.el.style("height")) - this.margin.top - this.margin.bottom;
+    this.color = d3.scaleOrdinal(d3.schemeCategory10);
+    this.svg = d3.select(el)
+      .append("svg")
+        .attr("width", this.width)
+        .attr("height", this.height);
+  }
+
+  _renderPieChart(data) {
+    const outerRadius = this.width / 2;
+    const innerRadius = outerRadius / 1.25;
+    const arc = d3.arc()
+          .innerRadius(innerRadius)
+          .outerRadius(outerRadius);
+    const pie = d3.pie()
+      .value(d => d.value);
+    const arcs = this.svg.selectAll("g.arc")
+      .data(pie(data))
+      .enter()
+        .append("g")
+        .attr("class", "arc")
+        .attr("transform", `translate(${outerRadius}, ${outerRadius})`);
+    const that = this;
+    arcs.append("path")
+      .on("mouseover", function (d) {
+        that.svg.selectAll("g.arc path")
+          .attr("fill-opacity", 0.3);
+        d3.select(this)
+          .attr("stroke", "black")
+          .attr("fill-opacity", 0.75);
+        const coordinates = d3.mouse(this);
+        const tooltipContent = `
+        <span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> especies</span>
+        `;
+        d3.select("#tooltip__biodiversidad")
+          .style("left", `${coordinates[0]}px`)
+          .style("top", `${coordinates[1] + 90}px`)
+          .style("display", "block")
+          .style("font-size", "11px")
+          .html(tooltipContent);
+      })
+      .on("mousemove", function () {
+        const coordinates = d3.mouse(this);
+        d3.select("#tooltip__biodiversidad")
+          .style("left", `${coordinates[0]}px`)
+          .style("top", `${coordinates[1] + 90}px`);
+      })
+      .on("mouseout", function () {
+        that.svg.selectAll("g.arc path")
+              .attr("fill-opacity", 0.75);
+        d3.select(this)
+          .attr("stroke", "none");
+        d3.select("#tooltip__biodiversidad")
+          .style("display", "none");
+      })
+      .attr("fill", d => this.color(d.data.name))
+      .attr("d", arc);
+  }
+
+  renderGraphic(data) {
+    this._renderPieChart(data);
   }
 }
