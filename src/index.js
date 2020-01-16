@@ -92,8 +92,35 @@ class Landing {
       const estrategiasRequest = esriRequest(window.tncConfig.urls.estrategias, queryOptions);
       const proyectosRequest = esriRequest(window.tncConfig.urls.proyectos, queryOptions);
       
+      //this.devLoad();
+      
       Promise.all([estrategiasRequest, proyectosRequest]).then(this.processResponse.bind(this));
     });
+  }
+  
+  devLoad() {
+    fetch('/json/estrategias.json').then(response => {
+      response.json().then(data => {
+        const datos = {
+          data: {
+            ...data
+          }
+        }
+        this.buildEstrategiasHTML(datos);
+      })
+    })
+
+    fetch('/json/proyectos.json').then(response => {
+      response.json().then(data => {
+        const datos = {
+          data: {
+            ...data
+          }
+        }
+        this.buildProyectosHTML(datos);
+      })
+    })
+
   }
   
   processResponse(responses) {
@@ -166,11 +193,9 @@ class Landing {
       <section class="card ${options.ID_proyecto ? 'proyecto' : 'estrategia'}" 
         ${options.ID_proyecto ? 'data-proyecto="' + options.ID_proyecto + '"' :
         'data-estrategia="estrategia_' + options.ID_estrategia + '"'}
-        style="background-color: ${options.color};">
+        style="background-image: url('${options.fondo}');">
         <img class="card__icon" src="${options.icono}">
-      <div class="card-background">
-        <div class="card-overlay"></div>
-        <img src="${options.fondo}" >
+      <div class="card-background" style="background-color: ${options.color}">
       </div>
       <div class="card__text">
         <h2 class="card__title"
