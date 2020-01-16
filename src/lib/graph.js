@@ -377,18 +377,17 @@ class BarChart {
     this.factor = 0.5;
 
     this.barGroup = d3.select(el)
-                      .append("svg")
-                        .attr("class", "bar")
-                        .attr("width", this.width + this.margin.left + this.margin.right)
-                        .attr("height", this.height + this.margin.top + this.margin.bottom)
-                      .append("g")
-                        .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+      .append("svg")
+        .attr("class", "bar")
+        .attr("width", this.width + this.margin.left + this.margin.right)
+        .attr("height", this.height + this.margin.top + this.margin.bottom)
+      .append("g")
+        .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
   }
 
   _renderBarChart(data) {
 
-    this.barGroup.selectAll("*")
-                  .remove();
+    this.barGroup.selectAll("*").remove();
 
     const xScale = d3.scaleBand()
       .domain(d3.range(data.length))
@@ -415,8 +414,7 @@ class BarChart {
       .enter()
       .append("rect")
         .on("mouseover", function (d) {
-          that.barGroup.selectAll("rect")
-                            .attr("fill-opacity", 0.3);
+          that.barGroup.selectAll("rect").attr("fill-opacity", 0.3);
           d3.select(this)
             .attr("stroke", "black")
             .attr("fill-opacity", 0.75);
@@ -675,7 +673,6 @@ class StackedAreaChart {
 
 class PieChart {
   constructor (el) {
-    this.margin = {top: 10, right: 10, bottom: 10, left: 25};
     this.el = d3.select(el);
 
     // compute width and height based on parent div
