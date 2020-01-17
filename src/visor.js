@@ -54,3 +54,13 @@ const changeThemeColor = (newColor) => {
   document.documentElement.style.setProperty('--theme-color-hover', pSBC(0.3, newColor));
   document.documentElement.style.setProperty('--theme-color-active', pSBC(-0.5, newColor));
 };
+
+function getEstrategiaInitial() {
+  const estrategia = Urls.queryParam('estrategia');
+  return estrategia ? estrategia : window.sessionStorage.getItem('estrategia');
+}
+
+function getProyectoInitial() {
+  const proyecto = Urls.queryParam('proyecto');
+  return proyecto ? proyecto : window.sessionStorage.getItem('proyecto'); 
+}

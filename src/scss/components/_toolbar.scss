@@ -1,21 +1,20 @@
 .toolbar {
   background-color: var(--theme-color);
   box-shadow: 5px 0 10px rgba($black, .4);
-  left: 0;
+  left: 4.6rem;
   position: absolute;
-  top: $alto-header;
+  top: calc(6rem + 4.6rem);
   z-index: $index-toolbar;
   
   &__menu {
     align-items: center;
     display: flex;
-    flex-direction: column;
     justify-content: space-evenly;
   }
 
   &__menu-item {
     cursor: pointer;
-    padding: .8rem;
+    padding: 1rem;
     position: relative;
 
 
@@ -40,24 +39,24 @@
 }
 
 .menu-panel {
-  align-items: center;
-  background-color: var(--theme-color);
+  background-color: $white;
   box-shadow: 5px 0 10px rgba($black, .4);
   display: flex;
   flex-direction: column;
-  left: 4.6rem;
   overflow: hidden;
   position: absolute;
-  transition: width .4s cubic-bezier(0.075, 0.82, 0.165, 1);
-  transform-origin: left;
-  width: 0;
+  transition: max-height .4s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transform-origin: top;
+  max-height: 0;
+  width: 20rem;
 
   &__title {
-    color: $white;
+    color: $dark-gray;
     font-size: 1.8rem;
     font-weight: lighter;
     margin-bottom: 1rem;
     padding-top: 1rem;
+    padding-left: 2rem;
     height: 3.6rem;
   }
 
@@ -93,24 +92,11 @@
   }
 
   &--expanded {
-    width: 20rem;
+    max-height: 50rem;
   }
 }
 
-#menu-base {
-  top: calc(3 * 4.6rem);
-}
-
-#menu-leyenda {
-  top: calc(2 * 4.6rem);
-}
-
-#menu-capas {
-  top: calc(1 * 4.6rem);
-}
-
 #menu-buscar {
-  top: calc(0 * 4.6rem);
 
   #search-map {
     padding-top: 1rem;

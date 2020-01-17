@@ -21,6 +21,18 @@
     }
   }
 
+  &__selection {
+    background-color: var(--theme-color);
+    position: absolute;
+    top: 5rem;
+    padding: 4rem 2rem
+  }
+
+  &__selection-context {
+    color: $dark-gray;
+    font-size: 2.5rem;
+  }
+
   &__tabs {
     align-items: center;
     display: flex;
@@ -28,7 +40,7 @@
   }
 
   &__tab {
-    background-color: var(--theme-color);
+    background-color: $dark-gray;
     color: $white;
     cursor: pointer;
     padding: 1.6rem 0;
@@ -36,8 +48,8 @@
     width: 12rem;
     
     &--active {
-      background-color: $white;
-      color: $font-dark;
+      background-color: var(--theme-color);
+      color: $white;
     }
 
     &--disabled {
@@ -69,7 +81,9 @@
     cursor: pointer;
     font-size: 20px;
     position: absolute;
-    right: -1rem;
-    top: 6rem;
+    right: 1rem;
+    text-align: right;
+    top: 18rem;
+    width: 2rem;
   }
 }

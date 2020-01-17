@@ -49,6 +49,14 @@ class ProyectoRepository {
     return result[0].color;
   }
 
+  static async getProyecto(id) {
+    const results = await window.store.select(this.TABLE_NAME, {
+      ID_proyecto: id
+    });
+
+    return results[0];
+  }
+
 }
 
 ProyectoRepository.TABLE_NAME = 'Proyectos'

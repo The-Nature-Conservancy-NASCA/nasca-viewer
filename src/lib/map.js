@@ -136,16 +136,17 @@ class TNCMap {
       window.tnc_map.when(() => {
         window.tnc_map.layers.items[1].outFields = ["*"];
         window.tnc_map.layers.items[2].outFields = ["*"];
-        const estrategiaInitial = this._getEstrategiaInitial();
+        const estrategiaInitial = getEstrategiaInitial();
         let definitionExpression = null;
 
         if (estrategiaInitial) {
+          changeSelectionContext()
           EstrategiaRepository.getColor(estrategiaInitial).then(color => { changeThemeColor(color); });
           ProyectoRepository.getProyectosOfEstrategia(estrategiaInitial).then(proyectos => {
             definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
           });
         }
-        const proyecto = this._getProyectoInitial();
+        const proyecto = getProyectoInitial();
         if(proyecto) {
           ProyectoRepository.getColor(proyecto).then(color => {
             changeThemeColor(color);
@@ -170,15 +171,6 @@ class TNCMap {
     }.bind(this));
   }
 
-  _getEstrategiaInitial() {
-    const estrategia = Urls.queryParam('estrategia');
-    return estrategia ? estrategia : window.sessionStorage.getItem('estrategia');
-  }
-
-  _getProyectoInitial() {
-    const proyecto = Urls.queryParam('proyecto');
-    return proyecto ? proyecto : window.sessionStorage.getItem('proyecto'); 
-  }
 
   mapClick(event) {
     this.view.hitTest(event).then((response) => {

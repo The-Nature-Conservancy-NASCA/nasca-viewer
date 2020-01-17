@@ -51,6 +51,22 @@ class Panel {
         }
       });
     });
+    
+    if(getProyectoInitial()) {
+      ProyectoRepository.getProyecto(getProyectoInitial()).then(proyecto => {
+        document.querySelectorAll(".panel__selection-context").forEach(div => {
+          div.innerHTML =  proyecto.nombre;
+        });
+      });
+    }
+
+    if(getEstrategiaInitial()) {
+      EstrategiaRepository.getEstrategia(getEstrategiaInitial()).then(estrategia => {
+        document.querySelectorAll(".panel__selection-context").forEach(div => {
+          div.innerHTML =  estrategia.nombre;
+        });
+      })
+    }
   }
 
   activatePanel(tab) {
@@ -80,6 +96,12 @@ class Panel {
     });
   }
 
+  _renderSelection() {
+    return /* html */`<div class="panel__selection">
+                        <h3 class="panel__selection-context"></h3>
+                      </div>`;
+  }
+
   _renderHTML() {
     const html = /* html */
       `
@@ -101,12 +123,14 @@ class Panel {
       </header>
       <section class="resultados">
         <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
+          ${this._renderSelection()}
           <i class="panel__information esri-icon-description js-show-component-info" data-component="carbono"></i>
           ${window.tncConfig.strings.warning_panel}
           <div id="graph__carbono"></div>
           <div id="tooltip__carbono" class="tooltip"></div>
         </div>
         <div class="panel__tab-panel" id="panel-biodiversidad">
+          ${this._renderSelection()}
           <i class="panel__information esri-icon-description js-show-component-info" data-component="biodiversidad"></i>
           <div id="biodiversidad-resultados">
             ${window.tncConfig.strings.warning_panel}
@@ -116,12 +140,14 @@ class Panel {
           <div id="resultado-carousel"></div>
         </div>
         <div class="panel__tab-panel" id="panel-cobertura">
+          ${this._renderSelection()}
           <i class="panel__information esri-icon-description js-show-component-info" data-component="cobertura"></i>
           <div id="graph__coberturas"></div>
           <select name="time__coberturas" id="time__coberturas" class="time__select"></select>
           <div id="tooltip__coberturas" class="tooltip"></div>
         </div>
         <div class="panel__tab-panel" id="panel-implementacion">
+          ${this._renderSelection()}
           <i class="panel__information esri-icon-description js-show-component-info" data-component="implementacion"></i>
           ${window.tncConfig.strings.warning_panel}
           <div id="graph__implementaciones"></div>
