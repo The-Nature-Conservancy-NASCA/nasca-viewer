@@ -27,6 +27,7 @@
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   display: none;
+  width: auto !important;
 
   .tooltip__title {
     font-weight: bold;

@@ -123,7 +123,7 @@ class TreeMap {
                           .attr("stroke-width", 1)
                           .attr("fill-opacity", 0.75);
                     
-                        const coordinates = [d3.event.pageX, d3.event.pageY];
+                        const coordinates = d3.mouse(this);
                         const tooltipContent = `
                         <span class="tooltip__title">${d.parent.data.name}</span><br>
                         <span class="tooltip__subtitle">${d.data.name}</span>: <span class="tooltip__value">${Math.round(d.data.value)} ha</span>
@@ -306,7 +306,7 @@ class StackedBarChart {
             const name = d3.select(this.parentNode).attr("name");
             const n = d[1] - d[0];
         
-            const coordinates = [d3.event.pageX, d3.event.pageY];
+            const coordinates = d3.mouse(this);
             const tooltipContent = `
             <span class="tooltip__title">${name}</span><br>
             <span class="tooltip__value">${n}</span><span class="tooltip__subtitle"> especies</span>
@@ -319,7 +319,7 @@ class StackedBarChart {
               .html(tooltipContent);
           })
           .on("mousemove", function () {
-            const coordinates = [d3.event.pageX, d3.event.pageY];
+            const coordinates = d3.mouse(this);
             d3.select("#tooltip__biodiversidad")
               .style("left", `${coordinates[0]}px`)
               .style("top", `${coordinates[1] + 150}px`);
@@ -418,20 +418,20 @@ class BarChart {
             .attr("stroke", "black")
             .attr("fill-opacity", 0.75);
       
-          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const coordinates = d3.mouse(this);
           const tooltipContent = `<span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> ha</span>`;
           d3.select("#tooltip__implementaciones")
             .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1]}px`)
+            .style("top", `${coordinates[1] + 100}px`)
             .style("display", "block")
             .style("font-size", "11px")
             .html(tooltipContent);
         })
         .on("mousemove", function () {
-          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const coordinates = d3.mouse(this);
           d3.select("#tooltip__implementaciones")
             .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1]}px`);
+            .style("top", `${coordinates[1] + 100}px`);
         })
         .on("mouseout", function () {
           that.barGroup.selectAll("rect")
@@ -610,7 +610,7 @@ class StackedAreaChart {
             .attr("fill-opacity", 0.75);
           const label = d.key;
           const q = d.slice(-1)[0][1] - d.slice(-1)[0][0];
-          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const coordinates = d3.mouse(this);
           const tooltipContent = `
           <span class="tooltip__title">${label}</span><br>
           <span class="tooltip__value">${Math.round(q)}</span><span class="tooltip__subtitle"> MtCO2e</span>
@@ -623,7 +623,7 @@ class StackedAreaChart {
             .html(tooltipContent);
         })
         .on("mousemove", function () {
-          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const coordinates = d3.mouse(this);
           d3.select("#tooltip__carbono")
             .style("left", `${coordinates[0]}px`)
             .style("top", `${coordinates[1] + 90}px`);
@@ -731,23 +731,23 @@ class PieChart {
         d3.select(this)
           .attr("stroke", "black")
           .attr("fill-opacity", 0.75);
-        const coordinates = [d3.event.pageX, d3.event.pageY];
+        const coordinates = d3.mouse(this);
         const tooltipContent = `
         <span class="tooltip__title">${d.data.name}</span><br>
         <span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> especies</span>
         `;
         d3.select("#tooltip__biodiversidad")
           .style("left", `${coordinates[0]}px`)
-          .style("top", `${coordinates[1] + 90}px`)
+          .style("top", `${coordinates[1] + 100}px`)
           .style("display", "block")
           .style("font-size", "11px")
           .html(tooltipContent);
       })
       .on("mousemove", function () {
-        const coordinates = [d3.event.pageX, d3.event.pageY];
+        const coordinates = d3.mouse(this);
         d3.select("#tooltip__biodiversidad")
           .style("left", `${coordinates[0]}px`)
-          .style("top", `${coordinates[1] + 90}px`);
+          .style("top", `${coordinates[1] + 100}px`);
       })
       .on("mouseout", function () {
         that.svg.selectAll("g.arc path")
