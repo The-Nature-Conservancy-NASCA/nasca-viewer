@@ -30,12 +30,12 @@ class TreeMap {
 
 
     this.treeMapGroup = d3.select(el)
-                          .append("svg")
-                            .attr("class", "treemap")
-                            .attr("width", this.width + margin.left + margin.right)
-                            .attr("height", this.height + margin.top + margin.bottom)
-                          .append("g")
-                            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+      .append("svg")
+        .attr("class", "treemap")
+        .attr("width", this.width + margin.left + margin.right)
+        .attr("height", this.height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     const that = this;
     this.buttons.on("click", function () {
@@ -116,14 +116,14 @@ class TreeMap {
                     .append("rect")
                       .on("mouseover", function (d) {
                         that.treeMapGroup.selectAll("rect")
-                                          .attr("fill-opacity", 0.3);
+                          .attr("fill-opacity", 0.3);
     
                         d3.select(this)
                           .attr("stroke", "black")
                           .attr("stroke-width", 1)
                           .attr("fill-opacity", 0.75);
                     
-                        const coordinates = d3.mouse(this);
+                        const coordinates = [d3.event.pageX, d3.event.pageY];
                         const tooltipContent = `
                         <span class="tooltip__title">${d.parent.data.name}</span><br>
                         <span class="tooltip__subtitle">${d.data.name}</span>: <span class="tooltip__value">${Math.round(d.data.value)} ha</span>
@@ -245,27 +245,27 @@ class StackedBarChart {
     _renderStackedBarChart(data) {
 
       this.barGroup.selectAll("*")
-                  .remove();
+        .remove();
 
       const xScale = d3.scaleBand()
-                      .domain(d3.range(data.length))
-                      .range([this.margin.bottom + this.offset.bottom, this.height])
-                      .paddingInner(0.05);
+        .domain(d3.range(data.length))
+        .range([this.margin.bottom + this.offset.bottom, this.height])
+        .paddingInner(0.05);
       
 
 
       const yScale = d3.scaleLinear()
-                      .domain([0, d3.max(data, d => Object.values(d).reduce((a, b) => a + b, 0))])
-                      .range([0, this.width - this.margin.left - this.offset.left]);
+        .domain([0, d3.max(data, d => Object.values(d).reduce((a, b) => a + b, 0))])
+        .range([0, this.width - this.margin.left - this.offset.left]);
 
 
       var xAxis = d3.axisBottom()
-                    .scale(yScale)
-                    .ticks(5);
+        .scale(yScale)
+        .ticks(5);
   
       var yAxis = d3.axisLeft()
-                    .scale(xScale)
-                    .tickFormat((d, i) => this.labels[i]);
+        .scale(xScale)
+        .tickFormat((d, i) => this.labels[i]);
   
       const keys = [];
       data.forEach(group => {
@@ -277,74 +277,74 @@ class StackedBarChart {
       });
 
       const stack = d3.stack()
-                      .keys(keys)
-                      .order(d3.stackOrderDescending);
+        .keys(keys)
+        .order(d3.stackOrderDescending);
 
       const series = stack(data);
 
       
       const groups = this.barGroup.selectAll("g")
-                                  .data(series)
-                                  .enter()
-                                  .append("g")
-                                    .attr("name", d => d.key)
-                                    .attr("fill", (d, i) => this.color(i));
+        .data(series)
+        .enter()
+        .append("g")
+          .attr("name", d => d.key)
+          .attr("fill", (d, i) => this.color(i));
 
       const that = this;
 
       const rects = groups.selectAll("rect")
-                          .data(d => d)
-                          .enter()
-                          .append("rect")
-                            .on("mouseover", function (d) {
-                              that.barGroup.selectAll("rect")
-                                                .attr("fill-opacity", 0.3);
-                              d3.select(this)
-                                .attr("stroke", "black")
-                                .attr("fill-opacity", 0.75);
+        .data(d => d)
+        .enter()
+        .append("rect")
+          .on("mouseover", function (d) {
+            that.barGroup.selectAll("rect")
+                              .attr("fill-opacity", 0.3);
+            d3.select(this)
+              .attr("stroke", "black")
+              .attr("fill-opacity", 0.75);
 
-                              const name = d3.select(this.parentNode).attr("name");
-                              const n = d[1] - d[0];
-                          
-                              const coordinates = d3.mouse(this);
-                              const tooltipContent = `
-                              <span class="tooltip__title">${name}</span><br>
-                              <span class="tooltip__value">${n}</span><span class="tooltip__subtitle"> especies</span>
-                              `;
-                              d3.select("#tooltip__biodiversidad")
-                                .style("left", `${coordinates[0]}px`)
-                                .style("top", `${coordinates[1] + 150}px`)
-                                .style("display", "block")
-                                .style("font-size", "11px")
-                                .html(tooltipContent);
-                            })
-                            .on("mousemove", function () {
-                              const coordinates = d3.mouse(this);
-                              d3.select("#tooltip__biodiversidad")
-                                .style("left", `${coordinates[0]}px`)
-                                .style("top", `${coordinates[1] + 150}px`);
-                            })
-                            .on("mouseout", function () {
-                              that.barGroup.selectAll("rect")
-                                    .attr("fill-opacity", 0.75);
-      
-                              d3.select(this)
-                                .attr("stroke", "none");
-      
-                              d3.select("#tooltip__biodiversidad")
-                                .style("display", "none");
-                            })
-                            .attr("y", (d, i) => (xScale(i) - this.margin.bottom - this.offset.bottom) + ((xScale.bandwidth() * (1 - this.factor)) / 2))
-                            .attr("x", (d) => yScale(d[0]) + this.margin.left + this.offset.left)
-                            .attr("height", xScale.bandwidth() * this.factor)
-                            .transition()
-                            .attr("width", (d) => {
-                              if (!Number.isNaN(d[1])) {
-                                return yScale(d[1]) - yScale(d[0]);
-                              } else {
-                                return 0;
-                              }
-                            });
+            const name = d3.select(this.parentNode).attr("name");
+            const n = d[1] - d[0];
+        
+            const coordinates = [d3.event.pageX, d3.event.pageY];
+            const tooltipContent = `
+            <span class="tooltip__title">${name}</span><br>
+            <span class="tooltip__value">${n}</span><span class="tooltip__subtitle"> especies</span>
+            `;
+            d3.select("#tooltip__biodiversidad")
+              .style("left", `${coordinates[0]}px`)
+              .style("top", `${coordinates[1] + 150}px`)
+              .style("display", "block")
+              .style("font-size", "11px")
+              .html(tooltipContent);
+          })
+          .on("mousemove", function () {
+            const coordinates = [d3.event.pageX, d3.event.pageY];
+            d3.select("#tooltip__biodiversidad")
+              .style("left", `${coordinates[0]}px`)
+              .style("top", `${coordinates[1] + 150}px`);
+          })
+          .on("mouseout", function () {
+            that.barGroup.selectAll("rect")
+                  .attr("fill-opacity", 0.75);
+
+            d3.select(this)
+              .attr("stroke", "none");
+
+            d3.select("#tooltip__biodiversidad")
+              .style("display", "none");
+          })
+          .attr("y", (d, i) => (xScale(i) - this.margin.bottom - this.offset.bottom) + ((xScale.bandwidth() * (1 - this.factor)) / 2))
+          .attr("x", (d) => yScale(d[0]) + this.margin.left + this.offset.left)
+          .attr("height", xScale.bandwidth() * this.factor)
+          .transition()
+          .attr("width", (d) => {
+            if (!Number.isNaN(d[1])) {
+              return yScale(d[1]) - yScale(d[0]);
+            } else {
+              return 0;
+            }
+          });
 
       this.barGroup.append("g")
         .attr("class", "axis")
@@ -365,7 +365,7 @@ class StackedBarChart {
 
 class BarChart {
   constructor (el) {
-    this.margin = {top: 10, right: 10, bottom: 10, left: 55};
+    this.margin = {top: 10, right: 10, bottom: 30, left: 20};
     this.offset = {left: 10, bottom: 10};
     this.el = d3.select(el);
 
@@ -391,21 +391,20 @@ class BarChart {
 
     const xScale = d3.scaleBand()
       .domain(d3.range(data.length))
-      .range([this.margin.bottom + this.offset.bottom, this.height])
+      .range([this.margin.left + this.offset.left, this.width])
       .paddingInner(0.05);
 
     const yScale = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.value)])
-      .range([0, this.width - this.margin.left - this.offset.left]);
+      .range([this.height, this.margin.bottom + this.offset.bottom]);
 
     var xAxis = d3.axisBottom()
-      .scale(yScale)
-      .ticks(5);
-
-    var yAxis = d3.axisLeft()
       .scale(xScale)
       .tickFormat((d, i) => data[i].name);
 
+    var yAxis = d3.axisLeft()
+      .scale(yScale)
+      .ticks(3);
 
     const that = this;
 
@@ -419,22 +418,20 @@ class BarChart {
             .attr("stroke", "black")
             .attr("fill-opacity", 0.75);
       
-          const coordinates = d3.mouse(this);
-          const tooltipContent = `
-          <span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> ha</span>
-          `;
+          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const tooltipContent = `<span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> ha</span>`;
           d3.select("#tooltip__implementaciones")
             .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1] + 90}px`)
+            .style("top", `${coordinates[1]}px`)
             .style("display", "block")
             .style("font-size", "11px")
             .html(tooltipContent);
         })
         .on("mousemove", function () {
-          const coordinates = d3.mouse(this);
+          const coordinates = [d3.event.pageX, d3.event.pageY];
           d3.select("#tooltip__implementaciones")
             .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1] + 90}px`);
+            .style("top", `${coordinates[1]}px`);
         })
         .on("mouseout", function () {
           that.barGroup.selectAll("rect")
@@ -446,26 +443,53 @@ class BarChart {
           d3.select("#tooltip__implementaciones")
             .style("display", "none");
         })
-        .attr("y", (d, i) => (xScale(i) - this.margin.bottom - this.offset.bottom) + ((xScale.bandwidth() * (1 - this.factor)) / 2))
-        .attr("x", d => this.margin.left + this.offset.left)
-        .attr("height", xScale.bandwidth() * this.factor)
+        .attr("x", (d, i) => xScale(i) + ((xScale.bandwidth() * (1 - this.factor)) / 2))
+        // .attr("x", (d, i) => xScale(i))
+        .attr("y", d => (this.height - (this.margin.bottom + this.offset.bottom)) - yScale(d.value))
+        .attr("width", xScale.bandwidth() * this.factor)
         .attr("fill", d => this.color(d.name))
         .transition()
-        .attr("width", d => yScale(d.value));
+        .attr("height", d => yScale(d.value));
 
     this.barGroup.append("g")
-                  .attr("class", "axis")
-                  .attr("transform", `translate(${this.margin.left}, ${-this.margin.bottom - this.offset.bottom})`)
-                  .call(yAxis);
+      .attr("class", "axis")
+      .attr("transform", `translate(${this.margin.left}, ${-this.margin.bottom - this.offset.bottom})`)
+      .call(yAxis);
 
     this.barGroup.append("g")
-                  .attr("class", "axis")
-                  .attr("transform", `translate(${this.margin.left + this.offset.left}, ${this.height - this.margin.bottom})`)
-                  .call(xAxis);
+      .attr("class", "axis")
+      .attr("transform", `translate(${0}, ${this.height - this.margin.bottom})`)
+      .call(xAxis)
+    .selectAll(".tick text")
+      .call(this._wrap, xScale.bandwidth());
   }
 
   renderGraphic(data) {
     this._renderBarChart(data);
+  }
+
+  _wrap(text, width) {
+    text.each(function() {
+      var text = d3.select(this),
+          words = text.text().split(/\s+/).reverse(),
+          word,
+          line = [],
+          lineNumber = 0,
+          lineHeight = 1.1, // ems
+          y = text.attr("y"),
+          dy = parseFloat(text.attr("dy")),
+          tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em");
+      while (word = words.pop()) {
+        line.push(word);
+        tspan.text(line.join(" "));
+        if (tspan.node().getComputedTextLength() > width) {
+          line.pop();
+          tspan.text(line.join(" "));
+          line = [word];
+          tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+        }
+      }
+    });
   }
 }
 
@@ -586,7 +610,7 @@ class StackedAreaChart {
             .attr("fill-opacity", 0.75);
           const label = d.key;
           const q = d.slice(-1)[0][1] - d.slice(-1)[0][0];
-          const coordinates = d3.mouse(this);
+          const coordinates = [d3.event.pageX, d3.event.pageY];
           const tooltipContent = `
           <span class="tooltip__title">${label}</span><br>
           <span class="tooltip__value">${Math.round(q)}</span><span class="tooltip__subtitle"> MtCO2e</span>
@@ -599,7 +623,7 @@ class StackedAreaChart {
             .html(tooltipContent);
         })
         .on("mousemove", function () {
-          const coordinates = d3.mouse(this);
+          const coordinates = [d3.event.pageX, d3.event.pageY];
           d3.select("#tooltip__carbono")
             .style("left", `${coordinates[0]}px`)
             .style("top", `${coordinates[1] + 90}px`);
@@ -707,8 +731,9 @@ class PieChart {
         d3.select(this)
           .attr("stroke", "black")
           .attr("fill-opacity", 0.75);
-        const coordinates = d3.mouse(this);
+        const coordinates = [d3.event.pageX, d3.event.pageY];
         const tooltipContent = `
+        <span class="tooltip__title">${d.data.name}</span><br>
         <span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> especies</span>
         `;
         d3.select("#tooltip__biodiversidad")
@@ -719,7 +744,7 @@ class PieChart {
           .html(tooltipContent);
       })
       .on("mousemove", function () {
-        const coordinates = d3.mouse(this);
+        const coordinates = [d3.event.pageX, d3.event.pageY];
         d3.select("#tooltip__biodiversidad")
           .style("left", `${coordinates[0]}px`)
           .style("top", `${coordinates[1] + 90}px`);
