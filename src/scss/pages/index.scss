@@ -14,24 +14,32 @@
 .card {
   align-items: center;
   background-color: #000;
+  background-position: center center;
+  background-size: cover;
   color: $white;
   cursor: pointer;
   display: flex;
   flex-basis: 100%;
   flex-direction: column;
-  max-width: 50%;
+  max-width: 33%;
   position: relative;
   transform-origin: bottom;
   justify-content: flex-end;
-  transition: color, background-color .4s ease;
+  transition: all .4s ease;
 
   &.hover {
     .card-background {
-      opacity: 0;
+      opacity: .5;
+      z-index: 0;
     }
 
     .card__title {
       border-bottom-color: $white !important;
+    }
+
+    .card__icon {
+      opacity: 1;
+      z-index: 1;
     }
   }
 
@@ -51,10 +59,11 @@
   }
 
   &__icon {
-    height: 38rem;
     margin-bottom: 5rem;
     object-fit: contain;
-    width: 38rem;
+    opacity: 0;
+    width: 50%;
+    transition: opacity .3s ease;
   }
 
   &__description {
@@ -74,9 +83,11 @@
 .card-background {
   top: 0;
   left: 0;
-  max-width: 50%;
   position: absolute;
   transition: opacity .3s;
+  width: 33vw;
+  height: 100vh;
+  opacity: 0;
 
   img {
     height: $alto-contenido;
@@ -85,17 +96,9 @@
   }
 }
 
-.card-overlay {
-  background-color: rgba($black, .5);
-  height: 100%;
-  left: 0;
-  position: absolute;
-  z-index: 2;
-  width: 200%;
-}
-
 .estrategias {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   height: $alto-contenido;
   transition: margin-top .2s ease;

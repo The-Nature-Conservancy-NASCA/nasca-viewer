@@ -60,36 +60,36 @@ class TreeMap {
 
   _stratify (features, name, parentLabel, childLabel, valueField, idField, year) {
     const data = {"name": name, "children": []};
-    for (let feat of features) {
-      if (feat.visita == year) {
-        const parentExists = !!data.children.filter(child => child.name === feat[parentLabel]).length;
-        if (parentExists) {
-          const parent = data.children.filter(child => child.name === feat[parentLabel])[0]
-          const childrenExists = !!parent.children.filter(child => child.name === feat[childLabel]).length;
-          if (childrenExists) {
-            const childEl = parent.children.filter(child => child.name === feat[childLabel])[0];
-            childEl.value += feat[valueField];
-          } else {
-            const obj = {
-              "name": feat[childLabel],
-              "id": feat[idField],
-              "value": feat[valueField]
-            };
-            parent.children.push(obj);
-          }
+
+    features.filter(feature => feature.visita == year).forEach(feat => {
+      const parentExists = !!data.children.filter(child => child.name === feat[parentLabel]).length;
+      if (parentExists) {
+        const parent = data.children.filter(child => child.name === feat[parentLabel])[0]
+        const childrenExists = !!parent.children.filter(child => child.name === feat[childLabel]).length;
+        if (childrenExists) {
+          const childEl = parent.children.filter(child => child.name === feat[childLabel])[0];
+          childEl.value += feat[valueField];
         } else {
           const obj = {
-            "name": feat[parentLabel],
-            "children": [{
-              "name": feat[childLabel],
-              "id": feat[idField],
-              "value": feat[valueField]
-            }]
+            "name": feat[childLabel],
+            "id": feat[idField],
+            "value": feat[valueField]
           };
-          data.children.push(obj);
+          parent.children.push(obj);
         }
+      } else {
+        const obj = {
+          "name": feat[parentLabel],
+          "children": [{
+            "name": feat[childLabel],
+            "id": feat[idField],
+            "value": feat[valueField]
+          }]
+        };
+        data.children.push(obj);
       }
-    }
+    })
+
     return data;
   }
 
