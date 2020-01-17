@@ -65,7 +65,7 @@ class Panel {
         document.querySelectorAll(".panel__selection-context").forEach(div => {
           div.innerHTML =  estrategia.nombre;
         });
-      })
+      });
     }
   }
 
@@ -125,7 +125,7 @@ class Panel {
         <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
           ${this._renderSelection()}
           <i class="panel__information esri-icon-description js-show-component-info" data-component="carbono"></i>
-          ${window.tncConfig.strings.warning_panel}
+          <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
           <div id="graph__carbono"></div>
           <div id="tooltip__carbono" class="tooltip"></div>
         </div>
@@ -133,7 +133,7 @@ class Panel {
           ${this._renderSelection()}
           <i class="panel__information esri-icon-description js-show-component-info" data-component="biodiversidad"></i>
           <div id="biodiversidad-resultados">
-            ${window.tncConfig.strings.warning_panel}
+            <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
           </div>
           <div id="container__biodiversidad"></div>
           <div id="tooltip__biodiversidad" class="tooltip"></div>
@@ -149,7 +149,7 @@ class Panel {
         <div class="panel__tab-panel" id="panel-implementacion">
           ${this._renderSelection()}
           <i class="panel__information esri-icon-description js-show-component-info" data-component="implementacion"></i>
-          ${window.tncConfig.strings.warning_panel}
+          <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
           <div id="graph__implementaciones"></div>
           <div id="tooltip__implementaciones" class="tooltip"></div>
         </div>

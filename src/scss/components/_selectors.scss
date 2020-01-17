@@ -13,14 +13,17 @@
 }
 
 .selector {
-  padding: 2.5rem;
-
+  
   li {
     cursor: pointer;
-    margin-bottom: 2rem;
+    padding: 1rem 2rem;
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    &:hover {
+      background-color: $light-gray;
     }
   }
 }

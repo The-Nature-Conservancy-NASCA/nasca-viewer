@@ -174,6 +174,9 @@ class TNCMap {
   mapClick(event) {
     this.view.hitTest(event).then((response) => {
       const { predio, region } = this.extractIds(response.results);
+      document.querySelectorAll(".js-panel-warning").forEach(span => {
+        span.style.display = "none";
+      });
       if(predio) {
         // eventBus.emitEventListeners('predioClicked');
         CoberturasRepository.getUniqueYearsByPredio(predio).then(years => {
@@ -352,11 +355,21 @@ class TNCMap {
       const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
       this.filterLayers(definitionExpression);
     });
+    EstrategiaRepository.getEstrategia(estrategiaId).then(estrategia => {
+      document.querySelectorAll(".panel__selection-context").forEach(div => {
+        div.innerHTML =  estrategia.nombre;
+      });
+    });
   }
 
   changeProyecto(proyectoId) {
     const definitionExpression = `ID_proyecto='${proyectoId}'`;
     this.filterLayers(definitionExpression);
+    ProyectoRepository.getProyecto(proyectoId).then(proyecto => {
+      document.querySelectorAll(".panel__selection-context").forEach(div => {
+        div.innerHTML =  proyecto.nombre;
+      });
+    });
   }
 
   filterLayers(definitionExpression) {

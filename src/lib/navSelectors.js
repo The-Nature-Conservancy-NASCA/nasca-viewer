@@ -16,6 +16,7 @@ class EstrategiaSelector {
           `<li class="js-selector-item" 
               data-estrategia="${estrategia.id}"
               data-color="${estrategia.color}"
+              style="border-left: 4px solid ${estrategia.color}"
               >${estrategia.nombre}</li>`).join('')}
       </ul>
     `;
@@ -27,6 +28,7 @@ class EstrategiaSelector {
   _registerEventHandlers() {
     this._selectorToggle.addEventListener('click', event => {
       this._el.classList.toggle('navigation__selector--visible');
+      document.getElementById('selector-proyectos').classList.remove('navigation__selector--visible');
     });
 
     const itemsEstrategia = document.querySelectorAll('.js-selector-item[data-estrategia]');
@@ -43,6 +45,10 @@ class EstrategiaSelector {
             window.map.changeEstrategia(estrategiaId);
             changeThemeColor(estrategiaColor);
           }
+        });
+
+        item.addEventListener('mouseenter', event => {
+          //console.log(event.currentTarget.dataset.estrategia);
         });
       });
     }
@@ -71,6 +77,7 @@ class ProyectoSelector  {
           `<li class="js-selector-item" 
               data-proyecto="${proyecto.id}"
               data-color="${proyecto.color}"
+              style="border-left: 4px solid ${proyecto.color}"
               >${proyecto.nombre}</li>`).join('')}
       </ul>
     `;
@@ -82,6 +89,7 @@ class ProyectoSelector  {
   _registerEventHandlers() {
     this._selectorToggle.addEventListener('click', event => {
       this._el.classList.toggle('navigation__selector--visible');
+      document.getElementById('selector-estrategias').classList.remove('navigation__selector--visible');
     });
 
     const itemsProyecto = document.querySelectorAll('.js-selector-item[data-proyecto]');
