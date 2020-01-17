@@ -52,13 +52,13 @@ class TNCMap {
       this.biodiversityQuery.returnGeometry = false;
       this.biodiversityGroups = ["grupo_tnc", "cobertura"];
       this.biodiversityCountField = "genero";
-      this.bioQuery = this.biodiversidadLayer.createQuery();
       this.colorQuery = this.coloresLayer.createQuery();
-      this.bioIconsQuery = this.bioIconsLayer.createQuery();
-      this.bioIconsQuery.outFields = ["*"];
-      this.bioIconsQuery.returnGeometry = false;
-      this.bioQuery.returnGeometry = false;
       this.colorQuery.where = "1=1";
+      this.colorQuery.outFields = ["*"];
+      this.bioIconsQuery = this.bioIconsLayer.createQuery();
+      this.bioIconsQuery.outFields = ["grupo_tnc", "url"];
+      this.bioQuery = this.biodiversidadLayer.createQuery();
+      this.bioQuery.returnGeometry = false;
       this.bioQuery.outFields = ['ID_region', 'cantidad_individuos', 'grupo_tnc'];
       const sumPopulation = {
         onStatisticField: "grupo_tnc",
@@ -67,7 +67,6 @@ class TNCMap {
       };
       this.bioQuery.outStatistics = [sumPopulation];
       this.bioQuery.groupByFieldsForStatistics = ['grupo_tnc'];
-      this.colorQuery.outFields = ["*"];
       
       window.tnc_map = new WebMap({
         portalItem: {
@@ -202,6 +201,9 @@ class TNCMap {
           ]
           this.barChart.renderGraphic(data);
         });
+
+        d3.selectAll(".group__container").remove();
+        d3.select("#biodiversidad-resultados").style("visibility", "visible");
       }
       else if(region) {
         eventBus.emitEventListeners('regionClicked');
@@ -225,7 +227,7 @@ class TNCMap {
               {"name": "Bosque", "value": 0},
               {"name": "Restauración", "value": 0},
               {"name": "Producción Sostenible", "value": 0}
-            ]
+            ];
             result.features.forEach(el => {
               const feat = el.attributes;
               data[0].value += feat.area_manejo_sostenible;
@@ -244,20 +246,19 @@ class TNCMap {
 
         this.getBiodiversityPerLandcoverData(region).then(res => {
           d3.selectAll(".group__container").remove();
+          d3.select("#biodiversidad-resultados").style("visibility", "hidden");
           res.forEach(el => {
             const group = el.name;
             this.biodiversityQuery.where = `ID_region = '${region}' AND grupo_tnc = '${group}'`;
             this.biodiversityQuery.returnDistinctValues = true;
             this.biodiversityQuery.returnCountOnly = false;
             this.biodiversityQuery.outFields = ["especie"];
-            this.bioIconsQuery.where = `grupo_tnc = '${group}'`;
             this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(species => {
+              this.bioIconsQuery.where = `grupo_tnc = '${group}'`;
               this.bioIconsLayer.queryFeatures(this.bioIconsQuery).then(icon => {
                 const iconUrl = icon.features[0].attributes.url;
                 const count = species.features.length;
-                const groupContainer = d3.select("#container__biodiversidad")
-                .append("div")
-                  .attr("class", "group__container");
+                const groupContainer = d3.select("#container__biodiversidad").append("div").attr("class", "group__container");
                 const header = groupContainer.append("div").attr("class", "group__header");
                 header.append("h6").text(group);
                 header.append("h6").text(count);
@@ -265,7 +266,6 @@ class TNCMap {
                   .append("div")
                     .attr("class", "group__graphic")
                     .attr("id", `graph__${group}`);
-                const width = parseInt(d3.select(`#graph__${group}`).style("width"));
                 graphic.append("img")
                   .attr("src", iconUrl)
                   .attr("class", "biodiversity__icon");
