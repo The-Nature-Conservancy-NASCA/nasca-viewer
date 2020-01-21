@@ -133,8 +133,9 @@ class TNCMap {
       });
       
       window.tnc_map.when(() => {
-        window.tnc_map.layers.items[1].outFields = ["*"];
-        window.tnc_map.layers.items[2].outFields = ["*"];
+        console.log(window.tnc_map.layers);
+        window.tnc_map.layers.items.find(item => item.title === "Predios").outFields = ["*"];
+        window.tnc_map.layers.items.find(item => item.title === "Regiones").outFields = ["*"];
         const estrategiaInitial = getEstrategiaInitial();
         let definitionExpression = null;
 
