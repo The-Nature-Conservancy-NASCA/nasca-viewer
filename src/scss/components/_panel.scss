@@ -6,8 +6,9 @@
   flex-direction: column;
   height: 100%;
   position: fixed;
-  right: 0;
+  right: -48rem;
   top: $alto-header;
+  transition: right .3s ease-in-out;
   width: 48rem;
 
   &__header {
@@ -19,6 +20,30 @@
       font-weight: lighter;
       padding-left: 1.5rem;
     }
+  }
+
+  &__expand {
+    background-color: var(--theme-color);
+    border-radius: 2px 0 0 2px;
+    cursor: pointer;
+    height: 6rem;
+    display: flex;
+    align-items: center;
+    right: 48rem;
+    position: absolute;
+    top: calc(50vh - 4rem);
+    transition: transform .2s;
+    width: 3.5rem;
+
+    img {
+      transform: rotateZ(180deg);
+    }
+
+    &.expanded {
+      img {
+        transform: rotateZ(0);
+      }
+    } 
   }
 
   &__selection {
@@ -78,13 +103,12 @@
 
   &__information {
     color: $font-gray;
-    cursor: pointer;
     font-size: 20px;
-    position: absolute;
-    right: 1rem;
-    text-align: right;
-    top: 18rem;
-    width: 2rem;
+    width: 100%;
+  }
+
+  &.expanded {
+    right: 0;
   }
 }
 

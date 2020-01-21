@@ -74,11 +74,11 @@ class ToolBar {
         <li class="toolbar__menu-item" data-menu="menu-capas">
           <i class="toolbar__menu-icon esri-icon-layers" title="Capas"></i>
         </li>
-        <li class="toolbar__menu-item" data-menu="menu-leyenda">
-          <i class="toolbar__menu-icon esri-icon-layer-list" title="Leyenda"></i>
-        </li>
         <li class="toolbar__menu-item" data-menu="menu-base">
           <i class="toolbar__menu-icon esri-icon-basemap" title="Mapa base"></i>
+        </li>
+        <li class="toolbar__menu-item" data-menu="menu-leyenda">
+          <i class="toolbar__menu-icon esri-icon-layer-list" title="Leyenda"></i>
         </li>
       </ul>
       <div id="menu-buscar" class="menu-panel">

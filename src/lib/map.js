@@ -173,6 +173,7 @@ class TNCMap {
 
   mapClick(event) {
     this.view.hitTest(event).then((response) => {
+      eventBus.emitEventListeners('mapClick');
       const { predio, region } = this.extractIds(response.results);
       document.querySelectorAll(".js-panel-warning").forEach(span => {
         span.style.display = "none";
