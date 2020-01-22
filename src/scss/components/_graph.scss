@@ -39,6 +39,23 @@
     display: block;
     margin: auto
   }
+
+  button {
+    background-color: var(--theme-color);
+    border: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+    color: $white;
+    cursor: pointer;
+    margin-right: 1rem;
+    padding: 1rem;
+    transition: all .2s;
+    width: 10rem;
+
+    &:hover {
+      box-shadow: 0 5px 8px rgba(0, 0, 0, .4);
+      transform: translateY(-2px);
+    }
+  }
 }
 
 #graph__biodiversidad, #graph__implementaciones, #graph__carbono {
@@ -69,8 +86,16 @@
   visibility: hidden;
 }
 
+.time__select {
+  text-align: center;
+  border: none;
+  border-bottom: 2px solid var(--theme-color);
+  padding: 1rem;
+}
+
 #container__biodiversidad {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  width: 100%;
 }

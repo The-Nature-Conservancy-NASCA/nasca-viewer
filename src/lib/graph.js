@@ -422,7 +422,7 @@ class BarChart {
           const tooltipContent = `<span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> ha</span>`;
           d3.select("#tooltip__implementaciones")
             .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1] + 100}px`)
+            .style("top", `${coordinates[1] + 250}px`)
             .style("display", "block")
             .style("font-size", "11px")
             .html(tooltipContent);
@@ -431,7 +431,7 @@ class BarChart {
           const coordinates = d3.mouse(this);
           d3.select("#tooltip__implementaciones")
             .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1] + 100}px`);
+            .style("top", `${coordinates[1] + 250}px`);
         })
         .on("mouseout", function () {
           that.barGroup.selectAll("rect")

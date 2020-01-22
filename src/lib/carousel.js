@@ -1,72 +1,115 @@
 class Carousel {
+  constructor(container, items, controls, controlsContainer) {
+    this.carouselContainer = container;
+    this.carouselControls = controls;
+    this.carouselArray = [...items];
+    this.controlsContainer = controlsContainer;
+  }
 
-  constructor (el) {
-    this._el = document.getElementById(el);
-    this._queryData();
-    eventBus.addEventListener('biodiversidadClicked', event => {
-      this.renderHTML();
+  // Assign initial css classes for gallery and nav items
+  setInitialState() {
+    this.carouselArray[0].classList.add('gallery-item-first');
+    this.carouselArray[1].classList.add('gallery-item-previous');
+    this.carouselArray[2].classList.add('gallery-item-selected');
+    this.carouselArray[3].classList.add('gallery-item-next');
+    this.carouselArray[4].classList.add('gallery-item-last');
+
+    document.querySelector('.gallery-nav').childNodes[0].className = 'gallery-nav-item gallery-item-first';
+    document.querySelector('.gallery-nav').childNodes[1].className = 'gallery-nav-item gallery-item-previous';
+    document.querySelector('.gallery-nav').childNodes[2].className = 'gallery-nav-item gallery-item-selected';
+    document.querySelector('.gallery-nav').childNodes[3].className = 'gallery-nav-item gallery-item-next';
+    document.querySelector('.gallery-nav').childNodes[4].className = 'gallery-nav-item gallery-item-last';
+  }
+
+  // Update the order state of the carousel with css classes
+  setCurrentState(target, selected, previous, next, first, last) {
+
+    selected.forEach(el => {
+      el.classList.remove('gallery-item-selected');
+
+      if (target.className == 'gallery-controls-previous') {
+        el.classList.add('gallery-item-next');
+      } else {
+        el.classList.add('gallery-item-previous');
+      }
+    });
+
+    previous.forEach(el => {
+      el.classList.remove('gallery-item-previous');
+
+      if (target.className == 'gallery-controls-previous') {
+        el.classList.add('gallery-item-selected');
+      } else {
+        el.classList.add('gallery-item-first');
+      }
+    });
+
+    next.forEach(el => {
+      el.classList.remove('gallery-item-next');
+
+      if (target.className == 'gallery-controls-previous') {
+        el.classList.add('gallery-item-last');
+      } else {
+        el.classList.add('gallery-item-selected');
+      }
+    });
+
+    first.forEach(el => {
+      el.classList.remove('gallery-item-first');
+
+      if (target.className == 'gallery-controls-previous') {
+        el.classList.add('gallery-item-previous');
+      } else {
+        el.classList.add('gallery-item-last');
+      }
+    });
+
+    last.forEach(el => {
+      el.classList.remove('gallery-item-last');
+
+      if (target.className == 'gallery-controls-previous') {
+        el.classList.add('gallery-item-first');
+      } else {
+        el.classList.add('gallery-item-next');
+      }
     });
   }
-  
-  init () {
-    this.carousel = document.querySelector("[data-target='carousel']")
-    this.card = this.carousel.querySelector("[data-target='card']")
-    this.leftButton = document.querySelector("[data-action='slideLeft']")
-    this.rightButton = document.querySelector("[data-action='slideRight']")
-    this.carouselWidth = this.carousel.clientWidth
-    this.cardStyle = this.card.currentStyle || window.getComputedStyle(this.card)
-    this.cardMarginRight = Number(this.cardStyle.marginRight.match(/\d+/g)[0])
-    this.cardCount = this.carousel.querySelectorAll("[data-target='card']").length
 
-    let offset = 0
-    const maxX = -(
-      this.cardCount * this.carouselWidth +
-      this.cardMarginRight * this.cardCount -
-      this.carouselWidth -
-      this.cardMarginRight
-    )
+  // Construct the carousel navigation
+  setNav() {
+    this.carouselContainer.appendChild(document.createElement('ul')).className = 'gallery-nav';
 
-    this.leftButton.addEventListener('click', () => {
-      if (offset !== 0) {
-        offset += this.carouselWidth + this.cardMarginRight
-        this.carousel.style.transform = `translateX(${offset}px)`
-      }
-    })
-
-    this.rightButton.addEventListener('click', () => {
-      if (offset !== maxX) {
-        offset -= this.carouselWidth + this.cardMarginRight
-        this.carousel.style.transform = `translateX(${offset}px)`
-      }
-    })
+    this.carouselArray.forEach(item => {
+      const nav = this.carouselContainer.lastElementChild;
+      nav.appendChild(document.createElement('li'));
+    }); 
   }
-  
-  _queryData() {
-    CarouselRepository.getData().then(carouselData => {
-      this._data = carouselData;
+
+  // Construct the carousel controls
+  setControls() {
+    this.carouselControls.forEach(control => {
+      this.controlsContainer.appendChild(document.createElement('button')).className = `gallery-controls-${control}`;
+    }); 
+
+    !!this.controlsContainer.childNodes[0] ? this.controlsContainer.childNodes[0].innerHTML = this.carouselControls[0] : null;
+    !!this.controlsContainer.childNodes[1] ? this.controlsContainer.childNodes[1].innerHTML = this.carouselControls[1] : null;
+  }
+ 
+  // Add a click event listener to trigger setCurrentState method to rearrange carousel
+  useControls() {
+    const triggers = [...this.controlsContainer.childNodes];
+
+    triggers.forEach(control => {
+      control.addEventListener('click', () => {
+        const target = control;
+        const selectedItem = document.querySelectorAll('.gallery-item-selected');
+        const previousSelectedItem = document.querySelectorAll('.gallery-item-previous');
+        const nextSelectedItem = document.querySelectorAll('.gallery-item-next');
+        const firstCarouselItem = document.querySelectorAll('.gallery-item-first');
+        const lastCarouselItem = document.querySelectorAll('.gallery-item-last');
+
+        this.setCurrentState(target, selectedItem, previousSelectedItem, nextSelectedItem, firstCarouselItem, lastCarouselItem);
+      });
     });
-  }
-  
-  renderHTML() {
-    const options = this._data;
-    const template = /* html */`
-    <div class="carousel">
-      <ul class="carousel__list" data-target="carousel">
-        ${options.map(item => /* html */`
-          <li class="carousel__card" data-target="card">
-            <img class="carousel__image" src="${item.url}" alt="${item.nombre}">
-            <p class="carousel__text">${item.especie} - ${item.nombre}</p>
-          </li>
-        `).join('')}
-      </ul>
-      <div class="carousel__buttons">
-        <img class="carousel__button" src="/img/keyboard_arrow_left.png" data-action="slideLeft">
-        <img class="carousel__button" src="/img/keyboard_arrow_right.png" data-action="slideRight">
-      </div>
-    </div>
-    `;
-    
-    this._el.innerHTML = template;
-    this.init();
   }
 }

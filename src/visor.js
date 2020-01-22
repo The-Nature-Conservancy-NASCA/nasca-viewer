@@ -8,7 +8,7 @@ class Visor {
     new ToolBar('toolbar');
     new Panel('panel-resultados');
     window.map = new TNCMap('map-div');
-    new Carousel('resultado-carousel');
+    //new Carousel('resultado-carousel');
     const selectEstrategias = new EstrategiaSelector('selector-estrategias');
     const selectProyectos = new ProyectoSelector('selector-proyectos');
     window.modalPopup = new Modal();

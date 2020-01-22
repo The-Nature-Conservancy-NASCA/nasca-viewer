@@ -35,6 +35,8 @@ class Panel {
       this._showPanel();
     });
     this.registerHandlers();
+
+    this._createCarousel();
   }
 
   registerHandlers() {
@@ -77,6 +79,39 @@ class Panel {
         });
       });
     }
+  }
+
+  _createCarousel() {
+    const fakeImg = 'https://fakeimg.pl/300x200/?text=N/A';
+    let carouselImages = Array(5).fill(fakeImg);
+
+    CarouselRepository.getData().then(carouselData => {
+      carouselData.forEach((item, i) => {
+        if(carouselImages[i]) {
+          carouselImages[i] = item.url;
+        }
+      });
+      const template = /* html */`
+          <div class="gallery-container">
+            ${carouselImages.map(item => /* html */`
+              <img class="gallery-item" src="${item}">
+            `).join('')}
+          </div>
+          <div class="gallery-controls"></div>
+    `;
+      document.querySelector('.gallery').innerHTML = template;
+      const galleryContainer = document.querySelector('.gallery-container');
+      const galleryControlsContainer = document.querySelector('.gallery-controls');
+      const galleryControls = ['previous', 'next'];
+      const galleryItems = document.querySelectorAll('.gallery-item');
+          
+      const biodiversidadCarousel = new Carousel(galleryContainer, galleryItems, galleryControls, galleryControlsContainer);
+
+      biodiversidadCarousel.setControls();
+      biodiversidadCarousel.setNav();
+      biodiversidadCarousel.setInitialState();
+      biodiversidadCarousel.useControls();
+    });
   }
 
   togglePanelVisibility() {
@@ -144,41 +179,56 @@ class Panel {
       <section class="resultados">
         <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
           ${this._renderSelection()}
-          <p class="panel__information">${window.tncConfig.specificInformation.carbono.content}</p>
-          <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
-          <div id="graph__carbono"></div>
-          <div id="tooltip__carbono" class="tooltip"></div>
+          <div class="panel__tab-content">
+            <p class="panel__information">
+              ${window.tncConfig.specificInformation.carbono.content}
+            </p>
+            <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
+            <div id="graph__carbono" class="panel__graph"></div>
+            <div id="tooltip__carbono" class="tooltip"></div>
+          </div> 
         </div>
         <div class="panel__tab-panel" id="panel-biodiversidad">
           ${this._renderSelection()}
-          <p class="panel__information">${window.tncConfig.specificInformation.biodiversidad.content}</p>
-          <div id="biodiversidad-resultados">
-            <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
-          </div>
-          <div id="container__biodiversidad"></div>
-          <div id="tooltip__biodiversidad" class="tooltip"></div>
-          <div id="resultado-carousel"></div>
+          <div class="panel__tab-content">
+            <p class="panel__information">${window.tncConfig.specificInformation.biodiversidad.content}</p>
+            <div id="biodiversidad-resultados">
+              <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
+            </div>
+            <div id="container__biodiversidad"></div>
+            <div id="tooltip__biodiversidad" class="tooltip"></div>
+            <div class="gallery">
+            </div>
+          </div>  
         </div>
         <div class="panel__tab-panel" id="panel-cobertura">
           ${this._renderSelection()}
-          <p class="panel__information">${window.tncConfig.specificInformation.cobertura.content}</p>
-          <div id="graph__coberturas"></div>
-          <select name="time__coberturas" id="time__coberturas" class="time__select"></select>
-          <div id="tooltip__coberturas" class="tooltip"></div>
+          <div class="panel__tab-content">
+            <p class="panel__information">${window.tncConfig.specificInformation.cobertura.content}</p>
+            <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
+            <div class="panel__graph">
+              <div id="graph__coberturas" class="panel__graph"></div>
+              <div class="panel__graph-fields">
+                <select name="time__coberturas" id="time__coberturas" class="time__select"></select>
+              </div>
+            </div>
+            <div id="tooltip__coberturas" class="tooltip"></div>
+          </div>  
         </div>
         <div class="panel__tab-panel" id="panel-implementacion">
           ${this._renderSelection()}
-          <p class="panel__information">${window.tncConfig.specificInformation.implementacion.content}</p>
-          <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
-          <div id="graph__implementaciones"></div>
-          <div id="tooltip__implementaciones" class="tooltip"></div>
+          <div class="panel__tab-content">
+            <p class="panel__information">${window.tncConfig.specificInformation.implementacion.content}</p>
+            <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
+            <div id="graph__implementaciones" class="panel__graph"></div>
+            <div id="tooltip__implementaciones" class="tooltip"></div>
+          </div>  
         </div>
       </section>
       <div class="panel__expand">
         <img src="/img/keyboard_arrow_right.png" >
       </div>
       `;
-    
       this._el.innerHTML = html;
   }
 }
