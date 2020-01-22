@@ -56,8 +56,7 @@ class Landing {
   }
 
   _openVisor() {
-    const language = window.navigator.language.slice(0, 2) === 'en' ? '/en/' : '/';
-    window.location = `${language}visor.html`;
+    window.location = `./visor.html`;
   }
 
   estrategiaVisible() {
@@ -99,7 +98,7 @@ class Landing {
   }
   
   devLoad() {
-    fetch('/json/estrategias.json').then(response => {
+    fetch(Urls.getRelativeUrl('/json/estrategias.json')).then(response => {
       response.json().then(data => {
         const datos = {
           data: {
@@ -110,7 +109,7 @@ class Landing {
       })
     })
 
-    fetch('/json/proyectos.json').then(response => {
+    fetch(Urls.getRelativeUrl('/json/proyectos.json')).then(response => {
       response.json().then(data => {
         const datos = {
           data: {
@@ -210,7 +209,7 @@ class Landing {
 
 }
 
-fetch('/json/config.json').then(response => {
+fetch(Urls.getRelativeUrl('/json/config.json')).then(response => {
   response.json().then(config => {
     const lang = window.navigator.language.slice(0, 2) || document.documentElement.lang;
     window.tncConfig = config[lang];

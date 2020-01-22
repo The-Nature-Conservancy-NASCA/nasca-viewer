@@ -39,7 +39,7 @@ class Visor {
 }
 
 const eventBus = new Eventbus();
-fetch('/json/config.json').then(response => {
+fetch(Urls.getRelativeUrl('/json/config.json')).then(response => {
   response.json().then(config => {
     window.store = new Store();
     const lang =/* window.navigator.language.slice(0, 2) || */document.documentElement.lang;

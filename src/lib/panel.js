@@ -226,7 +226,7 @@ class Panel {
         </div>
       </section>
       <div class="panel__expand">
-        <img src="/img/keyboard_arrow_right.png" >
+        <img src="${Urls.getRelativeUrl('/img/keyboard_arrow_right.png')}" >
       </div>
       `;
       this._el.innerHTML = html;
