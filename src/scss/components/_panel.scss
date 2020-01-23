@@ -1,15 +1,17 @@
+$panel-width: 50rem;
+
 .panel {
   align-items: center;
   background-color: rgba($white, $panel-opacity);
-  //box-shadow: -5px 0 10px rgba($black, .2);
+  box-shadow: -2px 0 4px rgba($black, 0.4);
   display: flex;
   flex-direction: column;
   height: 100%;
   position: fixed;
-  right: -48rem;
+  right: -$panel-width;
   top: $alto-header;
   transition: right .3s ease-in-out;
-  width: 48rem;
+  width: $panel-width;
 
   &__header {
     width: 100%;
@@ -24,11 +26,12 @@
   &__expand {
     background-color: var(--theme-color);
     border-radius: 2px 0 0 2px;
+    box-shadow: -2px 2px 4px rgba($black, 0.4);
     cursor: pointer;
     height: 6rem;
     display: flex;
     align-items: center;
-    right: 48rem;
+    right: $panel-width;
     position: absolute;
     top: calc(50vh - 4rem);
     transition: transform .2s;
@@ -65,6 +68,7 @@
     background-color: $dark-gray;
     color: $white;
     cursor: pointer;
+    flex: 1;
     padding: 1.6rem 0;
     text-align: center;
     width: 12rem;
