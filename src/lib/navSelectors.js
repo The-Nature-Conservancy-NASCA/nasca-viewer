@@ -6,7 +6,9 @@ class EstrategiaSelector {
   }
 
   createSelector(estrategias) {
+    this._estrategias = estrategias;
     this._renderHTML(estrategias);
+    this._createProjectSelectors();
   }
 
   _renderHTML(options) {
@@ -26,9 +28,15 @@ class EstrategiaSelector {
   }
 
   _registerEventHandlers() {
-    this._selectorToggle.addEventListener('click', event => {
-      this._el.classList.toggle('navigation__selector--visible');
-      document.getElementById('selector-proyectos').classList.remove('navigation__selector--visible');
+    this._selectorToggle.addEventListener('mouseenter', event => {
+      this._el.classList.add('navigation__selector--visible');
+    });
+
+    this._selectorToggle.addEventListener('mouseleave', event => {
+      const abiertos = document.querySelectorAll('.navigation__selector--visible');
+      if (abiertos.length > 0) {
+        abiertos.forEach(el => {el.classList.remove('navigation__selector--visible')});
+      }
     });
 
     const itemsEstrategia = document.querySelectorAll('.js-selector-item[data-estrategia]');
@@ -48,11 +56,34 @@ class EstrategiaSelector {
         });
 
         item.addEventListener('mouseenter', event => {
-          //console.log(event.currentTarget.dataset.estrategia);
+          const estrategiaId = event.currentTarget.dataset.estrategia;
+          const abiertos = document.querySelectorAll('.proyecto-selector.navigation__selector--visible');
+          if (abiertos.length > 0) {
+            abiertos.forEach(el => {el.classList.remove('navigation__selector--visible')});
+          }
+          if (document.getElementById(`proyectos-${estrategiaId}`)) {
+            document.getElementById(`proyectos-${estrategiaId}`).classList.add('navigation__selector--visible');
+          }
         });
       });
     }
 
+  }
+
+  _createProjectSelectors() {
+    this._estrategias.forEach((estrategia, index) => {
+      const { id } = estrategia; 
+      ProyectoRepository.listProyectos(id).then(proyectos => {
+        if (proyectos) {
+          let div = document.createElement('div');
+          div.setAttribute('class', 'navigation__selector proyecto-selector');
+          div.setAttribute('id', `proyectos-${id}`);
+          this._selectorToggle.append(div);
+          let proyecto = new ProyectoSelector(`proyectos-${id}`, 38 * index);
+          proyecto.createSelector(proyectos);
+        }
+      }); 
+    });
   }
 
   _closeSelector() {
@@ -61,9 +92,12 @@ class EstrategiaSelector {
 }
 
 class ProyectoSelector  {
-  constructor(el) {
+  constructor(el, offsetTop) {
     this._el = document.getElementById(el);
     this._selectorToggle = document.getElementById('toggle-selector-proyecto');
+    this._offsetTop = offsetTop;
+    this._el.style.top = `${60 + offsetTop}px`;
+    this._el.style.right = '-16px';
   }
 
   createSelector(proyectos) {
@@ -87,11 +121,6 @@ class ProyectoSelector  {
   }
 
   _registerEventHandlers() {
-    this._selectorToggle.addEventListener('click', event => {
-      this._el.classList.toggle('navigation__selector--visible');
-      document.getElementById('selector-estrategias').classList.remove('navigation__selector--visible');
-    });
-
     const itemsProyecto = document.querySelectorAll('.js-selector-item[data-proyecto]');
 
     if(itemsProyecto) {

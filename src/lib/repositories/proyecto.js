@@ -31,6 +31,24 @@ class ProyectoRepository {
     }
   }
 
+  static async listProyectos(estrategia) {
+    const results = await window.store.select(this.TABLE_NAME, {
+      ID_estrategia: estrategia
+    });
+    
+    if(results.length && results.length > 1 ) {
+      return results.map(result => {
+        const {ID_estrategia, ID_proyecto, nombre, color } = result;
+        return {
+          id: ID_proyecto,
+          estrategia: ID_estrategia,
+          nombre,
+          color
+        };
+      });
+    }
+  }
+
   static async getProyectosOfEstrategia(estrategia) {
     const results = await window.store.select(this.TABLE_NAME, {
       ID_estrategia: estrategia

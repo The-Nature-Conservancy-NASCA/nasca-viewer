@@ -10,7 +10,6 @@ class Visor {
     window.map = new TNCMap('map-div');
     //new Carousel('resultado-carousel');
     const selectEstrategias = new EstrategiaSelector('selector-estrategias');
-    const selectProyectos = new ProyectoSelector('selector-proyectos');
     window.modalPopup = new Modal();
   
     document.getElementById('nav-ver-todo').addEventListener('click', event => {
@@ -21,14 +20,10 @@ class Visor {
       window.modalPopup.openModal(window.tncConfig.generalInformation);
     });
   
-    EstrategiaRepository.listEstrategias().then(estrategias => {
+    const estrategiaRequest = EstrategiaRepository.listEstrategias().then(estrategias => {
       selectEstrategias.createSelector(estrategias);
     });
-  
-    ProyectoRepository.listProyectos().then(proyectos => {
-      selectProyectos.createSelector(proyectos);
-    });
-    
+
   }
 
   _loadData() {

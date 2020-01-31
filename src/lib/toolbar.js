@@ -77,6 +77,9 @@ class ToolBar {
         <li class="toolbar__menu-item" data-menu="menu-base">
           <i class="toolbar__menu-icon esri-icon-basemap" title="Mapa base"></i>
         </li>
+        <li class="toolbar__menu-item" data-menu="menu-print">
+          <i class="toolbar__menu-icon esri-icon-printer" title="Imprimir"></i>
+        </li>
         <li class="toolbar__menu-item" data-menu="menu-leyenda">
           <i class="toolbar__menu-icon esri-icon-layer-list" title="Leyenda"></i>
         </li>
@@ -93,6 +96,11 @@ class ToolBar {
       <div id="menu-leyenda" class="menu-panel">
         <h2 class="menu-panel__title">${window.tncConfig.strings.leyenda}</h2>
         <div class="menu-panel__contenido" id="leyenda-map">
+        </div>
+      </div>
+      <div id="menu-print" class="menu-panel">
+        <h2 class="menu-panel__title">${window.tncConfig.strings.imprimir}</h2>
+        <div class="menu-panel__contenido" id="print-map">
         </div>
       </div>
       <div id="menu-base" class="menu-panel">

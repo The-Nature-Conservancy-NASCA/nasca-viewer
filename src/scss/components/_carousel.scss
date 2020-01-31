@@ -1,41 +1,42 @@
 .gallery {
+  box-shadow: 0 0 5px rgba($black, 0.4);
   width: 100%;
 }
 
 .gallery-container {
   align-items: center;
   display: flex;
-  height: 300px;
+  height: 24rem;
   margin: 0 auto;
-  max-width: 1000px;
+  max-width: 100rem;
   position: relative;
 }
 
 .gallery-item {
   border: 1px solid $light-gray;
-  height: 50px;
+  height: 5rem;
   opacity: .4;
   position: absolute;
   transition: all 0.3s ease-in-out;
-  width: 150px;
+  width: 15rem;
   z-index: 0;
 }
 
 .gallery-item.gallery-item-selected {
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.45), 0 0 110px rgba(255, 255, 255, 0.25), 0 0 100px rgba(255, 255, 255, 0.1);
-  height: 200px;
+  box-shadow: 0 0 3rem rgba(255, 255, 255, 0.6), 0 0 6rem rgba(255, 255, 255, 0.45), 0 0 11rem rgba(255, 255, 255, 0.25), 0 0 10rem rgba(255, 255, 255, 0.1);
+  height: 20rem;
   opacity: 1;
   left: 50%;
   transform: translateX(-50%);
-  width: 300px;
+  width: 30rem;
   z-index: 2;
 }
 
 .gallery-item.gallery-item-previous,
 .gallery-item.gallery-item-next {
-  height: 100px;
+  height: 10rem;
   opacity: 1;
-  width: 200px;
+  width: 20rem;
   z-index: 1;
 }
 
@@ -51,25 +52,25 @@
 
 .gallery-item.gallery-item-first {
   left: 15%;
-  transform: translateX(-50%);
+  transform: translateX(-40%);
 }
 
 .gallery-item.gallery-item-last {
   left: 85%;
-  transform: translateX(-50%);
+  transform: translateX(-60%);
 }
 
 .gallery-controls {
   display: flex;
   justify-content: center;
-  margin: 30px 0;
+  margin: 3rem 0;
 }
 
 .gallery-controls button {
   border: 0;
   cursor: pointer;
   font-size: 16px;
-  margin: 0 20px;
+  margin: 0 2rem;
   padding: 0 12px;
   text-transform: capitalize;
 }
@@ -88,7 +89,7 @@
   content: '';
   display: inline-block;
   height: 4px;
-  left: -10px;
+  left: -1rem;
   padding: 2px;
   position: absolute;
   top: 0;
@@ -113,7 +114,7 @@
   height: 4px;
   padding: 2px;
   position: absolute;
-  right: -10px;
+  right: -1rem;
   top: 50%;
   transform: rotate(-45deg) translateY(-50%);
   transition: right 0.15s ease-in-out;
@@ -137,9 +138,9 @@
 .gallery-nav li {
   background: #ccc;
   border-radius: 50%;
-  height: 10px;
+  height: 1rem;
   margin: 0 16px;
-  width: 10px;
+  width: 1rem;
 }
 
 .gallery-nav li.gallery-item-selected {
