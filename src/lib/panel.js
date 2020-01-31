@@ -83,18 +83,18 @@ class Panel {
 
   _createCarousel() {
     const fakeImg = 'https://fakeimg.pl/300x200/?text=N/A';
-    let carouselImages = Array(5).fill(fakeImg);
+    let carouselImages = Array(5).fill({nombre: '', url: fakeImg});
 
     CarouselRepository.getData().then(carouselData => {
       carouselData.forEach((item, i) => {
         if(carouselImages[i]) {
-          carouselImages[i] = item.url;
+          carouselImages[i] = {url: item.url, nombre: item.nombre};
         }
       });
       const template = /* html */`
           <div class="gallery-container">
             ${carouselImages.map(item => /* html */`
-              <img class="gallery-item" src="${item}">
+              <img class="gallery-item" src="${item.url}">
             `).join('')}
           </div>
           <div class="gallery-controls"></div>
@@ -184,8 +184,12 @@ class Panel {
               ${window.tncConfig.specificInformation.carbono.content}
             </p>
             <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
-            <div id="graph__carbono" class="panel__graph"></div>
-            <div id="tooltip__carbono" class="tooltip"></div>
+            <div class="panel__graph">
+              <div class="panel__stats">
+                <div id="graph__carbono"></div>
+                <div id="tooltip__carbono" class="tooltip"></div>
+              </div>
+            </div>
           </div> 
         </div>
         <div class="panel__tab-panel" id="panel-biodiversidad">
@@ -195,8 +199,10 @@ class Panel {
             <div id="biodiversidad-resultados">
               <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
             </div>
-            <div id="container__biodiversidad"></div>
-            <div id="tooltip__biodiversidad" class="tooltip"></div>
+            <div class="panel__stats">
+              <div id="container__biodiversidad"></div>
+              <div id="tooltip__biodiversidad" class="tooltip"></div>
+            </div>
             <div class="gallery">
             </div>
           </div>  
@@ -207,9 +213,11 @@ class Panel {
             <p class="panel__information">${window.tncConfig.specificInformation.cobertura.content}</p>
             <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
             <div class="panel__graph">
-              <div id="graph__coberturas" class="panel__graph"></div>
-              <div class="panel__graph-fields">
-                <select name="time__coberturas" id="time__coberturas" class="time__select"></select>
+              <div class="panel__stats">
+                <div id="graph__coberturas"></div>
+                <div class="panel__graph-fields">
+                  <select name="time__coberturas" id="time__coberturas" class="time__select"></select>
+                </div>
               </div>
             </div>
             <div id="tooltip__coberturas" class="tooltip"></div>
@@ -220,8 +228,12 @@ class Panel {
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.implementacion.content}</p>
             <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
-            <div id="graph__implementaciones" class="panel__graph"></div>
-            <div id="tooltip__implementaciones" class="tooltip"></div>
+            <div class="panel__graph">
+              <div class="panel__stats">
+                <div id="graph__implementaciones"></div>
+                <div id="tooltip__implementaciones" class="tooltip"></div>
+              </div>
+            </div>
           </div>  
         </div>
       </section>

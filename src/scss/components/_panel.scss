@@ -120,6 +120,12 @@ $panel-width: 50rem;
     flex: 1;
   }
 
+  &__stats {
+    box-shadow: 0 0 5px rgba($black, 0.4);
+    padding: 2rem;
+    width: 100%;
+  }
+
   &__graph-fields {
     width: 100;
     text-align: center;

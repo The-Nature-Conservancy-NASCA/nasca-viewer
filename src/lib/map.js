@@ -8,6 +8,7 @@ class TNCMap {
       'esri/widgets/LayerList',
       'esri/widgets/Legend',
       'esri/widgets/Search',
+      'esri/widgets/Print',
       'esri/widgets/Zoom',
       'esri/widgets/ScaleBar',
       'esri/tasks/Locator',
@@ -19,6 +20,7 @@ class TNCMap {
           LayerList,
           Legend,
           Search,
+          Print,
           Zoom,
           ScaleBar,
           Locator,
@@ -88,6 +90,12 @@ class TNCMap {
         container: 'leyenda-map'
       });
 
+      new Print({
+        view: this.view,
+        printServiceUrl: 'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task',
+        container: 'print-map'
+      });
+
       const layerList = new LayerList({
         view: this.view,
         container: 'layerList-map'
@@ -133,7 +141,6 @@ class TNCMap {
       });
       
       window.tnc_map.when(() => {
-        console.log(window.tnc_map.layers);
         window.tnc_map.layers.items.find(item => item.title === "Predios").outFields = ["*"];
         window.tnc_map.layers.items.find(item => item.title === "Regiones").outFields = ["*"];
         const estrategiaInitial = getEstrategiaInitial();
@@ -257,7 +264,7 @@ class TNCMap {
                 const count = species.features.length;
                 const groupContainer = d3.select("#container__biodiversidad").append("div").attr("class", "group__container");
                 const header = groupContainer.append("div").attr("class", "group__header");
-                header.append("h6").text(group);
+                header.append("h5").text(group);
                 header.append("h6").text(count);
                 const graphic = groupContainer
                   .append("div")
