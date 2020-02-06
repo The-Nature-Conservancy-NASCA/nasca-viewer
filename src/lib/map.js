@@ -180,11 +180,18 @@ class TNCMap {
 
   mapClick(event) {
     this.view.hitTest(event).then((response) => {
-      eventBus.emitEventListeners('mapClick');
       const { predio, region } = this.extractIds(response.results);
+      eventBus.emitEventListeners('mapClick', { predio, region });
       document.querySelectorAll(".js-panel-warning").forEach(span => {
         span.style.display = "none";
       });
+      if (!predio && !region) {
+        d3.selectAll("svg.treemap").remove();
+        d3.selectAll("svg.bar").remove();
+        d3.selectAll("svg.area").remove();
+        d3.selectAll("svg.pie").remove();
+
+      }
       if(predio) {
         // eventBus.emitEventListeners('predioClicked');
         CoberturasRepository.getUniqueYearsByPredio(predio).then(years => {
@@ -277,18 +284,7 @@ class TNCMap {
               });
             });
           });
-          // this.stackedBarChart.renderGraphic(res.counts, res.keys);
         });
-    
-        // window.sessionStorage.region = region;
-        // this.bioQuery.where = `ID_region = '${region}'`;
-        // this.biodiversidadLayer.queryFeatures(this.bioQuery).then(results => {
-        //   this._biodiversidad.showSpeciesCards(results.features);
-        //   d3.selectAll('.biodiversidad__card')
-        //   .on('click', this.groupByLandCover)
-        // }).catch(error => {
-        //   console.error(error);
-        // });
       }
     });
   }

@@ -31,8 +31,13 @@ class Panel {
     eventBus.addEventListener('regionClicked', event => {
       this._enableTab('biodiversidad');
     });
-    eventBus.addEventListener('mapClick', event => {
-      this._showPanel();
+    eventBus.addEventListener('mapClick', obj => {
+      const { predio, region } = obj;
+      if (predio || region) {
+        this._showPanel();
+      } else {
+        this._hidePanel();
+      }
     });
     this.registerHandlers();
 
@@ -122,6 +127,11 @@ class Panel {
   _showPanel() {
     this._el.classList.add(PANEL.CLASSES.EXPANDED);
     this._togglePanel.classList.add(PANEL.CLASSES.EXPANDED);
+  }
+
+  _hidePanel() {
+    this._el.classList.remove(PANEL.CLASSES.EXPANDED);
+    this._togglePanel.classList.remove(PANEL.CLASSES.EXPANDED);
   }
 
   activatePanel(tab) {

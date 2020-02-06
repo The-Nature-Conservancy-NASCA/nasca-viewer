@@ -705,6 +705,7 @@ class PieChart {
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.svg = d3.select(el)
       .append("svg")
+        .attr("class", "pie")
         .attr("width", this.width)
         .attr("height", this.height);
   }
