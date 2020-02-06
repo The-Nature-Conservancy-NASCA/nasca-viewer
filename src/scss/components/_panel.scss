@@ -1,4 +1,4 @@
-$panel-width: 50rem;
+$panel-width: 58rem;
 
 .panel {
   align-items: center;
@@ -50,12 +50,14 @@ $panel-width: 50rem;
 
   &__selection {
     background-color: var(--theme-color);
-    padding: 2rem 2rem
+    padding: 2rem 2rem;
   }
-
+  
   &__selection-context {
-    color: $dark-gray;
+    letter-spacing: 1.5px;
+    color: $white;
     font-size: 2.5rem;
+    font-weight: 100;
   }
 
   &__tabs {
@@ -69,6 +71,7 @@ $panel-width: 50rem;
     color: $white;
     cursor: pointer;
     flex: 1;
+    font-weight: 400;
     padding: 1.6rem 0;
     text-align: center;
     width: 12rem;
@@ -101,9 +104,10 @@ $panel-width: 50rem;
   }
   
   &__information {
+    justify-self: flex-start;
     color: $font-gray;
     font-size: 1.6rem;
-    margin-bottom: 10rem;
+    margin-bottom: 1.6rem;
     width: 100%;
   }
   
@@ -113,7 +117,7 @@ $panel-width: 50rem;
     flex-direction: column;
     justify-content: space-between;
     padding: 3rem;
-    height: calc(100vh - 180px);
+    min-height: calc(100vh - 180px);
   }
 
   &__graph {
@@ -121,7 +125,6 @@ $panel-width: 50rem;
   }
 
   &__stats {
-    box-shadow: 0 0 5px rgba($black, 0.4);
     padding: 2rem;
     width: 100%;
   }

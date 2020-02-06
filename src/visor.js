@@ -3,6 +3,7 @@ class Visor {
   constructor() {
     eventBus.addEventListener('coberturaLoaded', event => {
       document.querySelector('.loader').classList.add('hidden');
+      window.modalPopup.openModal({header: window.tncConfig.strings.warning_panel});
     });
     this._loadData();
     new ToolBar('toolbar');

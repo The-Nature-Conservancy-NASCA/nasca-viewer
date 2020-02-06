@@ -183,7 +183,6 @@ class Panel {
             <p class="panel__information">
               ${window.tncConfig.specificInformation.carbono.content}
             </p>
-            <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
             <div class="panel__graph">
               <div class="panel__stats">
                 <div id="graph__carbono"></div>
@@ -196,9 +195,6 @@ class Panel {
           ${this._renderSelection()}
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.biodiversidad.content}</p>
-            <div id="biodiversidad-resultados">
-              <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
-            </div>
             <div class="panel__stats">
               <div id="container__biodiversidad"></div>
               <div id="tooltip__biodiversidad" class="tooltip"></div>
@@ -211,7 +207,6 @@ class Panel {
           ${this._renderSelection()}
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.cobertura.content}</p>
-            <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
             <div class="panel__graph">
               <div class="panel__stats">
                 <div id="graph__coberturas"></div>
@@ -227,7 +222,6 @@ class Panel {
           ${this._renderSelection()}
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.implementacion.content}</p>
-            <span class="js-panel-warning">${window.tncConfig.strings.warning_panel}</span>
             <div class="panel__graph">
               <div class="panel__stats">
                 <div id="graph__implementaciones"></div>

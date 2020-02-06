@@ -1,7 +1,7 @@
 .modal {
   opacity: 0;
   visibility: hidden;
-
+  
   &--visible {
     opacity: 1;
     visibility: visible;
@@ -25,6 +25,7 @@
   background-color: #fff;
   border-top: 5px solid var(--theme-color);
   max-width: 500px;
+  padding: 2rem;
   z-index: 16;
 
   &__header {
@@ -32,11 +33,10 @@
     font-size: 2.5rem;
     text-align: center;
     padding: 1.6rem;
-    font-weight: 100;
+    font-weight: 400;
   }
 
   &__content {
-    padding: 2rem;
 
     > *:not(:last-child) {
       margin-bottom: 4rem;

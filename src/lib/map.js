@@ -1,7 +1,6 @@
 class TNCMap {
   
   constructor(container) {
-    this._biodiversidad = new Biodiversidad('biodiversidad-resultados');
     require(['esri/WebMap',
       'esri/views/MapView',
       'esri/widgets/BasemapGallery',
@@ -207,7 +206,6 @@ class TNCMap {
         });
 
         d3.selectAll(".group__container").remove();
-        d3.select("#biodiversidad-resultados").style("visibility", "visible");
       }
       else if(region) {
         eventBus.emitEventListeners('regionClicked');
@@ -250,7 +248,6 @@ class TNCMap {
 
         this.getBiodiversityPerLandcoverData(region).then(res => {
           d3.selectAll(".group__container").remove();
-          d3.select("#biodiversidad-resultados").style("visibility", "hidden");
           res.forEach(el => {
             const group = el.name;
             this.biodiversityQuery.where = `ID_region = '${region}' AND grupo_tnc = '${group}'`;
@@ -258,8 +255,10 @@ class TNCMap {
             this.biodiversityQuery.returnCountOnly = false;
             this.biodiversityQuery.outFields = ["especie"];
             this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(species => {
-              this.bioIconsQuery.where = `grupo_tnc = '${group}'`;
-              this.bioIconsLayer.queryFeatures(this.bioIconsQuery).then(icon => {
+              const iconsQuery = this.bioIconsLayer.createQuery();
+              iconsQuery.outFields = ["grupo_tnc", "url"];
+              iconsQuery.where = `grupo_tnc = '${group}'`;
+              this.bioIconsLayer.queryFeatures(iconsQuery).then(icon => {
                 const iconUrl = icon.features[0].attributes.url;
                 const count = species.features.length;
                 const groupContainer = d3.select("#container__biodiversidad").append("div").attr("class", "group__container");

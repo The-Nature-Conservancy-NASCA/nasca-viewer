@@ -58,9 +58,14 @@
   }
 }
 
-#graph__biodiversidad, #graph__implementaciones, #graph__carbono {
+#graph__biodiversidad, #graph__carbono {
   width: 400px;
   height: 150px;
+}
+
+#graph__implementaciones {
+  width: 500px;
+  height: 250px;
 }
 
 .group__graphic {
@@ -79,7 +84,7 @@
 
 .biodiversity__icon {
   @include positionCentered;
-  width: 100px;
+  width: 9.5rem;
 }
 
 #time__coberturas {
