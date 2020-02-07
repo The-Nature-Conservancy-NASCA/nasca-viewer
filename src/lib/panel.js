@@ -196,7 +196,6 @@ class Panel {
             <div class="panel__graph">
               <div class="panel__stats">
                 <div id="graph__carbono"></div>
-                <div id="tooltip__carbono" class="tooltip"></div>
               </div>
             </div>
           </div> 
@@ -207,7 +206,6 @@ class Panel {
             <p class="panel__information">${window.tncConfig.specificInformation.biodiversidad.content}</p>
             <div class="panel__stats">
               <div id="container__biodiversidad"></div>
-              <div id="tooltip__biodiversidad" class="tooltip"></div>
             </div>
             <div class="gallery">
             </div>
@@ -225,7 +223,6 @@ class Panel {
                 </div>
               </div>
             </div>
-            <div id="tooltip__coberturas" class="tooltip"></div>
           </div>  
         </div>
         <div class="panel__tab-panel" id="panel-implementacion">
@@ -235,7 +232,6 @@ class Panel {
             <div class="panel__graph">
               <div class="panel__stats">
                 <div id="graph__implementaciones"></div>
-                <div id="tooltip__implementaciones" class="tooltip"></div>
               </div>
             </div>
           </div>  

@@ -1,12 +1,13 @@
 class TreeMap {
 
   constructor (el, colors) {
-    const margin = {top: 10, right: 10, bottom: 10, left: 10};
+    const margin = {top: 0, right: 0, bottom: 0, left: 0};
     this.width = 400 - margin.left - margin.right;
     this.height = 300 - margin.top - margin.bottom;
 
     this.el = el;
     this.colors = colors;
+    this.tooltipOffset = 15;
 
     this.projectBtn = d3.select(el)
                         .append("button")
@@ -111,60 +112,181 @@ class TreeMap {
 
     // add rectangles
     this.treeMapGroup.selectAll("rect")
-                    .data(root.leaves())
-                    .enter()
-                    .append("rect")
-                      .on("mouseover", function (d) {
-                        that.treeMapGroup.selectAll("rect")
-                          .attr("fill-opacity", 0.3);
-    
-                        d3.select(this)
-                          .attr("stroke", "black")
-                          .attr("stroke-width", 1)
-                          .attr("fill-opacity", 0.75);
-                    
-                        const coordinates = d3.mouse(this);
-                        const tooltipContent = `
-                        <span class="tooltip__title">${d.parent.data.name}</span><br>
-                        <span class="tooltip__subtitle">${d.data.name}</span>: <span class="tooltip__value">${Math.round(d.data.value)} ha</span>
-                        `;
-                        d3.select("#tooltip__coberturas")
-                          .style("left", `${coordinates[0]}px`)
-                          .style("top", `${coordinates[1] + 50}px`)
-                          .style("display", "block")
-                          .style("font-size", "11px")
-                          .html(tooltipContent);
-                      })
-                      .on("mousemove", function () {
-                        const coordinates = d3.mouse(this);
-                        d3.select("#tooltip__coberturas")
-                          .style("left", `${coordinates[0]}px`)
-                          .style("top", `${coordinates[1] + 50}px`);
-                      })
-                      .on("mouseout", function () {
-                        that.treeMapGroup.selectAll("rect")
-                              .attr("fill-opacity", 0.75)
-                              .attr("stroke-width", 0.25)
-                              .attr("stroke", "gray");
+      .data(root.leaves())
+      .enter()
+      .append("rect")
+        .attr("class", d =>
+          d.parent.data.name.toLowerCase().replace(/ /g, "_")
+        )
+        .on("mouseover", function (d) {
+          that.treeMapGroup.selectAll("rect")
+            .attr("fill-opacity", 0.2);
+          d3.select(this)
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("fill-opacity", 0.75);
+          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const value = Number(Math.round(d.data.value)).toLocaleString("en");
+          const tooltipContent = `
+              <span class="tooltip__title">${d.parent.data.name}</span><br>
+              <span class="tooltip__subtitle">${
+                d.data.name ? d.data.name : ""
+              }</span>
+              <hr>
+              <span class="tooltip__value">${value} ha</span>
+            `;
+          d3.select("#tooltip__graph")
+            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+            .style("top", `${coordinates[1]}px`)
+            .style("display", "block")
+            .style("font-size", "11px")
+            .html(tooltipContent);
+        })
+        .on("mousemove", function () {
+          const coordinates = [d3.event.pageX, d3.event.pageY];
+          d3.select("#tooltip__graph")
+            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+            .style("top", `${coordinates[1]}px`);
+        })
+        .on("mouseout", function () {
+          that.treeMapGroup
+            .selectAll("rect")
+              .attr("fill-opacity", 0.8)
+              .attr("stroke-width", 0.25)
+              .attr("stroke", "gray");
+          d3.select("#tooltip__graph")
+          .html("")
+          .style("display", "none");
+        })
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0)
+        .attr("fill-opacity", 0.75)
+        .attr("fill", d => this.colors[d.data.id])
+        .attr("stroke-width", 0.25)
+        .attr("stroke", "gray")
+        .transition()
+        .on("end", () => this.buttons.style("visibility", "visible"))
+        .duration(750)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0);
 
-                        // d3.select(this)
-                        //   .attr("stroke", "none");
-
-                        d3.select("#tooltip__coberturas")
-                          .style("display", "none");
-                      })
-                      .attr("x", d => d.x0)
-                      .attr("y", d => d.y0)
-                      .attr("fill-opacity", 0.75)
-                      .attr("fill", d => this.colors[d.data.id])
-                      .attr("stroke-width", 0.25)
-                      .attr("stroke", "gray")
-                      .transition()
-                      .on("end", () => this.buttons.style("visibility", "visible"))
-                      .duration(750)
-                      .attr('width', d => d.x1 - d.x0)
-                      .attr('height', d => d.y1 - d.y0);
+      this.treeMapGroup
+        .selectAll("text")
+        .data(data.children)
+        .enter()
+        .append("text")
+        .attr("class", "parent__label")
+        .attr("pointer-events", "none")
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("font-size", 9)
+        .attr("fill", "white")
+        .attr("x", d => {
+          const center = that.computeElementsCenter(
+            d3
+              .selectAll(`.${d.name.toLowerCase().replace(/ /g, "_")}`)
+              .nodes()
+          );
+          return center.x;
+        })
+        .attr("y", d => {
+          const center = that.computeElementsCenter(
+            d3
+              .selectAll(`.${d.name.toLowerCase().replace(/ /g, "_")}`)
+              .nodes()
+          );
+          return center.y;
+        })
+        .text(d => d.name)
+        .each(this.wrap.bind(this));
+      this.treeMapGroup
+        .selectAll("text.parent__label")
+        .filter(function(d) {
+          const selection = d3
+            .selectAll(`.${d.name.toLowerCase().replace(/ /g, "_")}`)
+            .nodes();
+          const boxesBBox = that.computeElementsBBox(selection);
+          const textBBox = that.computeElementsBBox([d3.select(this).node()]);
+          const textWidthOverflow =
+            textBBox.xmax - textBBox.xmin > boxesBBox.xmax - boxesBBox.xmin;
+          const textHeightOverflow =
+            textBBox.ymax - textBBox.ymin > boxesBBox.ymax - boxesBBox.ymin;
+          return textWidthOverflow || textHeightOverflow;
+        })
+        .remove();
                     
+  }
+
+  computeElementsBBox(selection) {
+    const coordinates = {
+      xmin: [],
+      xmax: [],
+      ymin: [],
+      ymax: []
+    };
+    selection.forEach(item => {
+      const bbox = item.getBBox();
+      coordinates.xmin.push(bbox.x);
+      coordinates.ymin.push(bbox.y);
+      coordinates.xmax.push(bbox.x + bbox.width);
+      coordinates.ymax.push(bbox.y + bbox.height);
+    });
+    return {
+      xmin: Math.min(...coordinates.xmin),
+      xmax: Math.max(...coordinates.xmax),
+      ymin: Math.min(...coordinates.ymin),
+      ymax: Math.max(...coordinates.ymax)
+    };
+  }
+
+  computeElementsCenter(selection) {
+    const { xmin, xmax, ymin, ymax } = this.computeElementsBBox(selection);
+    const x = xmin + (xmax - xmin) / 2;
+    const y = ymin + (ymax - ymin) / 2;
+    return { x, y };
+  }
+
+  wrap(d, i) {
+    const selection = d3
+      .selectAll(`.${d.name.toLowerCase().replace(/ /g, "_")}`)
+      .nodes();
+    const bbox = this.computeElementsBBox(selection);
+    const width = bbox.xmax - bbox.xmin;
+    const text = d3.selectAll(".parent__label").filter((d, ind) => ind == i);
+    const words = text
+      .text()
+      .split(/\s+/)
+      .reverse();
+    const lineHeight = 1.1;
+    const x = text.attr("x");
+    const y = text.attr("y");
+    const dy = 0;
+
+    let line = [];
+    let word;
+    let lineNumber = 0;
+    let tspan = text
+      .text(null)
+      .append("tspan")
+      .attr("x", x)
+      .attr("y", y)
+      .attr("dy", dy + "em");
+
+    while ((word = words.pop())) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text
+          .append("tspan")
+          .attr("x", x)
+          .attr("y", y)
+          .attr("dy", ++lineNumber * lineHeight + dy + "em")
+          .text(word);
+      }
+    }
   }
 
   renderGraphic (features, scheme, level, years, year, isFirstRender=false) {
@@ -261,10 +383,13 @@ class StackedBarChart {
 
       var xAxis = d3.axisBottom()
         .scale(yScale)
+        .tickSizeOuter(0)
+        .tickSizeInner(0)
         .ticks(5);
   
       var yAxis = d3.axisLeft()
         .scale(xScale)
+        .tickSizeOuter(0)
         .tickFormat((d, i) => this.labels[i]);
   
       const keys = [];
@@ -365,9 +490,10 @@ class StackedBarChart {
 
 class BarChart {
   constructor (el) {
-    this.margin = {top: 10, right: 10, bottom: 30, left: 20};
+    this.margin = {top: 10, right: 10, bottom: 20, left: 30};
     this.offset = {left: 10, bottom: 10};
     this.el = d3.select(el);
+    this.tooltipOffset = 15;
 
     // compute width and height based on parent div
     this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
@@ -375,6 +501,11 @@ class BarChart {
 
     this.color = d3.scaleOrdinal(d3.schemeCategory10);
     this.factor = 0.5;
+
+    this.title = "Área total por acción";
+    this.xlabel = "Acción";
+    this.ylabel = "Área (ha)";
+
 
     this.barGroup = d3.select(el)
       .append("svg")
@@ -416,38 +547,43 @@ class BarChart {
           that.barGroup.selectAll("rect").attr("fill-opacity", 0.3);
           d3.select(this)
             .attr("stroke", "black")
-            .attr("fill-opacity", 0.75);
-      
-          const coordinates = d3.mouse(this);
-          const tooltipContent = `<span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> ha</span>`;
-          d3.select("#tooltip__implementaciones")
-            .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1] + 250}px`)
+            .attr("fill-opacity", 1);
+          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const value = new Number(Math.round(d.value)).toLocaleString("en");
+          const tooltipContent = `
+            <span class="tooltip__title">${d.name}</span>
+            <hr>
+            <span class="tooltip__value">${value}</span><span class="tooltip__subtitle"> ha</span>
+          `;
+          d3.select("#tooltip__graph")
+            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+            .style("top", `${coordinates[1]}px`)
             .style("display", "block")
             .style("font-size", "11px")
             .html(tooltipContent);
         })
         .on("mousemove", function () {
-          const coordinates = d3.mouse(this);
-          d3.select("#tooltip__implementaciones")
-            .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1] + 250}px`);
+          const coordinates = [d3.event.pageX, d3.event.pageY];
+          d3.select("#tooltip__graph")
+            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+            .style("top", `${coordinates[1]}px`);
         })
         .on("mouseout", function () {
           that.barGroup.selectAll("rect")
-                .attr("fill-opacity", 0.75);
+                .attr("fill-opacity", 1);
 
           d3.select(this)
             .attr("stroke", "none");
 
-          d3.select("#tooltip__implementaciones")
+          d3.select("#tooltip__graph")
+            .html("")
             .style("display", "none");
         })
         .attr("x", (d, i) => xScale(i) + ((xScale.bandwidth() * (1 - this.factor)) / 2))
-        // .attr("x", (d, i) => xScale(i))
         .attr("y", d => (this.height - (this.margin.bottom + this.offset.bottom)) - yScale(d.value))
         .attr("width", xScale.bandwidth() * this.factor)
-        .attr("fill", d => this.color(d.name))
+        .attr("fill", "#49AA42")
+        .attr("fill-opacity", 1)
         .transition()
         .attr("height", d => yScale(d.value));
 
@@ -462,6 +598,25 @@ class BarChart {
       .call(xAxis)
     .selectAll(".tick text")
       .call(this._wrap, xScale.bandwidth());
+
+    this.barGroup
+      .append("text")
+      .attr("class", "x label")
+      .attr("text-anchor", "end")
+      .attr("x", this.width + this.offset.left - this.margin.right)
+      .attr("y", this.height + 15)
+      .attr("font-size", 10)
+      .attr("font-weight", "bold")
+      .text(this.xlabel);
+    this.barGroup
+      .append("text")
+      .attr("class", "y label")
+      .attr("text-anchor", "start")
+      .attr("x", this.margin.left + this.offset.left)
+      .attr("y", 0)
+      .attr("font-size", 10)
+      .attr("font-weight", "bold")
+      .text(this.ylabel);
   }
 
   renderGraphic(data) {
@@ -495,7 +650,7 @@ class BarChart {
 
 class StackedAreaChart {
   constructor (el) {
-    this.margin = {top: 10, right: 10, bottom: 10, left: 25};
+    this.margin = {top: 10, right: 10, bottom: 20, left: 30};
     this.offset = {left: 10, bottom: 10};
     this.el = d3.select(el);
 
@@ -503,8 +658,12 @@ class StackedAreaChart {
     this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
     this.height = parseInt(this.el.style("height")) - this.margin.top - this.margin.bottom;
 
-    this.factor = 0.5;
     this.features;
+    this.tooltipOffset = 15;
+    this.currentYear = new Date().getFullYear();
+    this.xlabel = "Año";
+    this.ylabel = "Carbono";
+    this.title = "Captura de carbono";
 
     this.totalBtn = d3.select(el)
       .append("button")
@@ -568,11 +727,13 @@ class StackedAreaChart {
     
     const xAxis = d3.axisBottom()
       .scale(xScale)
+      .tickSizeOuter(0)
       .tickFormat(d => parseInt(d))
-      .ticks(10);
+      .ticks(5);
 
     const yAxis = d3.axisLeft()
           .scale(yScale)
+          .tickSizeOuter(0)
           .ticks(5);
 
     const keys = [];
@@ -585,7 +746,6 @@ class StackedAreaChart {
       }) 
     });
       
-
     const stack = d3.stack()
       .keys(keys)
       .order(d3.stackOrderDescending);
@@ -603,38 +763,150 @@ class StackedAreaChart {
       .enter()
       .append("path")
         .on("mouseover", function (d) {
-          that.areaGroup.selectAll("path")
-            .attr("fill-opacity", 0.3);
-          d3.select(this)
-            .attr("stroke", "black")
-            .attr("fill-opacity", 0.75);
           const label = d.key;
-          const q = d.slice(-1)[0][1] - d.slice(-1)[0][0];
-          const coordinates = d3.mouse(this);
+          const svgCoordinates = d3.mouse(this);
+          const year = Math.ceil(xScale.invert(svgCoordinates[0]));
+          const accumulatedValue = d.find(item => item.data.year == year)[1];
+          const value = d.find(item => item.data.year == year).data[label];
+          const areaBeforeYear = d3
+            .area()
+            .defined(d => d.data.year <= year)
+            .x(d => xScale(d.data.year))
+            .y0(d => yScale(d[0]))
+            .y1(d => yScale(d[1]));
+          const areaAfterYear = d3
+            .area()
+            .defined(d => d.data.year >= year)
+            .x(d => xScale(d.data.year))
+            .y0(d => yScale(d[0]))
+            .y1(d => yScale(d[1]));
+
+          that.areaGroup
+            .append("g")
+            .attr("class", "area__before")
+            .selectAll("path")
+            .data(series)
+            .enter()
+            .append("path")
+            .attr("d", areaBeforeYear)
+            .attr("fill", d => (d.key == label ? "none" : "white"))
+            .attr("fill-opacity", d => (d.key == label ? 1 : 0.8))
+            .attr("stroke", d => (d.key == label ? "black" : "none"))
+            .attr("pointer-events", "none");
+          that.areaGroup
+            .append("g")
+            .attr("class", "area__after")
+            .selectAll("path")
+            .data(series)
+            .enter()
+            .append("path")
+            .attr("d", areaAfterYear)
+            .attr("fill", "white")
+            .attr("fill-opacity", 0.8)
+            .attr("pointer-events", "none");
+
+          that.areaGroup
+            .select(".vertical.helper__line")
+              .attr("x1", xScale(year))
+              .attr("x2", xScale(year))
+              .attr("y1", yScale.range()[0])
+              .attr("y2", yScale(accumulatedValue));
+          that.areaGroup
+            .select(".horizontal.helper__line")
+              .attr("x1", xScale.range()[0])
+              .attr("x2", xScale(year))
+              .attr("y1", yScale(accumulatedValue))
+              .attr("y2", yScale(accumulatedValue));
+          that.areaGroup.selectAll(".helper__line").attr("visibility", "visible");
+          that.areaGroup.selectAll(".helper__line").raise();
+          that.areaGroup.select(".year__division").raise();
+
+          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const tooltipValue = Number(Math.round(value)).toLocaleString("en");
           const tooltipContent = `
-          <span class="tooltip__title">${label}</span><br>
-          <span class="tooltip__value">${Math.round(q)}</span><span class="tooltip__subtitle"> MtCO2e</span>
+          <span class="tooltip__title">${label} (${year})</span>
+          <hr>
+          <span class="tooltip__value">${tooltipValue} MtCO2e</span>
           `;
-          d3.select("#tooltip__carbono")
-            .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1] + 90}px`)
+          d3.select("#tooltip__graph")
+            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+            .style("top", `${coordinates[1]}px`)
             .style("display", "block")
             .style("font-size", "11px")
             .html(tooltipContent);
         })
-        .on("mousemove", function () {
-          const coordinates = d3.mouse(this);
-          d3.select("#tooltip__carbono")
-            .style("left", `${coordinates[0]}px`)
-            .style("top", `${coordinates[1] + 90}px`);
+        .on("mousemove", function (d) {
+          const label = d.key;
+          const svgCoordinates = d3.mouse(this);
+          const year = Math.ceil(xScale.invert(svgCoordinates[0]));
+          const accumulatedValue = d.find(item => item.data.year == year)[1];
+          const value = d.find(item => item.data.year == year).data[label];
+          const areaBeforeYear = d3
+            .area()
+            .defined(d => d.data.year <= year)
+            .x(d => xScale(d.data.year))
+            .y0(d => yScale(d[0]))
+            .y1(d => yScale(d[1]));
+          const areaAfterYear = d3
+            .area()
+            .defined(d => d.data.year >= year)
+            .x(d => xScale(d.data.year))
+            .y0(d => yScale(d[0]))
+            .y1(d => yScale(d[1]));
+            d3.selectAll(".area__before").remove();
+            d3.selectAll(".area__after").remove();
+          that.areaGroup
+            .append("g")
+            .attr("class", "area__before")
+            .selectAll("path")
+            .data(series)
+            .enter()
+            .append("path")
+            .attr("d", areaBeforeYear)
+            .attr("fill", d => (d.key == label ? "none" : "white"))
+            .attr("fill-opacity", d => (d.key == label ? 1 : 0.8))
+            .attr("stroke", d => (d.key == label ? "black" : "none"))
+            .attr("pointer-events", "none");
+          that.areaGroup
+            .append("g")
+            .attr("class", "area__after")
+            .selectAll("path")
+            .data(series)
+            .enter()
+            .append("path")
+            .attr("d", areaAfterYear)
+            .attr("fill", "white")
+            .attr("fill-opacity", 0.8)
+            .attr("pointer-events", "none");
+          d3.select(".vertical.helper__line")
+            .attr("x1", xScale(year))
+            .attr("x2", xScale(year))
+            .attr("y1", yScale.range()[0])
+            .attr("y2", yScale(accumulatedValue));
+          d3.select(".horizontal.helper__line")
+            .attr("x1", xScale.range()[0])
+            .attr("x2", xScale(year))
+            .attr("y1", yScale(accumulatedValue))
+            .attr("y2", yScale(accumulatedValue));
+          d3.selectAll(".helper__line").raise();
+          d3.select(".year__division").raise();
+          const coordinates = [d3.event.pageX, d3.event.pageY];
+          const tooltipValue = Number(Math.round(value)).toLocaleString("en");
+          const tooltipContent = `
+          <span class="tooltip__title">${label} (${year})</span>
+          <hr>
+          <span class="tooltip__value">${tooltipValue} MtCO2e</span>
+          `;
+          d3.select("#tooltip__graph")
+            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+            .style("top", `${coordinates[1]}px`)
+            .html(tooltipContent);
         })
         .on("mouseout", function () {
-          that.areaGroup.selectAll("path")
-            .attr("fill-opacity", 0.75);
-          d3.select(this)
-            .attr("stroke", "none");
-          d3.select("#tooltip__carbono")
-            .style("display", "none");
+          d3.selectAll(".area__before").remove();
+          d3.selectAll(".area__after").remove();
+          that.areaGroup.selectAll(".helper__line").attr("visibility", "hidden");
+          d3.select("#tooltip__graph").style("display", "none").html("");
         })
         .attr("class", "area")
         .attr("d", area)
@@ -650,6 +922,57 @@ class StackedAreaChart {
       .attr("class", "axis")
       .attr("transform", `translate(${this.margin.left}, 0)`)
       .call(yAxis);
+
+    const yearDivision = this.areaGroup
+      .append("g")
+        .attr("class", "year__division")
+        .attr("pointer-events", "none");
+    yearDivision
+      .append("line")
+        .attr("x1", xScale(this.currentYear))
+        .attr("x2", xScale(this.currentYear))
+        .attr("y1", yScale.range()[0])
+        .attr("y2", yScale.range()[1])
+        .attr("pointer-events", "none")
+        .attr("stroke", "red");
+    yearDivision
+      .append("text")
+        .attr("y", xScale(this.currentYear) - 5)
+        .attr("x", yScale.range()[1] - this.margin.bottom)
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "end")
+        .attr("font-size", 9)
+        .attr("fill", "red")
+        .text("Cierre");
+
+    this.areaGroup
+      .append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("font-size", 10)
+        .attr("font-weight", "bold")
+        .attr("x", this.width - this.margin.right)
+        .attr("y", this.height + 15)
+        .text(this.xlabel);
+    this.areaGroup
+      .append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "start")
+        .attr("font-size", 10)
+        .attr("font-weight", "bold")
+        .attr("x", this.margin.left)
+        .attr("y", 0)
+        .text(this.ylabel);
+
+    this.areaGroup.append("line").attr("class", "vertical helper__line");
+    this.areaGroup.append("line").attr("class", "horizontal helper__line");
+    this.areaGroup
+      .selectAll(".helper__line")
+        .attr("visibility", "hidden")
+        .attr("pointer-events", "none")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", "3");
   }
 
   _formatData(features, field) {
@@ -708,6 +1031,7 @@ class PieChart {
         .attr("class", "pie")
         .attr("width", this.width)
         .attr("height", this.height);
+    this.tooltipOffset = 15;
   }
 
   _renderPieChart(data) {
@@ -732,31 +1056,30 @@ class PieChart {
         d3.select(this)
           .attr("stroke", "black")
           .attr("fill-opacity", 0.75);
-        const coordinates = d3.mouse(this);
+        const coordinates = [d3.event.pageX, d3.event.pageY];
+        const value = Number(Math.round(d.value)).toLocaleString("en");
         const tooltipContent = `
-        <span class="tooltip__title">${d.data.name}</span><br>
-        <span class="tooltip__value">${Math.round(d.value)}</span><span class="tooltip__subtitle"> especies</span>
-        `;
-        d3.select("#tooltip__biodiversidad")
-          .style("left", `${coordinates[0]}px`)
-          .style("top", `${coordinates[1] + 100}px`)
+          <span class="tooltip__title">${d.data.name}</span>
+          <hr>
+          <span class="tooltip__value">${value}</span><span class="tooltip__subtitle"> especies</span>
+          `;
+        d3.select("#tooltip__graph")
+          .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+          .style("top", `${coordinates[1]}px`)
           .style("display", "block")
           .style("font-size", "11px")
           .html(tooltipContent);
       })
       .on("mousemove", function () {
-        const coordinates = d3.mouse(this);
-        d3.select("#tooltip__biodiversidad")
-          .style("left", `${coordinates[0]}px`)
-          .style("top", `${coordinates[1] + 100}px`);
+        const coordinates = [d3.event.pageX, d3.event.pageY];
+        d3.select("#tooltip__graph")
+          .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+          .style("top", `${coordinates[1]}px`);
       })
       .on("mouseout", function () {
-        that.svg.selectAll("g.arc path")
-              .attr("fill-opacity", 0.75);
-        d3.select(this)
-          .attr("stroke", "none");
-        d3.select("#tooltip__biodiversidad")
-          .style("display", "none");
+        that.svg.selectAll("g.arc path").attr("fill-opacity", 0.75);
+        d3.select(this).attr("stroke", "none");
+        d3.select("#tooltip__graph").html("").style("display", "none");
       })
       .attr("fill", d => this.color(d.data.name))
       .attr("d", arc);
