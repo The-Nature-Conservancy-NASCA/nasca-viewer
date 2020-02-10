@@ -1,7 +1,10 @@
 class TNCMap {
   
   constructor(container) {
-    require(['esri/WebMap',
+    require([
+      'esri/Color',
+      'esri/Graphic',
+      'esri/WebMap',
       'esri/views/MapView',
       'esri/widgets/BasemapGallery',
       'esri/widgets/LayerList',
@@ -11,8 +14,13 @@ class TNCMap {
       'esri/widgets/Zoom',
       'esri/widgets/ScaleBar',
       'esri/tasks/Locator',
-      'esri/layers/FeatureLayer'],
+      'esri/layers/FeatureLayer',
+      'esri/symbols/SimpleLineSymbol',
+      'esri/symbols/SimpleFillSymbol'
+    ],
       function(
+          Color,
+          Graphic,
           WebMap,
           MapView,
           BasemapGallery,
@@ -23,7 +31,15 @@ class TNCMap {
           Zoom,
           ScaleBar,
           Locator,
-          FeatureLayer) {
+          FeatureLayer,
+          SimpleLineSymbol,
+          SimpleFillSymbol
+      ) {
+
+      this.Color = Color;
+      this.Graphic = Graphic;
+      this.SimpleLineSymbol = SimpleLineSymbol
+      this.SimpleFillSymbol = SimpleFillSymbol;
       this.prediosLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/1"
       });
@@ -185,12 +201,21 @@ class TNCMap {
       document.querySelectorAll(".js-panel-warning").forEach(span => {
         span.style.display = "none";
       });
-      if (!predio && !region) {
+      if (predio || region) {
+        let layerTitle;
+        if (predio) {
+          layerTitle = "Predios";
+        } else if (region) {
+          layerTitle = "Regiones";
+        }
+        const layer = response.results.find(item => item.graphic.layer.title === layerTitle);
+        this.highlightFeature(layer.graphic.geometry);
+      } else {
+        this.view.graphics.removeAll();
         d3.selectAll("svg.treemap").remove();
         d3.selectAll("svg.bar").remove();
         d3.selectAll("svg.area").remove();
         d3.selectAll("svg.pie").remove();
-
       }
       if(predio) {
         // eventBus.emitEventListeners('predioClicked');
@@ -383,5 +408,18 @@ class TNCMap {
         layer.definitionExpression = definitionExpression;
       });
     });
+  }
+
+  highlightFeature(geometry) {
+    if (geometry.type === "polygon") {
+      const symbol = new this.SimpleFillSymbol(
+        "solid",
+        new this.SimpleLineSymbol("solid", new this.Color([232,104,80]), 2),
+        new this.Color([232,104,80,0.25])
+      );
+      const graphic = new this.Graphic(geometry, symbol);
+      this.view.graphics.removeAll();
+      this.view.graphics.add(graphic);
+    }
   }
 }
