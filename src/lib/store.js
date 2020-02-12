@@ -54,7 +54,7 @@ class Store {
   loadData() {
     CarouselRepository.loadData();
     CoberturasRepository.loadData();
-    BiodiversidadRepository.loadData();
+    RegionRepository.loadData();
   }
 
   _createConection() {
@@ -73,7 +73,6 @@ class Store {
     if (isDatabaseCreated) {
       console.log('DB iniciada');
     }
-
   }
 
   _createTables() {
@@ -82,7 +81,7 @@ class Store {
       ProyectoRepository.getTabla(),
       CarouselRepository.getTabla(),
       CoberturasRepository.getTabla(),
-      // BiodiversidadRepository.getTabla()
+      RegionRepository.getTabla()
     ];
   }
 }

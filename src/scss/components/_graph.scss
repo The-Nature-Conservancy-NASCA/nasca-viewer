@@ -85,6 +85,7 @@
 .biodiversity__icon {
   @include positionCentered;
   width: 9.5rem;
+  pointer-events: none;
 }
 
 #time__coberturas {

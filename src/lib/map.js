@@ -209,6 +209,10 @@ class TNCMap {
           layerTitle = "Regiones";
         }
         const layer = response.results.find(item => item.graphic.layer.title === layerTitle);
+        const projectId = layer.graphic.attributes["ID_proyecto"];
+        const regionId = layer.graphic.attributes["ID_region"];
+        this.changeSelectionContext(projectId);
+        this.changeSelectionSubContext(regionId);
         this.highlightFeature(layer.graphic.geometry);
       } else {
         this.view.graphics.removeAll();
@@ -384,11 +388,11 @@ class TNCMap {
       const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
       this.filterLayers(definitionExpression);
     });
-    EstrategiaRepository.getEstrategia(estrategiaId).then(estrategia => {
-      document.querySelectorAll(".panel__selection-context").forEach(div => {
-        div.innerHTML =  estrategia.nombre;
-      });
-    });
+    // EstrategiaRepository.getEstrategia(estrategiaId).then(estrategia => {
+    //   document.querySelectorAll(".panel__selection-context").forEach(div => {
+    //     div.innerHTML =  estrategia.nombre;
+    //   });
+    // });
   }
 
   changeProyecto(proyectoId) {
@@ -396,9 +400,25 @@ class TNCMap {
     this.filterLayers(definitionExpression);
     ProyectoRepository.getProyecto(proyectoId).then(proyecto => {
       document.querySelectorAll(".panel__selection-context").forEach(div => {
-        div.innerHTML =  proyecto.nombre;
+        div.innerHTML = proyecto.nombre;
       });
     });
+  }
+
+  changeSelectionContext(projectId) {
+    ProyectoRepository.getProyecto(projectId).then(proyecto => {
+      document.querySelectorAll(".panel__selection-context").forEach(div => {
+        div.innerHTML = proyecto.nombre;
+      });
+    });
+  }
+
+  changeSelectionSubContext(regionId) {
+    RegionRepository.getRegion(regionId).then(region => {
+      document.querySelectorAll(".panel__selection-subcontext").forEach(div => {
+        div.innerHTML = region.nombre;
+      });
+    })
   }
 
   filterLayers(definitionExpression) {

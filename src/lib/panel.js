@@ -164,6 +164,7 @@ class Panel {
   _renderSelection() {
     return /* html */`<div class="panel__selection">
                         <h3 class="panel__selection-context"></h3>
+                        <h2 class="panel__selection-subcontext"></h3>
                       </div>`;
   }
 
