@@ -68,11 +68,17 @@ class ProyectoRepository {
   }
 
   static async getProyecto(id) {
-    const results = await window.store.select(this.TABLE_NAME, {
-      ID_proyecto: id
-    });
+    try {
+      const results = await window.store.select(this.TABLE_NAME, {
+        ID_proyecto: id
+      });
+      return results[0];
+      
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
 
-    return results[0];
   }
 
 }
