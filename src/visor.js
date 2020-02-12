@@ -30,8 +30,53 @@ class Visor {
   _loadData() {
     CarouselRepository.loadData();
     CoberturasRepository.loadData();
+    this.loadLandingData();
   }
 
+  loadLandingData() {
+    require(['esri/request'], esriRequest => {
+     const queryOptions = {
+       query: {
+         f: 'json',
+         where: '1=1',
+         outFields: '*',
+         returnGeometry: false
+       },
+       responseType: 'json'
+     };
+
+     const estrategiasRequest = esriRequest(window.tncConfig.urls.estrategias, queryOptions);
+     const proyectosRequest = esriRequest(window.tncConfig.urls.proyectos, queryOptions);
+     
+     Promise.all([estrategiasRequest, proyectosRequest]).then(this.processResponse.bind(this));
+   });
+ }
+
+  processResponse(responses) {
+    const estrategiasResponse = responses[0];
+    const proyectosResponse = responses[1];
+
+    this.insertEstrategiaData(estrategiasResponse);
+    this.insertProyectosData(proyectosResponse);
+  }
+
+  insertEstrategiaData(estrategiasResponse) {
+    let estrategias = [];
+    if (estrategiasResponse.data && estrategiasResponse.data.features) {
+      const { features } = estrategiasResponse.data;
+      estrategias = features.map(feature => feature.attributes);
+      window.store.insertRows('Estrategias', estrategias);
+    }
+  }
+
+  insertProyectosData(proyectosResponse) {
+    let proyectos = {};
+    if (proyectosResponse.data && proyectosResponse.data.features) {
+      const { features } = proyectosResponse.data;
+      const proyectosRaw = Array.from(features, f => f.attributes);
+      window.store.insertRows('Proyectos', proyectosRaw);
+    }
+  }
 }
 
 const eventBus = new Eventbus();

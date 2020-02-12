@@ -72,7 +72,7 @@ class EstrategiaSelector {
 
   _createProjectSelectors() {
     this._estrategias.forEach((estrategia, index) => {
-      const { id } = estrategia; 
+      const { id } = estrategia;
       ProyectoRepository.listProyectos(id).then(proyectos => {
         if (proyectos) {
           let div = document.createElement('div');
