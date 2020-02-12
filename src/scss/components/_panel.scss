@@ -60,6 +60,11 @@ $panel-width: 58rem;
     font-weight: 100;
   }
 
+  &__selection-subcontext {
+    display: flex;
+    flex-direction: row;
+  }
+
   &__tabs {
     align-items: center;
     display: flex;

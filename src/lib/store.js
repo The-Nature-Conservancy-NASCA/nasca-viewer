@@ -52,9 +52,10 @@ class Store {
   }
   
   loadData() {
+    RegionRepository.loadData();
+    PredioRepository.loadData();
     CarouselRepository.loadData();
     CoberturasRepository.loadData();
-    RegionRepository.loadData();
   }
 
   _createConection() {
@@ -81,7 +82,8 @@ class Store {
       ProyectoRepository.getTabla(),
       CarouselRepository.getTabla(),
       CoberturasRepository.getTabla(),
-      RegionRepository.getTabla()
+      RegionRepository.getTabla(),
+      PredioRepository.getTabla()
     ];
   }
 }

@@ -30,6 +30,8 @@ class Visor {
   _loadData() {
     CarouselRepository.loadData();
     CoberturasRepository.loadData();
+    RegionRepository.loadData();
+    PredioRepository.loadData();
     this.loadLandingData();
   }
 

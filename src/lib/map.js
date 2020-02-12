@@ -212,7 +212,7 @@ class TNCMap {
         const projectId = layer.graphic.attributes["ID_proyecto"];
         const regionId = layer.graphic.attributes["ID_region"];
         this.changeSelectionContext(projectId);
-        this.changeSelectionSubContext(regionId);
+        this.changeSelectionSubContextRegion(regionId);
         this.highlightFeature(layer.graphic.geometry);
       } else {
         this.view.graphics.removeAll();
@@ -222,6 +222,7 @@ class TNCMap {
         d3.selectAll("svg.pie").remove();
       }
       if(predio) {
+        this.changeSelectionSubContextPredio(predio);
         // eventBus.emitEventListeners('predioClicked');
         CoberturasRepository.getUniqueYearsByPredio(predio).then(years => {
           CoberturasRepository.getCoberturasByPredio(predio).then(results => {
@@ -244,6 +245,7 @@ class TNCMap {
         d3.selectAll(".group__container").remove();
       }
       else if(region) {
+        this.clearSelectionSubContextPredio();
         eventBus.emitEventListeners('regionClicked');
         this.prediosQuery.where = `ID_region = '${region}'`;
         this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
@@ -388,11 +390,6 @@ class TNCMap {
       const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
       this.filterLayers(definitionExpression);
     });
-    // EstrategiaRepository.getEstrategia(estrategiaId).then(estrategia => {
-    //   document.querySelectorAll(".panel__selection-context").forEach(div => {
-    //     div.innerHTML =  estrategia.nombre;
-    //   });
-    // });
   }
 
   changeProyecto(proyectoId) {
@@ -413,12 +410,26 @@ class TNCMap {
     });
   }
 
-  changeSelectionSubContext(regionId) {
+  changeSelectionSubContextRegion(regionId) {
     RegionRepository.getRegion(regionId).then(region => {
-      document.querySelectorAll(".panel__selection-subcontext").forEach(div => {
+      document.querySelectorAll(".panel__selection-region").forEach(div => {
         div.innerHTML = region.nombre;
       });
     })
+  }
+
+  changeSelectionSubContextPredio(predioId) {
+    PredioRepository.getPredio(predioId).then(predio => {
+      document.querySelectorAll(".panel__selection-predio").forEach(div => {
+        div.innerHTML = `&nbsp| ${predio.nombre}`;
+      });
+    })
+  }
+
+  clearSelectionSubContextPredio() {
+    document.querySelectorAll(".panel__selection-predio").forEach(div => {
+      div.innerHTML = '';
+    });
   }
 
   filterLayers(definitionExpression) {

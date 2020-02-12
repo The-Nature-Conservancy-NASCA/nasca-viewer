@@ -16,7 +16,8 @@ class RegionRepository {
         query: {
           f: 'json',
           where: '1=1',
-          outFields: ["ID_region", "nombre"]
+          outFields: ["ID_region", "nombre"],
+          returnGeometry: false
         },
         responseType: 'json'
       };
@@ -24,10 +25,9 @@ class RegionRepository {
       request.then(response => {
         const regionesData = response.data.features.map(feature => {
           const { ID_region, nombre } = feature.attributes;
-
           return { ID_region, nombre };
         });
-        window.store.insertRows(this.TABLE_NAME, regionesData).then(result => {
+        window.store.insertRows(this.TABLE_NAME, regionesData).then(() => {
           eventBus.emitEventListeners('regionesLoaded');
         });
       });
