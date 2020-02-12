@@ -16,19 +16,19 @@
     "specificInformation": {
       "carbono": {
         "header": "Carbono",
-        "content": "El dióxido de carbono es capturado de manera natural a través de procesos biológicos, químicos y físicos. Este puede ser capturado por diferentes compartimientos y cada cobertura tiene una capacidad específica para capturar este gas."
+        "content": "La captura y emisión evitada de carbono asociadas a la conservación y restauración de ecosistemas naturales y a la producción sostenible son mecanismos costo-efectivos para mitigar el cambio climático. Cerca de un tercio de la reducción de emisiones globales requerida a 2030 para mitigar el cambio climático se puede alcanzar por la implementación de soluciones naturales del clima como las que promueve TNC."
       },
       "cobertura": {
         "header": "Coberturas",
-        "content": "Corresponde a la materia física que cubre la superficie de la tierra. Existen diferentes maneras de agrupar y clasificar las diferentes coberturas de la tierra. En este visor se agrupan las coberturas siguiendo la metodología CORINE o de acuerdo a la clasificación específica para cada uno de los proyectos."
+        "content": "Este componente describe las coberturas de la tierra, entendidas como aquello que existe sobre la superficie de un territorio, para el área seleccionda. Las coberturas se presentan bajo dos clasificaciones: la leyenda nacional de coberturas de la tierra (IDEAM 2010), basada en la metodología Corine Land Cover y la leyenda empleada por cada proyecto. La clasificación usando la leyenda nacional permite la comparación entre proyectos mientras que la clasificación empleada por cada proyecto permite hacer seguimiento a las coberturas de interes empleadas por cada proyecto para el cumplimiento de sus objetivos."
       },
       "biodiversidad": {
         "header": "Biodiversidad",
-        "content": "La biodiversidad se refiere a la diversidad de plantas y animales en un lugar determinado. En este visor se muestran las especies que a través de númerosos esfuerzos hemos encontrado en las diferentes regiones de los proyectos."
+        "content": "La Biodiversidad es la amplia variedad de seres vivos sobre la Tierra y los patrones naturales que la conforman. Esta es el resultado de miles de millones de años de evolución según procesos naturales y también de la influencia creciente de las actividades del ser humano.  La biodiversidad es garante de bienestar y equilibrio en la biosfera. Los elementos diversos que componen la biodiversidad conforman verdaderas unidades funcionales, que aportan y aseguran muchos de los “servicios” básicos para garantizar nuestra supervivencia. Finalmente desde nuestra condición humana, la biodiversidad también representa un capital natural. El uso y beneficio de la biodiversidad ha contribuido de muchas maneras al desarrollo de la cultura humana, y representa una fuente potencial para sobrellevar necesidades futuras."
       },
       "implementacion": {
         "header": "Implementaciones",
-        "content": "Estas implementaciones se refieren a las acciones que estamos tomando en términos de conservación y restauración en cada uno de los predios de nuestros proyectos. Adicionalmente, trabajamos por mejorar las condiciones sociales e incluir a todas las personas interesadas independientemente de su raza, sexo y religión>"
+        "content": "Las implementaciones corresponden a las acciones de conservación de TNC en las áreas donde gestiona, coordina y/o ejecuta proyectos. Se dividen en: Manejo sostenible: corresponden a áreas en las que se haya suscrito un acuerdo de conservación y que tienen planificación predial. Protección: área destinada a la protección, según acuerdos de conservación o implementación de figuras formales de protección contempladas en el Sistema Nacional de Áreas Protegidas. Restauración: corresponden a áreas en las que se este recuperando la vegetación original de un área, bien sea de forma activa o pasiva.Producción sostenible: son áreas en las que se implementan formas sostenibles de producción como los cultivos agroforestales, los sistemas silvopastoriles y las cercas vivas."
       }
     },
     "strings": {
