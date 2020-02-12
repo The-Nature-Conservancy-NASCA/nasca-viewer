@@ -26,6 +26,7 @@
     "node-sass": "^4.12.0"
   },
   "dependencies": {
-    "jsstore": "^3.4.4"
+    "jsstore": "^3.4.4",
+    "marked": "^0.8.0"
   }
 }

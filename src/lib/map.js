@@ -213,6 +213,7 @@ class TNCMap {
         const regionId = layer.graphic.attributes["ID_region"];
         this.changeSelectionContext(projectId);
         this.changeSelectionSubContextRegion(regionId);
+        this.changeSelectionSpecificInformation(projectId);
         this.highlightFeature(layer.graphic.geometry);
       } else {
         this.view.graphics.removeAll();
@@ -422,6 +423,15 @@ class TNCMap {
     PredioRepository.getPredio(predioId).then(predio => {
       document.querySelectorAll(".panel__selection-predio").forEach(div => {
         div.innerHTML = `&nbsp| ${predio.nombre}`;
+      });
+    })
+  }
+
+  changeSelectionSpecificInformation(projectId) {
+    document.querySelectorAll(".panel__specific__information").forEach(div => {
+      const informationField = div.getAttribute("data-information-field");
+      ProyectoRepository.getSpecificInformationText(projectId, informationField).then(text => {
+        div.innerHTML = marked(text);
       });
     })
   }

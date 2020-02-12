@@ -8,6 +8,10 @@ class ProyectoRepository {
         ID_estrategia: { dataType: 'string' },
         nombre: { dataType: 'string' },
         descripcion: { dataType: 'string' },
+        descripcion_carbono: { dataType: 'string' },
+        descripcion_coberturas: { dataType: 'string' },
+        descripcion_implementaciones: { dataType: 'string' },
+        descripcion_biodiversidad: { dataType: 'string' },
         color: { dataType: 'string' },
         fondo: { dataType: 'string' },
         icono: { dataType: 'string' }
@@ -78,9 +82,15 @@ class ProyectoRepository {
       console.error(error);
       return null;
     }
-
   }
 
+  static async getSpecificInformationText(id, field) {
+    const result = await window.store.select(this.TABLE_NAME, {
+      ID_proyecto: id
+    });
+
+    return result[0][field];
+  }
 }
 
 ProyectoRepository.TABLE_NAME = 'Proyectos'

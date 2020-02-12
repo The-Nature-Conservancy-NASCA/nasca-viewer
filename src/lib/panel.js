@@ -202,6 +202,8 @@ class Panel {
                 <div id="graph__carbono"></div>
               </div>
             </div>
+            <div class="panel__specific__information" data-information-field="descripcion_carbono">
+            </div>
           </div> 
         </div>
         <div class="panel__tab-panel" id="panel-biodiversidad">
@@ -212,6 +214,8 @@ class Panel {
               <div id="container__biodiversidad"></div>
             </div>
             <div class="gallery">
+            </div>
+            <div class="panel__specific__information" data-information-field="descripcion_biodiversidad">
             </div>
           </div>  
         </div>
@@ -227,6 +231,8 @@ class Panel {
                 </div>
               </div>
             </div>
+            <div class="panel__specific__information" data-information-field="descripcion_coberturas">
+            </div>
           </div>  
         </div>
         <div class="panel__tab-panel" id="panel-implementacion">
@@ -237,6 +243,8 @@ class Panel {
               <div class="panel__stats">
                 <div id="graph__implementaciones"></div>
               </div>
+            </div>
+            <div class="panel__specific__information" data-information-field="descripcion_implementaciones">
             </div>
           </div>  
         </div>
