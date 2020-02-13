@@ -41,7 +41,12 @@
       "coberturas": "Coberturas",
       "implementaciones": "Implementaciones",
       "biodiversidad": "Biodiversidad",
-      "buscar": "Buscar"
+      "placeholder_locator": "Buscar sitios de interés",
+      "placeholder_biodiversidad": "Buscar especies",
+      "sitios_interes": "Sitios de interés",
+      "all_placeholder": "Busca diferentes capas",
+      "predios": "Predios",
+      "placeholder_predios": "Busca el nombre o ID del predio"
     }
   },
   "en": {
@@ -86,7 +91,12 @@
       "coberturas": "Covers",
       "implementaciones": "Implementations",
       "biodiversidad": "Biodiversity",
-      "buscar": "Search"
+      "placeholder_locator": "Search sites of interest",
+      "placeholder_biodiversidad": "Search species",
+      "sitios_interes": "sites of interest",
+      "all_placeholder": "Search multiple layers",
+      "predios": "Properties",
+      "placeholder_predios": "Search the name or ID of a property"
     }
   }
 }

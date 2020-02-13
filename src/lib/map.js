@@ -127,21 +127,40 @@ class TNCMap {
       });
 
       const search = new Search({
-        sources: [{
-          locator: new Locator({ url: 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'}),
-          countryCode: 'COL',
-          singleLineFieldName: 'SingleLine',
-          name: 'Custom Geocoding Service',
-          localSearchOptions: {
-            minScale: 300000,
-            distance: 50000
+        allPlaceholder: window.tncConfig.strings.all_placeholder,
+        sources: [
+          {
+            locator: new Locator({ url: 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'}),
+            countryCode: 'COL',
+            singleLineFieldName: 'SingleLine',
+            name: window.tncConfig.strings.sitios_interes,
+            localSearchOptions: {
+              minScale: 300000,
+              distance: 50000
+            },
+            placeholder: window.tncConfig.strings.placeholder_locator,
+            maxResults: 3,
+            maxSuggestions: 6,
+            suggestionsEnabled: true,
+            minSuggestCharacters: 0
           },
-          placeholder: window.tncConfig.strings.buscar,
-          maxResults: 3,
-          maxSuggestions: 6,
-          suggestionsEnabled: true,
-          minSuggestCharacters: 0
-        }],
+          {
+            layer: this.biodiversidadLayer,
+            name: window.tncConfig.strings.biodiversidad,
+            searchFields: ["especie"],
+            displayField: "especie",
+            exactMatch: false,
+            placeholder: window.tncConfig.strings.placeholder_biodiversidad
+          },
+          {
+            layer: this.prediosLayer,
+            name: window.tncConfig.strings.predios,
+            searchFields: ["ID_predio", "nombre"],
+            displayField: "nombre",
+            exactMatch: false,
+            placeholder: window.tncConfig.strings.placeholder_predios
+          }
+      ],
         view: this.view,
         includeDefaultSources: false,
         container: 'search-map'
