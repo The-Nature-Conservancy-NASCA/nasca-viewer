@@ -63,6 +63,12 @@ $panel-width: 58rem;
   &__selection-subcontext {
     display: flex;
     flex-direction: row;
+
+    h4 {
+      color: $dark-gray;
+      font-style: italic;
+      font-size: 2rem;
+    }
   }
 
   &__tabs {
@@ -122,7 +128,8 @@ $panel-width: 58rem;
     flex-direction: column;
     justify-content: space-between;
     padding: 3rem;
-    min-height: calc(100vh - 180px);
+    overflow-y: auto;
+    min-height: 100%;
   }
 
   &__graph {
