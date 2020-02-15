@@ -63,6 +63,10 @@
     opacity: 0;
     transition: opacity .3s ease;
     width: 30%;
+
+    @include respond(tab-port) {
+      margin-bottom: 0;
+    }
   }
 
   &__description {
@@ -85,8 +89,12 @@
   position: absolute;
   transition: opacity .3s;
   width: 50vw;
-  height: 100vh;
+  height: calc(100vh - #{$alto-header});
   opacity: 0;
+
+  @include respond(tab-port) {
+    width: 100vw;
+  }
 
   img {
     height: $alto-contenido;
@@ -120,6 +128,11 @@
     margin-top: calc(-100vh + #{$alto-header});
     //height: 0;
   }
+
+  @include respond(tab-port) {
+    grid-template-columns: 1fr;
+    grid-auto-rows: calc(50vh - #{$alto-header} / 2);
+  }
 }
 
 .proyectos {
@@ -129,6 +142,12 @@
 
   &.hidden {
     display: none;
+  }
+
+  @include respond(tab-port) {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: calc(100vh - #{$alto-header});
   }
 
 }
@@ -154,6 +173,11 @@
     box-shadow: 0 5px 8px rgba($black, .8);
     transform: translateY(-2px);
   }
+
+  @include respond(tab-port) {
+    height: 4rem;
+    width: 4rem;
+  }
 }
 
 .cta-back {
@@ -161,6 +185,10 @@
 
   img {
     width: 4.5rem;
+
+    @include respond(tab-port) {
+      width: 2.5rem;
+    }
   }
 }
 
@@ -169,5 +197,9 @@
   
   img {
     width: 5rem;
+
+    @include respond(tab-port) {
+      width: 2.5rem;
+    }
   }
 }
