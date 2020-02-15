@@ -48,6 +48,12 @@
 #graph__carbono {
   button {
     @include tnc_button;
+
+    @include respond(tab-port) {
+      width: 10rem;
+      padding: 0.8rem;
+      font-size: 1.2rem;
+    }
   }
 
 }
@@ -61,11 +67,19 @@
 #graph__biodiversidad, #graph__carbono {
   width: 400px;
   height: 150px;
+
+  @include respond(tab-port) {
+    width: 90vw;
+  }
 }
 
 #graph__implementaciones {
-  width: 500px;
-  height: 250px;
+  width: 50rem;
+  height: 25rem;
+  
+  @include respond(tab-port) {
+    width: 90vw;
+  }
 }
 
 .group__graphic {

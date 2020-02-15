@@ -17,8 +17,24 @@ class Visor {
       window.map.filterLayers('');
     });
   
-    document.querySelector('.js-show-general-info').addEventListener('click', event => {
-      window.modalPopup.openModal(window.tncConfig.generalInformation);
+    document.querySelectorAll('.js-show-general-info').forEach(show=> {
+      show.addEventListener('click', event => {
+        window.modalPopup.openModal(window.tncConfig.generalInformation);
+      });
+    });
+
+    document.querySelector('.js-toggle-mobile-navigation').addEventListener('click', event => {
+      event.currentTarget.classList.toggle('esri-icon-drag-horizontal');
+      event.currentTarget.classList.toggle('esri-icon-close');
+      const navigation = document.querySelector('.navigation');
+      if (navigation.classList.contains('navigation--expanded')) {
+        document.querySelector('.navigation').style.overflow="hidden";
+      } else {
+        setTimeout(() => {
+          document.querySelector('.navigation').style.overflow="visible";
+        }, 350);
+      }
+      navigation.classList.toggle('navigation--expanded');
     });
   
     const estrategiaRequest = EstrategiaRepository.listEstrategias().then(estrategias => {

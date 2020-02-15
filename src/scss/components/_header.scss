@@ -10,6 +10,23 @@
   top: 0;
   width: 100vw;
   z-index: $index-header;
+
+  &__logo {
+    width: 12rem;
+    z-index: 13;
+  }
+
+  .mobile-icon {
+    display: none;
+    color: $font-gray;
+    font-weight: 700;
+    font-size: 2.2rem;
+    margin-left: 1rem;
+
+    @include respond(tab-port) {
+      display: inline-block;
+    }
+  }
 }
 
 @mixin dark-hover {
@@ -24,11 +41,38 @@
   align-items: center;
   display: flex;
   justify-content: space-evenly;
+  
+  @include respond(tab-port) {
+    background-color: $white;
+    box-shadow: 2px 5px 8px rgba($black, 0.4);
+    flex-direction: column;
+    height: 0;
+    justify-content: space-between;
+    max-height: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 4rem;
+    top: 6rem;
+    transition: height 0.3s ease-in-out;
+    z-index: 13;
 
+    &--expanded {
+      height: 15rem;
+      max-height: 100rem;
+    }
+  }
+  
   &__menu-list {
     align-items: center;
     display: flex;
     justify-content: space-evenly;
+    @include respond(tab-port) {
+      padding: 1rem;
+      display: flex;
+      height: 12rem;
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   &__item {
@@ -50,6 +94,9 @@
     align-items: center;
     display: flex;
     justify-content: space-evenly;
+    @include respond(tab-port) {
+      margin-bottom: 1rem;
+    }
   }
 
   .divider {
@@ -57,6 +104,10 @@
     height: 3rem;
     margin-right: 3rem;
     width: 2px;
+
+    @include respond(tab-port) {
+      display: none;
+    }
   }
 }
 
@@ -70,6 +121,10 @@
 
     &:last-child {
       margin-right: 0;
+    }
+
+    @include respond(tab-port) {
+      display: none;
     }
   }
 

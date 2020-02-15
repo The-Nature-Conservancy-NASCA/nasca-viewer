@@ -12,6 +12,11 @@ $panel-width: 58rem;
   top: $alto-header;
   transition: right .3s ease-in-out;
   width: $panel-width;
+  z-index: 12;
+
+  @media screen and (max-width: 900px) {
+    width: 100vw;
+  }
 
   &__header {
     width: 100%;
@@ -45,12 +50,17 @@ $panel-width: 58rem;
       img {
         transform: rotateZ(0);
       }
+
+      @include respond(tab-port) {
+        left: 0;
+      }
     } 
   }
 
   &__selection {
     background-color: var(--theme-color);
     padding: 2rem 2rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4)
   }
   
   &__selection-context {
@@ -86,6 +96,10 @@ $panel-width: 58rem;
     padding: 1.6rem 0;
     text-align: center;
     width: 12rem;
+
+    @include respond(tab-port) {
+      font-size: 1.4rem;
+    }
     
     &--active {
       background-color: var(--theme-color);
@@ -148,6 +162,13 @@ $panel-width: 58rem;
   
   &.expanded {
     right: 0;
+  }
+
+  &__specific__information {
+    margin-top: 1rem;
+    color: #999;
+    font-size: 1.6rem;
+    margin-bottom: 1.6rem;
   }
 }
 
