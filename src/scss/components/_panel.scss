@@ -129,7 +129,7 @@ $panel-width: 58rem;
     justify-content: space-between;
     padding: 3rem;
     overflow-y: auto;
-    min-height: 100%;
+    height: calc(100vh - 205px);
   }
 
   &__graph {
