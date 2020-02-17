@@ -5,6 +5,11 @@
   position: absolute;
   top: calc(6rem + 4.6rem);
   z-index: $index-toolbar;
+
+  @include respond(tab-port) {
+    left: 0;
+    top: 6rem;
+  }
   
   &__menu {
     align-items: center;

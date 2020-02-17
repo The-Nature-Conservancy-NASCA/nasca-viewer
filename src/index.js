@@ -192,7 +192,7 @@ class Landing {
       <section class="card ${options.ID_proyecto ? 'proyecto' : 'estrategia'}" 
         ${options.ID_proyecto ? 'data-proyecto="' + options.ID_proyecto + '"' :
         'data-estrategia="estrategia_' + options.ID_estrategia + '"'}
-        style="background-image: url('${options.fondo}');">
+        style="background: url('./img/bg-overlay.png'), url('${options.fondo}'); background-size: cover, cover;">
         <img class="card__icon" src="${options.icono}">
       <div class="card-background" style="background-color: ${options.color}">
       </div>

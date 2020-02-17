@@ -165,8 +165,8 @@ class Panel {
     return /* html */`<div class="panel__selection">
                         <h3 class="panel__selection-context"></h3>
                         <div class="panel__selection-subcontext">
-                          <h2 class="panel__selection-region"></h2>
-                          <h2 class="panel__selection-predio"></h2>
+                          <h4 class="panel__selection-region"></h4>
+                          <h4 class="panel__selection-predio"></h4>
                         </div>
                       </div>`;
   }
