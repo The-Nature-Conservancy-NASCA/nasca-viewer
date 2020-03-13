@@ -205,7 +205,7 @@ class TNCMap {
       this.coloresLayer.queryFeatures(this.colorQuery)
       .then(r => {
         const colors = this.colorsToObject(r.features);
-        this.treeMap = new TreeMap("#graph__coberturas", colors);
+        this.treemap = new Treemap("#graph__coberturas", colors);
       })
       this.stackedAreaChart = new StackedAreaChart("#graph__carbono");
       this.barChart = new BarChart("#graph__implementaciones");
@@ -246,7 +246,7 @@ class TNCMap {
         // eventBus.emitEventListeners('predioClicked');
         CoberturasRepository.getUniqueYearsByPredio(predio).then(years => {
           CoberturasRepository.getCoberturasByPredio(predio).then(results => {
-            this.treeMap.renderGraphic(results, "project", "predio", years, years[0], true);
+            this.treemap.renderGraphic(results, "project", "predio", years, years[0], true);
           });
         });
         
@@ -275,7 +275,7 @@ class TNCMap {
           });
           CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
             CoberturasRepository.getUniqueYearsByPredios(prediosIds).then(years => {
-              this.treeMap.renderGraphic(res, "project", "region", years, years[0], true);
+              this.treemap.renderGraphic(res, "project", "region", years, years[0], true);
             });
           });
 
