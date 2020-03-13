@@ -28,6 +28,7 @@
   pointer-events: none;
   display: none;
   width: auto !important;
+  z-index: 99;
 
   .tooltip__title {
     font-weight: bold;
