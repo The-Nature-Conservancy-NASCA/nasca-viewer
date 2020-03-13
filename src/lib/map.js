@@ -207,7 +207,7 @@ class TNCMap {
         const colors = this.colorsToObject(r.features);
         this.treemap = new Treemap("#graph__coberturas", colors);
       })
-      this.stackedAreaChart = new StackedAreaChart("#graph__carbono");
+      this.stackedArea = new StackedArea("#graph__carbono");
       this.barChart = new BarChart("#graph__implementaciones");
     }.bind(this));
   }
@@ -228,11 +228,11 @@ class TNCMap {
           layerTitle = "Regiones";
         }
         const layer = response.results.find(item => item.graphic.layer.title === layerTitle);
-        const projectId = layer.graphic.attributes["ID_proyecto"];
-        const regionId = layer.graphic.attributes["ID_region"];
-        this.changeSelectionContext(projectId);
-        this.changeSelectionSubContextRegion(regionId);
-        this.changeSelectionSpecificInformation(projectId);
+        this.projectId = layer.graphic.attributes["ID_proyecto"];
+        this.regionId = layer.graphic.attributes["ID_region"];
+        this.changeSelectionContext(this.projectId);
+        this.changeSelectionSubContextRegion(this.regionId);
+        this.changeSelectionSpecificInformation(this.projectId);
         this.highlightFeature(layer.graphic.geometry);
       } else {
         this.view.graphics.removeAll();
@@ -301,7 +301,9 @@ class TNCMap {
 
         this.carbonoQuery.where = `ID_region = '${region}'`;
         this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
-          this.stackedAreaChart.renderGraphic(result.features, null);
+          ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
+            this.stackedArea.renderGraphic(result.features, null, closingYear);
+          })
         });
 
         this.getBiodiversityPerLandcoverData(region).then(res => {

@@ -91,6 +91,14 @@ class ProyectoRepository {
 
     return result[0][field];
   }
+
+  static async getClosingYear(id) {
+    const result = await window.store.select(this.TABLE_NAME, {
+      ID_proyecto: id
+    });
+
+    return new Date(result[0].fecha_cierre).getFullYear();
+  }
 }
 
 ProyectoRepository.TABLE_NAME = 'Proyectos'
