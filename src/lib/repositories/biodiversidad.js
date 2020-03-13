@@ -20,7 +20,7 @@ class BiodiversidadRepository {
         query: {
           f: 'json',
           where: '1=1',
-          outFields: '*',
+          outFields: ["ID_region", "ID_proyecto", "grupo_tnc", "cobertura", "nombre_comun", "momento"],
           returnGeometry: false
         },
         responseType: 'json'
@@ -33,14 +33,16 @@ class BiodiversidadRepository {
             ID_proyecto,
             grupo_tnc,
             cobertura,
-            nombre_comun
+            nombre_comun,
+            momento
           } = feature.attributes;
           return {
             ID_region,
             ID_proyecto,
             grupo_tnc,
             cobertura,
-            nombre_comun
+            nombre_comun,
+            momento
           }
         });
         return window.store.insertRows(this.TABLE_NAME, data);
