@@ -7,21 +7,10 @@ class Treemap {
     this.el = el;
     this.colors = colors;
     this.tooltipOffset = 15;
-    this.projectBtn = d3.select(el)
-      .append("button")
-      .attr("value", "project")
-      .style("visibility", "hidden")
-      .text("Proyecto");
-    this.corineBtn = d3.select(el)
-      .append("button")
-        .attr("value", "corine")
-        .style("visibility", "hidden")
-        .text("Corine");
     this.features;
     this.years;
     this.year;
     this.scheme;
-    this.buttons = d3.select(el).selectAll("button");
     this.yearSelect = d3.select("#time__coberturas");
     this.treemapGroup = d3.select(el)
       .append("svg")
@@ -30,9 +19,27 @@ class Treemap {
         .attr("height", this.height + margin.top + margin.bottom)
       .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
+    this.buttonContainer = d3.select(el)
+      .append("div")
+      .attr("class", "ctas");
+    this.projectBtn = this.buttonContainer
+      .append("button")
+      .attr("value", "project")
+      .attr("class", "ctas__button selected")
+      .style("visibility", "hidden")
+      .attr("title", "Proyecto");
+    this.corineBtn = this.buttonContainer
+      .append("button")
+        .attr("value", "corine")
+        .style("visibility", "hidden")
+        .attr("class", "ctas__button")
+        .attr("title", "Corine");
+    this.buttons = this.buttonContainer.selectAll("button");
     const that = this;
     this.buttons.on("click", function () {
       that.scheme = this.value;
+      that.buttons.classed("selected", false);
+      d3.select(this).classed("selected", true);
       that.renderGraphic(that.features, that.scheme, that.level, that.years, that.year);
     });
     this.yearSelect.on("change", function() {
