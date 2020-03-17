@@ -342,7 +342,7 @@ class TNCMap {
   colorsToObject(features) {
     const colors = {};
     features.forEach(el => {
-      colors[el.attributes.ID_cobertura] = el.attributes.color;
+      colors[el.attributes.cobertura] = el.attributes.color;
     });
     return colors;
   }

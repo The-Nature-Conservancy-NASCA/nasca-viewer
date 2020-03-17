@@ -1,6 +1,7 @@
 class Treemap {
 
   constructor(el, colors) {
+    console.log(colors);
     const margin = {top: 0, right: 0, bottom: 0, left: 0};
     this.width = 400 - margin.left - margin.right;
     this.height = 300 - margin.top - margin.bottom;
@@ -46,8 +47,7 @@ class Treemap {
       PARENT_LABEL_ALT: "cobertura_comun",
       CHILD_LABEL: "subcobertura_proyecto",
       CHILD_LABEL_ALT: "corine2",
-      VALUE_FIELD: "area",
-      ID_FIELD: "ID_cobertura"
+      VALUE_FIELD: "area"
     };
   }
 
@@ -65,7 +65,6 @@ class Treemap {
         } else {
           const obj = {
             "name": feat[childLabel],
-            "id": feat[idField],
             "value": feat[valueField]
           };
           parent.children.push(obj);
@@ -75,7 +74,6 @@ class Treemap {
           "name": feat[parentLabel],
           "children": [{
             "name": feat[childLabel],
-            "id": feat[idField],
             "value": feat[valueField]
           }]
         };
@@ -163,9 +161,10 @@ class Treemap {
         })
         .attr("x", d => d.x0)
         .attr("y", d => d.y0)
-        .attr("fill", d => this.colors[d.data.id])
+        .attr("test", d => console.log(d))
+        .attr("fill", d => this.colors[d.parent.data.name] ? this.colors[d.parent.data.name] : "#000000")
         .attr("fill-opacity", 0.8)
-        .attr("stroke", d => this._shadeColor(this.colors[d.data.id], -20))
+        .attr("stroke", d => this._shadeColor(this.colors[d.parent.data.name] ? this.colors[d.parent.data.name] : "#000000", -20))
         .attr("stroke-width", 0.5)
         .attr("stroke-opacity", 1)
         .attr("width", d => d.x1 - d.x0)
