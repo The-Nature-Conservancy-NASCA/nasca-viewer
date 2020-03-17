@@ -1,7 +1,6 @@
 class Treemap {
 
   constructor(el, colors) {
-    console.log(colors);
     const margin = {top: 0, right: 0, bottom: 0, left: 0};
     this.width = 400 - margin.left - margin.right;
     this.height = 300 - margin.top - margin.bottom;
@@ -161,7 +160,6 @@ class Treemap {
         })
         .attr("x", d => d.x0)
         .attr("y", d => d.y0)
-        .attr("test", d => console.log(d))
         .attr("fill", d => this.colors[d.parent.data.name] ? this.colors[d.parent.data.name] : "#000000")
         .attr("fill-opacity", 0.8)
         .attr("stroke", d => this._shadeColor(this.colors[d.parent.data.name] ? this.colors[d.parent.data.name] : "#000000", -20))

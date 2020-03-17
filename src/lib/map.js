@@ -204,8 +204,8 @@ class TNCMap {
 
       this.coloresLayer.queryFeatures(this.colorQuery)
       .then(r => {
-        const colors = this.colorsToObject(r.features);
-        this.treemap = new Treemap("#graph__coberturas", colors);
+        this.colors = this.colorsToObject(r.features);
+        this.treemap = new Treemap("#graph__coberturas", this.colors);
       })
       this.stackedArea = new StackedArea("#graph__carbono");
       this.barChart = new BarChart("#graph__implementaciones");
@@ -326,10 +326,10 @@ class TNCMap {
                   .append("div")
                     .attr("class", "group__graphic")
                     .attr("id", `graph__${group}`);
-                graphic.append("img")
-                  .attr("src", iconUrl)
-                  .attr("class", "biodiversity__icon");
-                const pieChart = new PieChart(`#graph__${group}`);
+                // graphic.append("img")
+                //   .attr("src", iconUrl)
+                //   .attr("class", "biodiversity__icon");
+                const pieChart = new PieChart(`#graph__${group}`, this.colors, iconUrl);
                 pieChart.renderGraphic(el.values);
               });
             });
