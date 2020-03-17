@@ -25,14 +25,13 @@ class Treemap {
     this.projectBtn = this.buttonContainer
       .append("button")
       .attr("value", "project")
-      .attr("class", "ctas__button selected")
+      .attr("class", "selected")
       .style("visibility", "hidden")
       .attr("title", "Proyecto");
     this.corineBtn = this.buttonContainer
       .append("button")
         .attr("value", "corine")
         .style("visibility", "hidden")
-        .attr("class", "ctas__button")
         .attr("title", "Corine");
     this.buttons = this.buttonContainer.selectAll("button");
     const that = this;
