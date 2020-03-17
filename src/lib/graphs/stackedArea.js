@@ -12,33 +12,9 @@ class StackedArea {
     this.tooltipOffset = 15;
     this.closingYear;
     this.xlabel = "Año";
-    this.ylabel = "Carbono";
+    this.ylabel = "Carbono (GtCO2e)";
     this.title = "Captura de carbono";
     this.closureLabel = "Cierre";
-
-    this.totalBtn = d3.select(el)
-      .append("button")
-        .attr("value", null)
-        .style("visibility", "hidden")
-        .text("Total");
-    this.compartmentBtn = d3.select(el)
-        .append("button")
-          .attr("value", "compartimiento")
-          .style("visibility", "hidden")
-          .text("Compartimiento");
-    this.coverBtn = d3.select(el)
-        .append("button")
-          .attr("value", "cobertura")
-          .style("visibility", "hidden")
-          .text("Cobertura");
-
-    this.buttons = d3.select(el)
-      .selectAll("button");
-
-    const that = this;
-    this.buttons.on("click", function () {
-      that.renderGraphic(that.features, this.value, that.closingYear);
-    });
 
     
     this.areaGroup = d3.select(el)
@@ -48,6 +24,36 @@ class StackedArea {
         .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
         .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+
+    this.buttonContainer = d3.select(el).append("div").attr("class", "ctas");
+
+    this.totalBtn = this.buttonContainer
+      .append("button")
+        .attr("value", null)
+        .attr("class", "selected")
+        .style("visibility", "hidden")
+        .attr("title", "Total");
+    this.compartmentBtn = this.buttonContainer
+        .append("button")
+          .attr("value", "compartimiento")
+          .style("visibility", "hidden")
+          .attr("title", "Compartimiento");
+    this.coverBtn = this.buttonContainer
+        .append("button")
+          .attr("value", "cobertura")
+          .style("visibility", "hidden")
+          .attr("title", "Cobertura");
+
+    this.buttons = this.buttonContainer
+      .selectAll("button");
+
+    const that = this;
+    this.buttons.on("click", function () {
+      that.buttons.classed("selected", false);
+      d3.select(this).classed("selected", true);
+      that.renderGraphic(that.features, this.value, that.closingYear);
+    });
+
 
     this.defaultKey = "Total";
     this.domain = {
