@@ -2,19 +2,35 @@ class TimeSlider {
   constructor(el, width, height) {
     this.height = height;
     this.width = width;
+    this.margin = { left: 20, right: 20 };
+    this.totalWidth = this.width + this.margin.left + this.margin.right;
     this.radius = 11;
     this.color = "#49aa42";
     this.labelMarginBottom = 7;
     this.fontSize = 9;
     this.possiblePositions = {
-      1: [this.width/2],
-      2: [this.radius, this.width - this.radius],
-      3: [this.radius, this.width/2, this.width - this.radius],
-      4: [this.radius, this.width * 1/3, this.width * 2/3, this.width - this.radius]
+      1: [
+          this.margin.left + (this.width / 2)
+        ],
+      2: [
+          this.margin.left + this.radius, 
+          this.totalWidth - this.radius - this.margin.right
+        ],
+      3: [
+          this.margin.left + this.radius, 
+          this.margin.left + (this.width / 2), 
+          this.totalWidth - this.radius - this.margin.left
+        ],
+      4: [
+        this.margin.left + this.radius, 
+        this.margin.left + (this.width * 1/3), 
+        this.margin.left + (this.width * 2/3), 
+        this.totalWidth - this.radius - this.margin.left
+      ]
     };
     this.svg = d3.select(el)
       .append("svg")
-      .attr("width", this.width)
+      .attr("width", this.totalWidth)
       .attr("height", this.height);
   }
 
@@ -38,8 +54,8 @@ class TimeSlider {
     // agregar linea que conecta los circulos
     this.svg
       .append("line")
-        .attr("x1", this.radius)
-        .attr("x2", this.width - this.radius)
+        .attr("x1", this.margin.right + this.radius)
+        .attr("x2", this.totalWidth - this.radius - this.margin.right)
         .attr("y1", this.height / 2)
         .attr("y2", this.height / 2)
         .attr("stroke-width", Math.round(this.radius / 6))
@@ -83,21 +99,28 @@ class TimeSlider {
   }
 
   buttonToggle(d, i, n) {
+    // llenar circulos no seleccionados con blanco
     this.smallCirclesGroup
       .selectAll("circle")
       .filter((d, idx) => idx !== i)
         .attr("pointer-events", "all")
         .transition()
         .attr("fill", "white");
+
+    // llenar circulo seleccionado con color
     d3.select(n[i])
       .attr("pointer-events", "none")
       .transition()  
       .attr("fill", this.color);
+
+    // poner font-weight de los labels de los circulos no seleccionados normal
     this.labelsGroup
       .selectAll("text")
       .filter((d, idx) => idx !== i)
         .transition()
         .attr("font-weight", "normal");
+
+    // poner font-weight del label del circulo seleccionado en bold
     this.labelsGroup
       .selectAll("text")
       .filter((d, idx) => idx === i)
