@@ -1,8 +1,12 @@
 class StackedArea {
   constructor (el) {
+
+
+    // console.log(PieChart);
     this.margin = {top: 10, right: 10, bottom: 20, left: 30};
     this.offset = {left: 10, bottom: 10};
     this.el = d3.select(el);
+    
 
     // compute width and height based on parent div
     this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;

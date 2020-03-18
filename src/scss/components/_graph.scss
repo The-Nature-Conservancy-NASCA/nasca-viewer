@@ -66,8 +66,8 @@
 }
 
 #graph__biodiversidad, #graph__carbono {
-  width: 400px;
-  height: 150px;
+  width: 500px;
+  height: 300px;
 
   @include respond(tab-port) {
     width: 90vw;

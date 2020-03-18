@@ -234,6 +234,9 @@ class TNCMap {
         this.changeSelectionSubContextRegion(this.regionId);
         this.changeSelectionSpecificInformation(this.projectId);
         this.highlightFeature(layer.graphic.geometry);
+        ProyectoRepository.getMoments(this.projectId).then(moments => {
+          this.moments = moments;
+        });
       } else {
         this.view.graphics.removeAll();
         d3.selectAll("svg.treemap").remove();
@@ -274,7 +277,7 @@ class TNCMap {
           });
           CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
             CoberturasRepository.getUniqueYearsByPredios(prediosIds).then(years => {
-              this.treemap.renderGraphic(res, "project", "region", years, years[0], true);
+              this.treemap.renderGraphic(res, "project", "region", years, years[0], this.moments, true);
             });
           });
 

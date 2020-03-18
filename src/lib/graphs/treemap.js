@@ -2,8 +2,9 @@ class Treemap {
 
   constructor(el, colors) {
     const margin = {top: 0, right: 0, bottom: 0, left: 0};
+    this.timeSliderHeight = 50;
     this.width = 400 - margin.left - margin.right;
-    this.height = 300 - margin.top - margin.bottom;
+    this.height = 300 - margin.top - margin.bottom - this.timeSliderHeight;
     this.el = el;
     this.colors = colors;
     this.tooltipOffset = 15;
@@ -12,6 +13,7 @@ class Treemap {
     this.year;
     this.scheme;
     this.yearSelect = d3.select("#time__coberturas");
+    this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight);
     this.treemapGroup = d3.select(el)
       .append("svg")
         .attr("class", "treemap")
@@ -330,11 +332,12 @@ class Treemap {
     }
   }
 
-  renderGraphic(features, scheme, level, years, year, isFirstRender=false) {
+  renderGraphic(features, scheme, level, years, year, moments=null, isFirstRender=false) {
     if (isFirstRender) {
       this._appendOptions(this.yearSelect, years);
       this.scheme = scheme;
       this.years = years;
+      this.timeSlider.render(moments);
     }
     this.level = level;
     this.year = year;
