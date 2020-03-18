@@ -2,7 +2,7 @@ class TimeSlider {
   constructor(el, width, height) {
     this.height = height;
     this.width = width;
-    this.radius = 12;
+    this.radius = 11;
     this.color = "#49aa42";
     this.labelMarginBottom = 7;
     this.fontSize = 9;
@@ -24,8 +24,8 @@ class TimeSlider {
     const positions = this.possiblePositions[data.length];
 
     // agregar circulos grandes
-    const bigCirclesGroup = this.svg.append("g").attr("class", "big__circles");
-    bigCirclesGroup
+    this.bigCirclesGroup = this.svg.append("g").attr("class", "big__circles");
+    this.bigCirclesGroup
       .selectAll("circle")
       .data(data)
       .enter()
@@ -46,8 +46,8 @@ class TimeSlider {
         .attr("stroke", this.color);
 
     // agregar labels
-    const labelsGroup = this.svg.append("g").attr("class", "circle__labels");
-    labelsGroup
+    this.labelsGroup = this.svg.append("g").attr("class", "circle__labels");
+    this.labelsGroup
       .selectAll("text")
       .data(data)
       .enter()
@@ -63,34 +63,13 @@ class TimeSlider {
         .attr("font-weight", "bold");
 
     // agregar circulos pequeños
-    const smallCirclesGroup = this.svg.append("g").attr("class", "small__circles");
-    smallCirclesGroup
+    this.smallCirclesGroup = this.svg.append("g").attr("class", "small__circles");
+    this.smallCirclesGroup
       .selectAll("circle")
       .data(data)
       .enter()
       .append("circle")
-        .on("click", function(d, i) {
-          smallCirclesGroup
-            .selectAll("circle")
-            .filter((d, idx) => idx !== i)
-              .attr("pointer-events", "all")
-              .transition()
-              .attr("fill", "white");
-          d3.select(this)
-            .attr("pointer-events", "none")
-            .transition()  
-            .attr("fill", that.color);
-          labelsGroup
-            .selectAll("text")
-            .filter((d, idx) => idx !== i)
-              .transition()
-              .attr("font-weight", "normal");
-          labelsGroup
-          .selectAll("text")
-          .filter((d, idx) => idx === i)
-            .transition()
-            .attr("font-weight", "bold"); 
-        })
+        .attr("data-moment", d => d.value)
         .attr("cx", (d, i) => positions[i])
         .attr("cy", this.height / 2)
         .attr("r", Math.round(this.radius / 1.25))
@@ -99,5 +78,30 @@ class TimeSlider {
       .filter((d, i) => i == data.length-1)
         .attr("fill", this.color)
         .attr("pointer-events", "none");
+    
+    return this.smallCirclesGroup.selectAll("circle");
+  }
+
+  buttonToggle(d, i, n) {
+    this.smallCirclesGroup
+      .selectAll("circle")
+      .filter((d, idx) => idx !== i)
+        .attr("pointer-events", "all")
+        .transition()
+        .attr("fill", "white");
+    d3.select(n[i])
+      .attr("pointer-events", "none")
+      .transition()  
+      .attr("fill", this.color);
+    this.labelsGroup
+      .selectAll("text")
+      .filter((d, idx) => idx !== i)
+        .transition()
+        .attr("font-weight", "normal");
+    this.labelsGroup
+      .selectAll("text")
+      .filter((d, idx) => idx === i)
+        .transition()
+        .attr("font-weight", "bold"); 
   }
 }

@@ -337,7 +337,8 @@ class Treemap {
       this._appendOptions(this.yearSelect, years);
       this.scheme = scheme;
       this.years = years;
-      this.timeSlider.render(moments);
+      this.timeButtons = this.timeSlider.render(moments);
+      this.timeButtons.on("click", this._changeMoment.bind(this));
     }
     this.level = level;
     this.year = year;
@@ -361,5 +362,10 @@ class Treemap {
         .attr("value", d => d)
         .text(d => d);
     el.style("visibility", "visible");
+  }
+
+  _changeMoment(d, i, n) {
+    this.timeSlider.buttonToggle(d, i, n);
+    console.log(d3.select(n[i]).attr("data-moment"));
   }
 }
