@@ -247,12 +247,10 @@ class TNCMap {
       if(predio) {
         this.changeSelectionSubContextPredio(predio);
         // eventBus.emitEventListeners('predioClicked');
-        CoberturasRepository.getUniqueYearsByPredio(predio).then(years => {
-          CoberturasRepository.getCoberturasByPredio(predio).then(results => {
-            this.treemap.renderGraphic(results, "project", "predio", years, years[0], true);
-          });
+        CoberturasRepository.getCoberturasByPredio(predio).then(results => {
+          this.treemap.renderGraphic(results, "project", this.moments, true);
         });
-        
+      
         this.implementacionesQuery.where = `ID_predio = '${predio}'`;
         this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
           const feat = result.features[0].attributes;
@@ -276,9 +274,7 @@ class TNCMap {
             prediosIds.push(feat.attributes.ID_predio);
           });
           CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
-            CoberturasRepository.getUniqueYearsByPredios(prediosIds).then(years => {
-              this.treemap.renderGraphic(res, "project", "region", years, years[0], this.moments, true);
-            });
+            this.treemap.renderGraphic(res, "project", this.moments, true);
           });
 
           const prediosList = prediosIds.map(el => `'${el}'`).join(",");

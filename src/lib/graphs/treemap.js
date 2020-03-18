@@ -9,10 +9,8 @@ class Treemap {
     this.colors = colors;
     this.tooltipOffset = 15;
     this.features;
-    this.years;
-    this.year;
     this.scheme;
-    this.yearSelect = d3.select("#time__coberturas");
+    this.moment;
     this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight);
     this.treemapGroup = d3.select(el)
       .append("svg")
@@ -41,12 +39,8 @@ class Treemap {
       that.scheme = this.value;
       that.buttons.classed("selected", false);
       d3.select(this).classed("selected", true);
-      that.renderGraphic(that.features, that.scheme, that.level, that.years, that.year);
+      that.renderGraphic(that.features, that.scheme);
     });
-    this.yearSelect.on("change", function() {
-      that.year = this.value;
-      that.renderGraphic(that.features, that.scheme, that.level, that.years, that.year);
-    })
 
     this.constants = {
       NAME: "coberturas",
@@ -58,10 +52,10 @@ class Treemap {
     };
   }
 
-  _stratify(features, name, parentLabel, childLabel, valueField, idField, year) {
+  _stratify(features, name, parentLabel, childLabel, valueField, moment) {
     const data = {"name": name, "children": []};
 
-    features.filter(feature => feature.visita == year).forEach(feat => {
+    features.filter(feature => feature.momento === moment).forEach(feat => {
       const parentExists = !!data.children.filter(child => child.name === feat[parentLabel]).length;
       if (parentExists) {
         const parent = data.children.filter(child => child.name === feat[parentLabel])[0]
@@ -332,40 +326,27 @@ class Treemap {
     }
   }
 
-  renderGraphic(features, scheme, level, years, year, moments=null, isFirstRender=false) {
+  renderGraphic(features, scheme, moments=null, isFirstRender=false) {
     if (isFirstRender) {
-      this._appendOptions(this.yearSelect, years);
       this.scheme = scheme;
-      this.years = years;
+      this.moment = moments.slice(-1)[0].value;
       this.timeButtons = this.timeSlider.render(moments);
       this.timeButtons.on("click", this._changeMoment.bind(this));
     }
-    this.level = level;
-    this.year = year;
     const valueField = this.constants.VALUE_FIELD;
     this.features = features;
     let data;
     if (scheme === "project") {
-      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL, this.constants.CHILD_LABEL, valueField, this.constants.ID_FIELD, year);
+      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL, this.constants.CHILD_LABEL, valueField, this.moment);
     } else if (scheme === "corine") {
-      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL_ALT, this.constants.CHILD_LABEL_ALT, valueField, this.constants.ID_FIELD, year);
+      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL_ALT, this.constants.CHILD_LABEL_ALT, valueField, this.moment);
     }
     this._renderTreemap(data);
   }
 
-  _appendOptions(el, options) {
-    el.selectAll("option").remove();
-    el.selectAll("option")
-      .data(options)
-      .enter()
-      .append("option")
-        .attr("value", d => d)
-        .text(d => d);
-    el.style("visibility", "visible");
-  }
-
   _changeMoment(d, i, n) {
     this.timeSlider.buttonToggle(d, i, n);
-    console.log(d3.select(n[i]).attr("data-moment"));
+    this.moment = d3.select(n[i]).attr("data-moment");
+    this.renderGraphic(this.features, this.scheme);
   }
 }
