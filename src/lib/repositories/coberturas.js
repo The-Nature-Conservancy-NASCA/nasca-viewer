@@ -63,42 +63,6 @@ class CoberturasRepository {
     const results = await window.store.select(this.TABLE_NAME, {ID_predio: {in: predios}});
     return !!results ? results : [];
   }
-
-  static async getUniqueYearsByPredio(predio) {
-    const results = await window.store.groupBy(
-      this.TABLE_NAME,
-      {ID_predio: predio},
-      "visita"
-    );
-    if (results) {
-      const years = [];
-      results.forEach(el => {
-        years.push(el.visita);
-      });
-      years.reverse();
-      return years;
-    } else {
-      return [];
-    }
-  }
-
-  static async getUniqueYearsByPredios(predios) {
-    const results = await window.store.groupBy(
-      this.TABLE_NAME,
-      {ID_predio: {in: predios}},
-      "visita"
-    );
-    if (results) {
-      const years = [];
-      results.forEach(el => {
-        years.push(el.visita);
-      });
-      years.reverse();
-      return years;
-    } else {
-      return [];
-    }
-  }
 }
 
 CoberturasRepository.TABLE_NAME = 'Coberturas';
