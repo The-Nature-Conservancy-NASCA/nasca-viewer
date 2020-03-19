@@ -5,13 +5,18 @@ class BarChart {
     this.offset = { left: 10, bottom: 10 };
     this.el = d3.select(el);
     this.tooltipOffset = 15;
+    this.timeSliderHeight = 50;
 
     // compute width and height based on parent div
     this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
     this.height = parseInt(this.el.style("height")) - this.margin.top - this.margin.bottom;
 
+    this.data;
+    this.moments;
+    this.selectedMoment;
+    this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight);
     this.color = "#49AA42";
-    this.factor = 0.6;
+    this.factor = 0.5;
 
     this.title = "Área total por acción";
     this.ylabel = "Acción";
@@ -32,17 +37,27 @@ class BarChart {
       );
   }
 
-  _renderBarChart(data) {
-
+  _renderBarChart(features) {
     this.barGroup.selectAll("*").remove();
+
+    const data = this._processFeatures(features);
 
     this.xScale = d3.scaleBand()
       .domain(d3.range(data.length))
       .range([this.margin.bottom + this.offset.bottom, this.height])
       .paddingInner(0.05);
 
+    const values = [];
+    const fields = ["area_bosque", "areas_p_sostenibles", "area_restauracion"];
+    this.moments.forEach(moment => {
+      console.log(moment);
+      fields.forEach(field => {
+        console.log(field);
+        values.push(features.map(feat => feat.attributes).filter(feat => feat.momento === moment.value).reduce((a, b) => a + b[field], 0));
+      })
+    });
     this.yScale = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value)])
+      .domain([0, d3.max(values)])
       .range([0, this.width - this.margin.left - this.offset.left]);
 
     const xAxis = d3
@@ -177,8 +192,45 @@ class BarChart {
       .text(this.ylabel);
   }
 
-  renderGraphic(data) {
-    this._renderBarChart(data);
+  renderGraphic(features, moments=null, isFirstRender=false ) {
+    if (isFirstRender) {
+      this.moments = moments;
+      this.selectedMoment = moments.slice(-1)[0].value;
+      this.timeButtons = this.timeSlider.render(moments);
+      this.timeButtons.on("click", this._changeMoment.bind(this));
+    }
+    this.features = features;
+    this._renderBarChart(this.features);
+  }
+
+  _changeMoment(d, i, n) {
+    this.timeSlider.buttonToggle(d, i, n);
+    this.selectedMoment = d3.select(n[i]).attr("data-moment");
+    this.renderGraphic(this.features);
+  }
+
+  _processFeatures(features) {
+    const fieldMap = {
+      "Bosque": "area_bosque",
+      "Restauración": "area_restauracion",
+      "Produccion Sostenible": "areas_p_sostenibles"
+    };
+
+    const data = [];
+    features.filter(feat => feat.attributes.momento === this.selectedMoment).forEach(feat => {
+      for (let label in fieldMap) {
+        const value = feat.attributes[fieldMap[label]];
+        if (value) {
+          const obj = data.find(item => item.name === label);
+          if (obj) {
+            obj.value += value;
+          } else {
+            data.push({ name: label, value: value });
+          }
+        }
+      }
+    });
+    return data.sort((a, b) => a.name.localeCompare(b.name));  // asegurarse de devolver un array ordenado por el nombre de la accion
   }
 
   _wrap(d, i , n) {
@@ -191,9 +243,6 @@ class BarChart {
       text = text.slice(0, -1);
       self.text(text + "...");
       textLength = self.node().getComputedTextLength();
-    }
-    if (text.length === 0) {
-      self.text("");
     }
   }
 }

@@ -253,13 +253,7 @@ class TNCMap {
       
         this.implementacionesQuery.where = `ID_predio = '${predio}'`;
         this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
-          const feat = result.features[0].attributes;
-          const data = [
-            {"name": "Bosque", "value": feat.area_bosque},
-            {"name": "Restauración", "value": feat.area_restauracion},
-            {"name": "Producción Sostenible", "value": feat.areas_p_sostenibles}
-          ]
-          this.barChart.renderGraphic(data);
+          this.barChart.renderGraphic(result.features, this.moments, true);
         });
 
         d3.selectAll(".group__container").remove();
@@ -280,18 +274,7 @@ class TNCMap {
           const prediosList = prediosIds.map(el => `'${el}'`).join(",");
           this.implementacionesQuery.where = `ID_predio in (${prediosList})`;
           this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
-            const data = [
-              {"name": "Bosque", "value": 0},
-              {"name": "Restauración", "value": 0},
-              {"name": "Producción Sostenible", "value": 0}
-            ];
-            result.features.forEach(el => {
-              const feat = el.attributes;
-              data[0].value += feat.area_bosque;
-              data[1].value += feat.area_restauracion;
-              data[2].value += feat.areas_p_sostenibles;
-            });
-            this.barChart.renderGraphic(data);
+            this.barChart.renderGraphic(result.features, this.moments, true);
           });
         });
 
