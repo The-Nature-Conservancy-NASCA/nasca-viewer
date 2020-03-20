@@ -46,7 +46,7 @@ class EstrategiaSelector {
         item.addEventListener('click', event => {
           const estrategiaId = event.currentTarget.dataset.estrategia;
           if(estrategiaId !== '02') {
-            alert('No hay predios para la estrategia seleccionada');
+            window.modalPopup.openModal({header: window.tncConfig.strings.no_hay_predios, content: ''});
           } else {
             this._closeSelector();
             const estrategiaColor = event.currentTarget.dataset.color;

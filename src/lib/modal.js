@@ -16,18 +16,16 @@ class Modal {
 
   hideModal() {
     this._el.classList.remove('modal--visible');
+    this._setHeader('');
+    this._setContent('');
   }
 
   _setHeader(header) {
-    if (header) {
-      this._header.innerHTML = header;
-    }
+    this._header.innerHTML = header;
   }
 
   _setContent(content) {
-    if (content) {
-      this._content.innerHTML = content;
-    }
+    this._content.innerHTML = content;
   }
 
   _registerEventHandlers() {

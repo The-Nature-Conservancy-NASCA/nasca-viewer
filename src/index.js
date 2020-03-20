@@ -91,7 +91,7 @@ class Landing {
       const estrategiasRequest = esriRequest(window.tncConfig.urls.estrategias, queryOptions);
       const proyectosRequest = esriRequest(window.tncConfig.urls.proyectos, queryOptions);
       
-      //this.devLoad();
+      this.devLoad();
       
       Promise.all([estrategiasRequest, proyectosRequest]).then(this.processResponse.bind(this));
     });
@@ -129,8 +129,8 @@ class Landing {
     const estrategiasResponse = responses[0];
     const proyectosResponse = responses[1];
 
-    this.buildEstrategiasHTML(estrategiasResponse);
-    this.buildProyectosHTML(proyectosResponse);
+    //this.buildEstrategiasHTML(estrategiasResponse);
+    //this.buildProyectosHTML(proyectosResponse);
 
     this.registerHandlers();
     document.querySelector('.content').classList.remove('hidden');
@@ -145,9 +145,10 @@ class Landing {
       estrategias = features.map(feature => feature.attributes);
       window.store.insertRows('Estrategias', estrategias);
     }
-
+    const cantidadEstrategias = estrategias.length;
     let estrategiasHTML = this.createHTML(estrategias, 'estrategias');
     document.querySelector('.estrategias').innerHTML = estrategiasHTML;
+    document.querySelector('.estrategias').classList.add(`estrategias--${cantidadEstrategias}`)
   }
 
   buildProyectosHTML(proyectosResponse) {
@@ -192,7 +193,9 @@ class Landing {
       <section class="card ${options.ID_proyecto ? 'proyecto' : 'estrategia'}" 
         ${options.ID_proyecto ? 'data-proyecto="' + options.ID_proyecto + '"' :
         'data-estrategia="estrategia_' + options.ID_estrategia + '"'}
-        style="background: url('./img/bg-overlay.png'), url('${options.fondo}'); background-size: cover, cover;">
+        style="background: url('./img/bg-overlay.png'), url('${options.fondo}');
+            background-size: cover, cover;
+            background-position: center; background-repeat: no-repeat;">
         <img class="card__icon" src="${options.icono}">
       <div class="card-background" style="background-color: ${options.color}">
       </div>

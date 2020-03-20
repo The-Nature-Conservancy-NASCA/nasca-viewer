@@ -46,7 +46,8 @@
       "sitios_interes": "Sitios de interés",
       "all_placeholder": "Busca diferentes capas",
       "predios": "Predios",
-      "placeholder_predios": "Busca el nombre o ID del predio"
+      "placeholder_predios": "Busca el nombre o ID del predio",
+      "no_hay_predios": "No hay predios para la estrategia seleccionada"
     }
   },
   "en": {
@@ -96,7 +97,8 @@
       "sitios_interes": "sites of interest",
       "all_placeholder": "Search multiple layers",
       "predios": "Properties",
-      "placeholder_predios": "Search the name or ID of a property"
+      "placeholder_predios": "Search the name or ID of a property",
+      "no_hay_predios": "There are no lots for the selected strategy"
     }
   }
 }

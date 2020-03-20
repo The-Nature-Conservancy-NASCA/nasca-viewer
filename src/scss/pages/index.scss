@@ -107,7 +107,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   height: $alto-contenido;
-  transition: margin-top .2s ease;
+  max-height: 4000px;
+  transition: max-height .2s ease;
+  overflow: hidden;
+
+  @include respond(tab-port) {
+    height: unset;
+  }
 
   .estrategia.card {
     @include animationDelay;
@@ -125,8 +131,52 @@
   }
 
   &.collapsed {
-    margin-top: calc(-100vh + #{$alto-header});
-    //height: 0;
+    max-height: 0;
+  }
+
+  &--4 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &--5 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .estrategia.card {
+      max-width: 33.33%;
+      max-height: calc((100vh - 6rem) / 2);
+
+      &:nth-child(4),
+      &:nth-child(5) {
+        max-width: 50%;
+      }
+    }
+  }
+
+  &--6 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  &--7 {
+    grid-template-columns: 1fr;
+    height: unset;
+
+    .estrategia.card {
+      align-items: center;
+      flex-direction: row;
+      background-repeat: no-repeat;
+      background-position: center;
+      max-height: calc((100vh - 6rem) / 3);
+
+      .card__text {
+        margin-bottom: 0;
+      }
+
+      .card-background {
+        width: 100vw;
+      }
+    }
   }
 
   @include respond(tab-port) {
