@@ -90,9 +90,6 @@ class Carousel {
     this.carouselControls.forEach(control => {
       this.controlsContainer.appendChild(document.createElement('button')).className = `gallery-controls-${control}`;
     }); 
-
-    !!this.controlsContainer.childNodes[0] ? this.controlsContainer.childNodes[0].innerHTML = this.carouselControls[0] : null;
-    !!this.controlsContainer.childNodes[1] ? this.controlsContainer.childNodes[1].innerHTML = this.carouselControls[1] : null;
   }
  
   // Add a click event listener to trigger setCurrentState method to rearrange carousel

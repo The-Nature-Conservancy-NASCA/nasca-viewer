@@ -99,7 +99,10 @@ class Panel {
       const template = /* html */`
           <div class="gallery-container">
             ${carouselImages.map(item => /* html */`
-              <img class="gallery-item" src="${item.url}">
+              <div class="gallery-item">
+                <img class="gallery-item__image" src="${item.url}">
+                <span class="gallery-item__description">${item.nombre}</span>
+              </div>
             `).join('')}
           </div>
           <div class="gallery-controls"></div>

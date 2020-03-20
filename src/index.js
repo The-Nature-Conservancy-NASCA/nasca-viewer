@@ -91,7 +91,7 @@ class Landing {
       const estrategiasRequest = esriRequest(window.tncConfig.urls.estrategias, queryOptions);
       const proyectosRequest = esriRequest(window.tncConfig.urls.proyectos, queryOptions);
       
-      this.devLoad();
+      //this.devLoad();
       
       Promise.all([estrategiasRequest, proyectosRequest]).then(this.processResponse.bind(this));
     });
@@ -129,8 +129,8 @@ class Landing {
     const estrategiasResponse = responses[0];
     const proyectosResponse = responses[1];
 
-    //this.buildEstrategiasHTML(estrategiasResponse);
-    //this.buildProyectosHTML(proyectosResponse);
+    this.buildEstrategiasHTML(estrategiasResponse);
+    this.buildProyectosHTML(proyectosResponse);
 
     this.registerHandlers();
     document.querySelector('.content').classList.remove('hidden');

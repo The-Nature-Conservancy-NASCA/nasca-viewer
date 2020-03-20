@@ -97,7 +97,7 @@ class ProyectoSelector  {
     this._selectorToggle = document.getElementById('toggle-selector-proyecto');
     this._offsetTop = offsetTop;
     this._el.style.top = `${60 + offsetTop}px`;
-    this._el.style.right = '-16px';
+    this._el.style.right = '68px';
   }
 
   createSelector(proyectos) {
