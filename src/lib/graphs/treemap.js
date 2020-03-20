@@ -2,7 +2,7 @@ class Treemap {
 
   constructor(el, colors) {
     const margin = {top: 0, right: 0, bottom: 0, left: 0};
-    this.timeSliderHeight = 50;
+    this.timeSliderHeight = 70;
     this.width = 400 - margin.left - margin.right;
     this.height = 300 - margin.top - margin.bottom - this.timeSliderHeight;
     this.el = el;
@@ -10,7 +10,7 @@ class Treemap {
     this.tooltipOffset = 15;
     this.features;
     this.scheme;
-    this.moment;
+    this.selectedMoment;
     this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight);
     this.treemapGroup = d3.select(el)
       .append("svg")
@@ -37,8 +37,8 @@ class Treemap {
     const that = this;
     this.buttons.on("click", function () {
       that.scheme = this.value;
-      that.buttons.classed("selected", false);
-      d3.select(this).classed("selected", true);
+      // that.buttons.classed("selected", false).attr("point-events", "all");
+      // d3.select(this).classed("selected", true).attr("pointer-events", "none");
       that.renderGraphic(that.features, that.scheme);
     });
 
@@ -329,7 +329,7 @@ class Treemap {
   renderGraphic(features, scheme, moments=null, isFirstRender=false) {
     if (isFirstRender) {
       this.scheme = scheme;
-      this.moment = moments.slice(-1)[0].value;
+      this.selectedMoment = moments.slice(-1)[0].value;
       this.timeButtons = this.timeSlider.render(moments);
       this.timeButtons.on("click", this._changeMoment.bind(this));
     }
@@ -337,16 +337,20 @@ class Treemap {
     this.features = features;
     let data;
     if (scheme === "project") {
-      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL, this.constants.CHILD_LABEL, valueField, this.moment);
+      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL, this.constants.CHILD_LABEL, valueField, this.selectedMoment);
     } else if (scheme === "corine") {
-      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL_ALT, this.constants.CHILD_LABEL_ALT, valueField, this.moment);
+      data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL_ALT, this.constants.CHILD_LABEL_ALT, valueField, this.selectedMoment);
     }
+    this.buttons
+        .classed("selected", false)
+      .filter((d, i, n) => d3.select(n[i]).attr("value") === this.scheme)
+        .classed("selected", true);
     this._renderTreemap(data);
   }
 
   _changeMoment(d, i, n) {
     this.timeSlider.buttonToggle(d, i, n);
-    this.moment = d3.select(n[i]).attr("data-moment");
+    this.selectedMoment = d3.select(n[i]).attr("data-moment");
     this.renderGraphic(this.features, this.scheme);
   }
 }

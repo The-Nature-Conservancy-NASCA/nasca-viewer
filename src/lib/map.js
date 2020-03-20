@@ -16,7 +16,8 @@ class TNCMap {
       'esri/tasks/Locator',
       'esri/layers/FeatureLayer',
       'esri/symbols/SimpleLineSymbol',
-      'esri/symbols/SimpleFillSymbol'
+      'esri/symbols/SimpleFillSymbol',
+      'esri/request'
     ],
       function(
           Color,
@@ -33,13 +34,16 @@ class TNCMap {
           Locator,
           FeatureLayer,
           SimpleLineSymbol,
-          SimpleFillSymbol
+          SimpleFillSymbol,
+          esriRequest
       ) {
 
       this.Color = Color;
       this.Graphic = Graphic;
       this.SimpleLineSymbol = SimpleLineSymbol
       this.SimpleFillSymbol = SimpleFillSymbol;
+      this.esriRequest = esriRequest;
+      this.biodiversityQueryUrl = "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/2/query";
       this.prediosLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/1"
       });
@@ -73,6 +77,7 @@ class TNCMap {
       this.colorQuery.where = "1=1";
       this.colorQuery.outFields = ["*"];
       this.bioIconsQuery = this.bioIconsLayer.createQuery();
+      this.bioIconsQuery.where = "1=1";
       this.bioIconsQuery.outFields = ["grupo_tnc", "url"];
       this.bioQuery = this.biodiversidadLayer.createQuery();
       this.bioQuery.returnGeometry = false;
@@ -174,7 +179,7 @@ class TNCMap {
         position: 'bottom-left'
       });
       
-      window.tnc_map.when(() => {
+      window.tnc_map.when(() => {        
         window.tnc_map.layers.items.find(item => item.title === "Predios").outFields = ["*"];
         window.tnc_map.layers.items.find(item => item.title === "Regiones").outFields = ["*"];
         const estrategiaInitial = getEstrategiaInitial();
@@ -202,11 +207,15 @@ class TNCMap {
 
       this.view.ui.remove('zoom');
 
+      this.bioIconsLayer.queryFeatures(this.bioIconsQuery)
+      .then(r => {
+        this.bioIcons = new Map(r.features.map(obj => [obj.attributes.grupo_tnc, obj.attributes.url]));
+      });
       this.coloresLayer.queryFeatures(this.colorQuery)
       .then(r => {
         this.colors = this.colorsToObject(r.features);
         this.treemap = new Treemap("#graph__coberturas", this.colors);
-      })
+      });
       this.stackedArea = new StackedArea("#graph__carbono");
       this.barChart = new BarChart("#graph__implementaciones");
     }.bind(this));
@@ -285,38 +294,96 @@ class TNCMap {
           })
         });
 
-        this.getBiodiversityPerLandcoverData(region).then(res => {
-          d3.selectAll(".group__container").remove();
-          res.forEach(el => {
-            const group = el.name;
-            this.biodiversityQuery.where = `ID_region = '${region}' AND grupo_tnc = '${group}'`;
-            this.biodiversityQuery.returnDistinctValues = true;
-            this.biodiversityQuery.returnCountOnly = false;
-            this.biodiversityQuery.outFields = ["especie"];
-            this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(species => {
-              const iconsQuery = this.bioIconsLayer.createQuery();
-              iconsQuery.outFields = ["grupo_tnc", "url"];
-              iconsQuery.where = `grupo_tnc = '${group}'`;
-              this.bioIconsLayer.queryFeatures(iconsQuery).then(icon => {
-                const iconUrl = icon.features[0].attributes.url;
-                const count = species.features.length;
-                const groupContainer = d3.select("#container__biodiversidad").append("div").attr("class", "group__container");
-                const header = groupContainer.append("div").attr("class", "group__header");
-                header.append("h5").text(group);
-                header.append("h6").text(count);
-                const graphic = groupContainer
-                  .append("div")
-                    .attr("class", "group__graphic")
-                    .attr("id", `graph__${group}`);
-                // graphic.append("img")
-                //   .attr("src", iconUrl)
-                //   .attr("class", "biodiversity__icon");
-                const pieChart = new PieChart(`#graph__${group}`, this.colors, iconUrl);
-                pieChart.renderGraphic(el.values);
-              });
+        this.getBiodiversityGroups(region).then(groups => {
+          const groupCountPromises = [];
+          groups.forEach(group => {
+            let queryParameters =  {
+              where: `ID_region = '${region}' AND grupo_tnc = '${group}'`,
+              outFields: "especie",
+              returnGeometry: false,
+              returnDistinctValues: true,
+              returnCountOnly: true,
+              f: "json"
+            };
+            groupCountPromises.push(this.esriRequest(this.biodiversityQueryUrl, {query: queryParameters}));
+          });
+          Promise.all(groupCountPromises).then(responses => {
+            responses.forEach((response, i) => {
+              const group = groups[i];
+              const groupCount = response.data.count;
+              const groupContainer = 
+              d3.select("#container__biodiversidad")
+                .append("div")
+                  .attr("class", "group__container");
+              const header = groupContainer.append("div").attr("class", "group__header");
+              header.append("h5").text(group);
+              header.append("h6").text(groupCount);
+              groupContainer
+                .append("div")
+                  .attr("class", "group__graphic")
+                  .attr("id", `graph__${group}`);
+              const pieChart = new PieChart(`#graph__${group}`, this.colors, this.bioIcons.get(group));
             });
           });
+          // groups.forEach(group => {
+          //   this.biodiversityQuery.where = `ID_region = '${region}' AND grupo_tnc = '${group}'`;
+          //   this.biodiversityQuery.outFields = "especie";
+          //   this.biodiversityQuery.returnDistinctValues = true;
+          //   this.biodiversityQuery.returnCountOnly = true;
+          //   console.log(this.biodiversityQuery);
+          //   this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(result => {console.log(result)});
+          // });
+          // groups.forEach(group => {
+          //   const groupContainer = d3.select("#container__biodiversidad")
+          //     .append("div")
+          //       .attr("class", "group__container");
+          //   const header = groupContainer.append("div").attr("class", "group__header");
+          //     header.append("h5").text(group);
+          //     header.append("h6").text(count);
+          //     groupContainer
+          //       .append("div")
+          //         .attr("class", "group__graphic")
+          //         .attr("id", `graph__${group}`);
+          // });
         });
+
+        // this.getBiodiversityPerLandcoverData(region).then(res => {
+        //   const wrapper  = d3.select("#wrapper__biodiversidad");
+        //   wrapper.selectAll(".group__container").remove();
+        //   wrapper.select("svg").remove();
+        //   const timeSlider = new TimeSlider("#wrapper__biodiversidad", 300, 70, "#container__biodiversidad");
+        //   const timeButtons = timeSlider.render(this.moments);
+        //   timeButtons.on("click", function (d, i, n) {
+        //     timeSlider.buttonToggle(d, i, n);
+        //   });
+        //   console.log(res);
+        //   res.forEach(el => {
+        //     const group = el.name;
+        //     this.biodiversityQuery.where = `ID_region = '${region}' AND grupo_tnc = '${group}'`;
+        //     this.biodiversityQuery.returnDistinctValues = true;
+        //     this.biodiversityQuery.returnCountOnly = false;
+        //     this.biodiversityQuery.outFields = ["especie"];
+        //     this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(species => {
+        //       const iconsQuery = this.bioIconsLayer.createQuery();
+        //       iconsQuery.outFields = ["grupo_tnc", "url"];
+        //       iconsQuery.where = `grupo_tnc = '${group}'`;
+        //       this.bioIconsLayer.queryFeatures(iconsQuery).then(icon => {
+        //         const iconUrl = icon.features[0].attributes.url;
+        //         const count = species.features.length;
+        //         const groupContainer = d3.select("#container__biodiversidad").append("div").attr("class", "group__container");
+        //         const header = groupContainer.append("div").attr("class", "group__header");
+        //         header.append("h5").text(group);
+        //         header.append("h6").text(count);
+        //         groupContainer
+        //           .append("div")
+        //             .attr("class", "group__graphic")
+        //             .attr("id", `graph__${group}`);
+        //         const pieChart = new PieChart(`#graph__${group}`, this.colors, iconUrl);
+        //         pieChart.renderGraphic(el.values);
+        //       });
+        //     });
+        //   });
+        // });
       }
     });
   }
@@ -336,6 +403,22 @@ class TNCMap {
     const capaRegiones = results.find(result => result.graphic.layer.title === 'Regiones');
     const region = capaRegiones ? capaRegiones.graphic.attributes['ID_region'] : undefined;
     return { predio, region };
+  }
+
+  getBiodiversityGroups(region) {
+    const queryOptions = {
+      where: `ID_region = '${region}'`,
+      outFields: "grupo_tnc",
+      returnGeometry: false,
+      returnDistinctValues: true,
+      f: "json"
+    }
+    const promise = new Promise(resolve => {
+      this.esriRequest(this.biodiversityQueryUrl, {query: queryOptions}).then(response => {
+        resolve(response.data.features.map(feature => feature.attributes.grupo_tnc));
+      })
+    });
+    return promise;
   }
 
   getBiodiversityPerLandcoverData(region) {

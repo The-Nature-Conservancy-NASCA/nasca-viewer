@@ -214,7 +214,9 @@ class Panel {
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.biodiversidad.content}</p>
             <div class="panel__stats">
-              <div id="container__biodiversidad"></div>
+              <div id="wrapper__biodiversidad">
+                <div id="container__biodiversidad"></div>
+              </div>
             </div>
             <div class="gallery">
             </div>

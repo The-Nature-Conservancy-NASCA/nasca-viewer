@@ -1,5 +1,5 @@
 class TimeSlider {
-  constructor(el, width, height) {
+  constructor(el, width, height, otherEl=null) {
     this.height = height;
     this.width = width;
     this.margin = { left: 20, right: 20 };
@@ -7,6 +7,7 @@ class TimeSlider {
     this.radius = 11;
     this.color = "#49aa42";
     this.labelMarginBottom = 7;
+    this.labelMarginTop = 8;
     this.fontSize = 9;
     this.possiblePositions = {
       1: [
@@ -28,10 +29,17 @@ class TimeSlider {
         this.totalWidth - this.radius - this.margin.left
       ]
     };
-    this.svg = d3.select(el)
+    if (otherEl) {
+      this.svg = d3.select(el)
+        .insert("svg", otherEl)
+          .attr("width", this.totalWidth)
+          .attr("height", this.height);
+    } else {
+      this.svg = d3.select(el)
       .append("svg")
-      .attr("width", this.totalWidth)
-      .attr("height", this.height);
+        .attr("width", this.totalWidth)
+        .attr("height", this.height);
+    }
   }
 
   render(data) {
@@ -61,9 +69,9 @@ class TimeSlider {
         .attr("stroke-width", Math.round(this.radius / 6))
         .attr("stroke", this.color);
 
-    // agregar labels
-    this.labelsGroup = this.svg.append("g").attr("class", "circle__labels");
-    this.labelsGroup
+    // agregar labels con el nombre del momento
+    this.momentLabelsGroup = this.svg.append("g").attr("class", "circle__labels");
+    this.momentLabelsGroup
       .selectAll("text")
       .data(data)
       .enter()
@@ -75,6 +83,23 @@ class TimeSlider {
         .attr("font-size", this.fontSize)
         .attr("fill", "black")
         .text(d => d.name)
+      .filter((d, i) => i == data.length-1)
+        .attr("font-weight", "bold");
+
+    // agregar labels con el año del momento
+    this.yearLabelsGroup = this.svg.append("g").attr("class", "circle__labels");
+    this.yearLabelsGroup
+      .selectAll("text")
+      .data(data)
+      .enter()
+      .append("text")
+        .attr("x", (d, i) => positions[i])
+        .attr("y", (this.height / 2) + (this.radius + this.labelMarginTop))
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("font-size", this.fontSize)
+        .attr("fill", "black")
+        .text(d => d.year)
       .filter((d, i) => i == data.length-1)
         .attr("font-weight", "bold");
 
@@ -114,14 +139,24 @@ class TimeSlider {
       .attr("fill", this.color);
 
     // poner font-weight de los labels de los circulos no seleccionados normal
-    this.labelsGroup
+    this.momentLabelsGroup
+      .selectAll("text")
+      .filter((d, idx) => idx !== i)
+        .transition()
+        .attr("font-weight", "normal");
+    this.yearLabelsGroup
       .selectAll("text")
       .filter((d, idx) => idx !== i)
         .transition()
         .attr("font-weight", "normal");
 
     // poner font-weight del label del circulo seleccionado en bold
-    this.labelsGroup
+    this.momentLabelsGroup
+      .selectAll("text")
+      .filter((d, idx) => idx === i)
+        .transition()
+        .attr("font-weight", "bold");
+    this.yearLabelsGroup
       .selectAll("text")
       .filter((d, idx) => idx === i)
         .transition()
