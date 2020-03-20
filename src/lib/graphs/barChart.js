@@ -5,7 +5,7 @@ class BarChart {
     this.offset = { left: 10, bottom: 10 };
     this.el = d3.select(el);
     this.tooltipOffset = 15;
-    this.timeSliderHeight = 50;
+    this.timeSliderHeight = 70;
 
     // compute width and height based on parent div
     this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
@@ -50,9 +50,7 @@ class BarChart {
     const values = [];
     const fields = ["area_bosque", "areas_p_sostenibles", "area_restauracion"];
     this.moments.forEach(moment => {
-      console.log(moment);
       fields.forEach(field => {
-        console.log(field);
         values.push(features.map(feat => feat.attributes).filter(feat => feat.momento === moment.value).reduce((a, b) => a + b[field], 0));
       })
     });
