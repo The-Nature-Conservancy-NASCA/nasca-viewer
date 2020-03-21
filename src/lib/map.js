@@ -178,6 +178,7 @@ class TNCMap {
       this.view.ui.add([zoom, scaleBar], {
         position: 'bottom-left'
       });
+      this.view.ui.remove('zoom');
       
       window.tnc_map.when(() => {        
         window.tnc_map.layers.items.find(item => item.title === "Predios").outFields = ["*"];
@@ -201,23 +202,29 @@ class TNCMap {
         }
         
         this.filterLayers(definitionExpression);
-          
-        this.view.on("click", this.mapClick.bind(this));
-      });
 
-      this.view.ui.remove('zoom');
 
-      this.bioIconsLayer.queryFeatures(this.bioIconsQuery)
-      .then(r => {
-        this.bioIcons = new Map(r.features.map(obj => [obj.attributes.grupo_tnc, obj.attributes.url]));
+        const promises = [
+          ProyectoRepository.getMoments(),
+          this.bioIconsLayer.queryFeatures(this.bioIconsQuery),
+          this.coloresLayer.queryFeatures(this.colorQuery)
+        ];
+        Promise.all(promises).then(result => {
+          // inicializar nivel, valor y componente de visualizacion
+          this.vizLevel;
+          this.vizLevelValue;
+          this.vizComponent;
+  
+          // definir momentos, iconos biodiversidad y colores coberturas
+          this.moments = result[0];
+          this.bioIcons = new Map(result[1].features.map(obj => [obj.attributes.grupo_tnc, obj.attributes.url]));
+          this.colors = this.colorsToObject(result[2].features);
+  
+          // agregar evento al click del mapa y paneles
+          this.view.on("click", this.mapClick.bind(this));
+          d3.selectAll(".panel__tab").on("click", this.panelClick.bind(this));
+        });
       });
-      this.coloresLayer.queryFeatures(this.colorQuery)
-      .then(r => {
-        this.colors = this.colorsToObject(r.features);
-        this.treemap = new Treemap("#graph__coberturas", this.colors);
-      });
-      this.stackedArea = new StackedArea("#graph__carbono");
-      this.barChart = new BarChart("#graph__implementaciones");
     }.bind(this));
   }
 
@@ -233,72 +240,43 @@ class TNCMap {
         let layerTitle;
         if (predio) {
           layerTitle = "Predios";
+          this.vizLevel = "predio";
+          this.vizLevelValue = predio;
         } else if (region) {
           layerTitle = "Regiones";
+          this.vizLevel = "region";
+          this.vizLevelValue = region;
         }
         const layer = response.results.find(item => item.graphic.layer.title === layerTitle);
         this.projectId = layer.graphic.attributes["ID_proyecto"];
         this.regionId = layer.graphic.attributes["ID_region"];
         this.changeSelectionContext(this.projectId);
         this.changeSelectionSubContextRegion(this.regionId);
+        if (predio) {
+          this.changeSelectionSubContextPredio(predio);
+        } else if (region) {
+          this.clearSelectionSubContextPredio();
+        }
         this.changeSelectionSpecificInformation(this.projectId);
         this.highlightFeature(layer.graphic.geometry);
-        ProyectoRepository.getMoments(this.projectId).then(moments => {
-          this.moments = moments;
-          if (region) {
-            this.clickRegion(region);
-          }
-        });
+        d3.select(".panel__tab--active").node().click();
       } else {
+        this.vizLevel = null;
+        this.vizLevelValue = null;
         this.view.graphics.removeAll();
-        d3.selectAll("svg.treemap").remove();
-        d3.selectAll("svg.bar").remove();
-        d3.selectAll("svg.area").remove();
-        d3.selectAll("svg.pie").remove();
-      }
-      if(predio) {
-        this.changeSelectionSubContextPredio(predio);
-        // eventBus.emitEventListeners('predioClicked');
-        CoberturasRepository.getCoberturasByPredio(predio).then(results => {
-          this.treemap.renderGraphic(results, "project", this.moments, true);
-        });
-      
-        this.implementacionesQuery.where = `ID_predio = '${predio}'`;
-        this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
-          this.barChart.renderGraphic(result.features, this.moments, true);
-        });
-
-        d3.selectAll(".group__container").remove();
+        d3.select("#graph__coberturas").selectAll("*").remove();
+        d3.select("#graph__carbono").selectAll("*").remove();
+        d3.select("#graph__implementaciones").selectAll("*").remove();
+        d3.select("#wrapper__biodiversidad").select("svg").remove();
+        d3.select("#container__biodiversidad").selectAll("*").remove();
       }
     });
   }
 
   clickRegion(region) {
-    this.clearSelectionSubContextPredio();
-    eventBus.emitEventListeners('regionClicked');
-    this.prediosQuery.where = `ID_region = '${region}'`;
-    this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
-      const prediosIds = [];
-      results.features.forEach(feat => {
-        prediosIds.push(feat.attributes.ID_predio);
-      });
-      CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
-        this.treemap.renderGraphic(res, "project", this.moments, true);
-      });
 
-      const prediosList = prediosIds.map(el => `'${el}'`).join(",");
-      this.implementacionesQuery.where = `ID_predio in (${prediosList})`;
-      this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
-        this.barChart.renderGraphic(result.features, this.moments, true);
-      });
-    });
 
-    this.carbonoQuery.where = `ID_region = '${region}'`;
-    this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
-      ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
-        this.stackedArea.renderGraphic(result.features, null, closingYear);
-      })
-    });
+
 
     this.getBiodiversityGroups(region).then(groups => {
       d3.select("#wrapper__biodiversidad").select("svg").remove();
@@ -504,5 +482,88 @@ class TNCMap {
       this.view.graphics.removeAll();
       this.view.graphics.add(graphic);
     }
+  }
+
+  panelClick() {
+    console.log(component);
+    if (component === "biodiversidad") {
+      this.renderBiodiversityComponent(this.vizLevel, this.vizLevelValue);
+    } else if (component === "carbono") {
+      this.renderCarbonComponent(this.vizLevel, this.vizLevelValue);
+    } else if (component === "implementacion") {
+      this.renderImplementationsComponent(this.vizLevel, this.vizLevelValue);
+    } else if (component === "cobertura") {
+      this.renderLandcoverComponent(this.vizLevel, this.vizLevelValue).then(() => {console.log("aYEEE BIATCH")});
+    }
+  }
+
+  renderBiodiversityComponent(level, value) {
+    d3.select("#wrapper__biodiversidad").select("svg").remove();
+    d3.select("#container__biodiversidad").selectAll("*").remove();
+  }
+
+  renderCarbonComponent(level, value) {
+    d3.select("#graph__carbono").selectAll("*").remove();
+    this.stackedArea = new StackedArea("#graph__carbono");
+    if (level === "predio") {
+      console.log("Carbono nivel predio no ha sido implementado todavia");
+    } else if (level === "region") {
+      this.carbonoQuery.where = `ID_region = '${value}'`;
+      this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
+        ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
+          this.stackedArea.renderGraphic(result.features, null, closingYear);
+        })
+      });
+    }
+  }
+
+  renderImplementationsComponent(level, value) {
+    d3.select("#graph__implementaciones").selectAll("*").remove();
+    this.barChart = new BarChart("#graph__implementaciones");
+    if (level === "predio") {
+      this.implementacionesQuery.where = `ID_predio = '${value}'`;
+      this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
+        this.barChart.renderGraphic(result.features, this.moments[this.projectId], true);
+      });
+    } else if (level === "region") {
+      this.prediosQuery.where = `ID_region = '${value}'`;
+      this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
+        const prediosIds = [];
+        results.features.forEach(feat => {
+          prediosIds.push(feat.attributes.ID_predio);
+        });  
+        const prediosList = prediosIds.map(el => `'${el}'`).join(",");
+        this.implementacionesQuery.where = `ID_predio in (${prediosList})`;
+        this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
+          this.barChart.renderGraphic(result.features, this.moments[this.projectId], true);
+        });
+      });
+    }
+  }
+
+  renderLandcoverComponent(level, value) {
+    const promise = new Promise(resolve => {
+      d3.select("#graph__coberturas").selectAll("*").remove();
+      this.treemap = new Treemap("#graph__coberturas", this.colors);
+      if (level === "predio") {
+        CoberturasRepository.getCoberturasByPredio(value).then(results => {
+          this.treemap.renderGraphic(results, "project", this.moments[this.projectId], true);
+          resolve(true);
+        });
+      } else if (level === "region") {
+        this.prediosQuery.where = `ID_region = '${value}'`;
+        this.prediosLayer.queryFeatures(this.prediosQuery).then(result => {
+          const prediosIds = [];
+          result.features.forEach(feat => {
+            prediosIds.push(feat.attributes.ID_predio);
+          });
+          CoberturasRepository.getCoberturasByPredios(prediosIds).then(data => {
+            this.treemap.renderGraphic(data, "project", this.moments[this.projectId], true);
+            resolve(true);
+          });
+        });
+      }
+    });
+    return promise
   }
 }
