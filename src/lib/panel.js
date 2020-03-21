@@ -231,9 +231,6 @@ class Panel {
             <div class="panel__graph">
               <div class="panel__stats">
                 <div id="graph__coberturas"></div>
-                <div class="panel__graph-fields">
-                  <select name="time__coberturas" id="time__coberturas" class="time__select"></select>
-                </div>
               </div>
             </div>
             <div class="panel__specific__information" data-information-field="descripcion_coberturas">
