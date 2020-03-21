@@ -100,31 +100,32 @@ class ProyectoRepository {
     return new Date(result[0].fecha_cierre).getFullYear();
   }
 
-  static async getMoments(id) {
-    const query = await window.store.select(this.TABLE_NAME, {
-      ID_proyecto: id
-    });
-    const result = query[0];
+  static async getMoments() {
     const moments = {
-        "Línea base": { field: "fecha_linea_base", value: "0" },
-        "Seguimiento 1": { field: "fecha_seguimiento1", value: "1" },
-        "Seguimiento 2" : { field: "fecha_seguimiento2", value: "2" },
-        "Cierre": { field: "fecha_cierre", value: "3"}
+      "Línea base": { field: "fecha_linea_base", value: "0" },
+      "Seguimiento 1": { field: "fecha_seguimiento1", value: "1" },
+      "Seguimiento 2" : { field: "fecha_seguimiento2", value: "2" },
+      "Cierre": { field: "fecha_cierre", value: "3"}
     };
-    const projectMoments = [];
-    for (let label in moments) {
-      const obj = moments[label];
-      if (result[obj.field]) {
-        projectMoments.push(
-          {
-            name: label,
-            value: obj.value,
-            year: new Date(result[obj.field]).getFullYear()
-          }
-        )
+    const result = {};
+    const projects = await window.store.select(this.TABLE_NAME);
+    projects.forEach(project => {
+      const projectMoments = [];
+      for (let label in moments) {
+        const obj = moments[label];
+        if (project[obj.field]) {
+          projectMoments.push(
+            {
+              name: label,
+              value: obj.value,
+              year: new Date(project[obj.field]).getFullYear()
+            }
+          )
+        }
       }
-    }
-    return projectMoments;
+      result[project.ID_proyecto] = projectMoments;
+    });
+    return result;
   }
 }
 
