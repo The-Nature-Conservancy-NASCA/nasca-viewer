@@ -245,6 +245,9 @@ class TNCMap {
         this.highlightFeature(layer.graphic.geometry);
         ProyectoRepository.getMoments(this.projectId).then(moments => {
           this.moments = moments;
+          if (region) {
+            this.clickRegion(region);
+          }
         });
       } else {
         this.view.graphics.removeAll();
@@ -267,124 +270,80 @@ class TNCMap {
 
         d3.selectAll(".group__container").remove();
       }
-      else if(region) {
-        this.clearSelectionSubContextPredio();
-        eventBus.emitEventListeners('regionClicked');
-        this.prediosQuery.where = `ID_region = '${region}'`;
-        this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
-          const prediosIds = [];
-          results.features.forEach(feat => {
-            prediosIds.push(feat.attributes.ID_predio);
-          });
-          CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
-            this.treemap.renderGraphic(res, "project", this.moments, true);
-          });
+    });
+  }
 
-          const prediosList = prediosIds.map(el => `'${el}'`).join(",");
-          this.implementacionesQuery.where = `ID_predio in (${prediosList})`;
-          this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
-            this.barChart.renderGraphic(result.features, this.moments, true);
-          });
+  clickRegion(region) {
+    this.clearSelectionSubContextPredio();
+    eventBus.emitEventListeners('regionClicked');
+    this.prediosQuery.where = `ID_region = '${region}'`;
+    this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
+      const prediosIds = [];
+      results.features.forEach(feat => {
+        prediosIds.push(feat.attributes.ID_predio);
+      });
+      CoberturasRepository.getCoberturasByPredios(prediosIds).then(res => {
+        this.treemap.renderGraphic(res, "project", this.moments, true);
+      });
+
+      const prediosList = prediosIds.map(el => `'${el}'`).join(",");
+      this.implementacionesQuery.where = `ID_predio in (${prediosList})`;
+      this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
+        this.barChart.renderGraphic(result.features, this.moments, true);
+      });
+    });
+
+    this.carbonoQuery.where = `ID_region = '${region}'`;
+    this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
+      ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
+        this.stackedArea.renderGraphic(result.features, null, closingYear);
+      })
+    });
+
+    this.getBiodiversityGroups(region).then(groups => {
+      d3.select("#wrapper__biodiversidad").select("svg").remove();
+      d3.select("#container__biodiversidad").selectAll("*").remove();
+      const groupCountPromises = [];
+      groups.forEach(group => {
+        let queryParameters =  {
+          where: `ID_region = '${region}' AND grupo_tnc = '${group}'`,
+          outFields: "especie",
+          returnGeometry: false,
+          returnDistinctValues: true,
+          returnCountOnly: true,
+          f: "json"
+        };
+        groupCountPromises.push(this.esriRequest(this.biodiversityQueryUrl, {query: queryParameters}));
+      });
+      Promise.all(groupCountPromises).then(responses => {
+        responses.forEach((response, i) => {
+          // create group label with count and initialize PieChart
+          const group = groups[i];
+          const groupCount = response.data.count;
+          const groupContainer = 
+          d3.select("#container__biodiversidad")
+            .append("div")
+              .attr("class", "group__container");
+          const header = groupContainer.append("div").attr("class", "group__header");
+          header.append("h5").text(group);
+          header.append("h6").text(groupCount);
+          groupContainer
+            .append("div")
+              .attr("class", "group__graphic")
+              .attr("id", `graph__${group}`);
+          const pieChart = new PieChart(`#graph__${group}`, this.colors, this.bioIcons.get(group));
         });
 
-        this.carbonoQuery.where = `ID_region = '${region}'`;
-        this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
-          ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
-            this.stackedArea.renderGraphic(result.features, null, closingYear);
-          })
-        });
+        // get container width
+        // d3.select("#panel-biodiversidad").classed("panel__tab-panel--active", true);
+        // const containerWidth = d3.select("#wrapper__biodiversidad").node().offsetWidth;
+        const containerWidth = 458;
+        // d3.select("#panel-biodiversidad").classed("panel__tab-panel--active", false);
 
-        this.getBiodiversityGroups(region).then(groups => {
-          const groupCountPromises = [];
-          groups.forEach(group => {
-            let queryParameters =  {
-              where: `ID_region = '${region}' AND grupo_tnc = '${group}'`,
-              outFields: "especie",
-              returnGeometry: false,
-              returnDistinctValues: true,
-              returnCountOnly: true,
-              f: "json"
-            };
-            groupCountPromises.push(this.esriRequest(this.biodiversityQueryUrl, {query: queryParameters}));
-          });
-          Promise.all(groupCountPromises).then(responses => {
-            responses.forEach((response, i) => {
-              const group = groups[i];
-              const groupCount = response.data.count;
-              const groupContainer = 
-              d3.select("#container__biodiversidad")
-                .append("div")
-                  .attr("class", "group__container");
-              const header = groupContainer.append("div").attr("class", "group__header");
-              header.append("h5").text(group);
-              header.append("h6").text(groupCount);
-              groupContainer
-                .append("div")
-                  .attr("class", "group__graphic")
-                  .attr("id", `graph__${group}`);
-              const pieChart = new PieChart(`#graph__${group}`, this.colors, this.bioIcons.get(group));
-            });
-          });
-          // groups.forEach(group => {
-          //   this.biodiversityQuery.where = `ID_region = '${region}' AND grupo_tnc = '${group}'`;
-          //   this.biodiversityQuery.outFields = "especie";
-          //   this.biodiversityQuery.returnDistinctValues = true;
-          //   this.biodiversityQuery.returnCountOnly = true;
-          //   console.log(this.biodiversityQuery);
-          //   this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(result => {console.log(result)});
-          // });
-          // groups.forEach(group => {
-          //   const groupContainer = d3.select("#container__biodiversidad")
-          //     .append("div")
-          //       .attr("class", "group__container");
-          //   const header = groupContainer.append("div").attr("class", "group__header");
-          //     header.append("h5").text(group);
-          //     header.append("h6").text(count);
-          //     groupContainer
-          //       .append("div")
-          //         .attr("class", "group__graphic")
-          //         .attr("id", `graph__${group}`);
-          // });
-        });
-
-        // this.getBiodiversityPerLandcoverData(region).then(res => {
-        //   const wrapper  = d3.select("#wrapper__biodiversidad");
-        //   wrapper.selectAll(".group__container").remove();
-        //   wrapper.select("svg").remove();
-        //   const timeSlider = new TimeSlider("#wrapper__biodiversidad", 300, 70, "#container__biodiversidad");
-        //   const timeButtons = timeSlider.render(this.moments);
-        //   timeButtons.on("click", function (d, i, n) {
-        //     timeSlider.buttonToggle(d, i, n);
-        //   });
-        //   console.log(res);
-        //   res.forEach(el => {
-        //     const group = el.name;
-        //     this.biodiversityQuery.where = `ID_region = '${region}' AND grupo_tnc = '${group}'`;
-        //     this.biodiversityQuery.returnDistinctValues = true;
-        //     this.biodiversityQuery.returnCountOnly = false;
-        //     this.biodiversityQuery.outFields = ["especie"];
-        //     this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(species => {
-        //       const iconsQuery = this.bioIconsLayer.createQuery();
-        //       iconsQuery.outFields = ["grupo_tnc", "url"];
-        //       iconsQuery.where = `grupo_tnc = '${group}'`;
-        //       this.bioIconsLayer.queryFeatures(iconsQuery).then(icon => {
-        //         const iconUrl = icon.features[0].attributes.url;
-        //         const count = species.features.length;
-        //         const groupContainer = d3.select("#container__biodiversidad").append("div").attr("class", "group__container");
-        //         const header = groupContainer.append("div").attr("class", "group__header");
-        //         header.append("h5").text(group);
-        //         header.append("h6").text(count);
-        //         groupContainer
-        //           .append("div")
-        //             .attr("class", "group__graphic")
-        //             .attr("id", `graph__${group}`);
-        //         const pieChart = new PieChart(`#graph__${group}`, this.colors, iconUrl);
-        //         pieChart.renderGraphic(el.values);
-        //       });
-        //     });
-        //   });
-        // });
-      }
+        // add TimeSlider
+        const timeSlider = new TimeSlider("#wrapper__biodiversidad", containerWidth, 70, "#container__biodiversidad", false);
+        const timeButtons = timeSlider.render(this.moments);
+      });
     });
   }
 
@@ -538,8 +497,8 @@ class TNCMap {
     if (geometry.type === "polygon") {
       const symbol = new this.SimpleFillSymbol(
         "solid",
-        new this.SimpleLineSymbol("solid", new this.Color([232,104,80]), 2),
-        new this.Color([232,104,80,0.25])
+        new this.SimpleLineSymbol("solid", new this.Color([0,168,132]), 1),
+        new this.Color([115,255,223,0.25])
       );
       const graphic = new this.Graphic(geometry, symbol);
       this.view.graphics.removeAll();
