@@ -1,0 +1,227 @@
+{
+  "objectIdFieldName": "OBJECTID",
+  "uniqueIdField": {
+    "name": "OBJECTID",
+    "isSystemMaintained": true
+  },
+  "globalIdFieldName": "GlobalID",
+  "serverGens": {
+    "minServerGen": 127529,
+    "serverGen": 194018
+  },
+  "fields": [
+    {
+      "name": "OBJECTID",
+      "type": "esriFieldTypeOID",
+      "alias": "OBJECTID",
+      "sqlType": "sqlTypeOther",
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Identificador único que se asigna cuando se crean nuevos proyectos de TNC.\",\"fieldValueType\":\"uniqueIdentifier\"}"
+    },
+    {
+      "name": "ID_proyecto",
+      "type": "esriFieldTypeString",
+      "alias": "ID_proyecto",
+      "sqlType": "sqlTypeOther",
+      "length": 50,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Identificador único de cada uno de los proyectos en ejecución o ejecutados por parte de TNC.\",\"fieldValueType\":\"uniqueIdentifier\"}"
+    },
+    {
+      "name": "nombre",
+      "type": "esriFieldTypeString",
+      "alias": "Nombre del proyecto",
+      "sqlType": "sqlTypeOther",
+      "length": 50,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo en el que se registra el nombre de cada uno de los proyectos de TNC\",\"fieldValueType\":\"nameOrTitle\"}"
+    },
+    {
+      "name": "descripcion",
+      "type": "esriFieldTypeString",
+      "alias": "Descripción",
+      "sqlType": "sqlTypeOther",
+      "length": 50,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo en el que se describe el propósito general de cada uno de los proyectos de TNC\",\"fieldValueType\":\"description\"}"
+    },
+    {
+      "name": "ID_estrategia",
+      "type": "esriFieldTypeString",
+      "alias": "ID_estrategia",
+      "sqlType": "sqlTypeOther",
+      "length": 50,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo mediante el cual se relaciona cada proyecto con la estrategia que lo enmarca.\",\"fieldValueType\":\"uniqueIdentifier\"}"
+    },
+    {
+      "name": "color",
+      "type": "esriFieldTypeString",
+      "alias": "Color",
+      "sqlType": "sqlTypeOther",
+      "length": 25,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo en el que se registra el color asignado para representar cada proyecto de TNC\",\"fieldValueType\":\"description\"}"
+    },
+    {
+      "name": "fondo",
+      "type": "esriFieldTypeString",
+      "alias": "Fondo",
+      "sqlType": "sqlTypeOther",
+      "length": 500,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo en el que se registra el fondo asignado para representar cada proyecto de TNC\",\"fieldValueType\":\"description\"}"
+    },
+    {
+      "name": "icono",
+      "type": "esriFieldTypeString",
+      "alias": "Icono",
+      "sqlType": "sqlTypeOther",
+      "length": 500,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo en el que se registra el icono asignado para representar cada proyecto de TNC\",\"fieldValueType\":\"description\"}"
+    },
+    {
+      "name": "GlobalID",
+      "type": "esriFieldTypeGlobalID",
+      "alias": "GlobalID",
+      "sqlType": "sqlTypeOther",
+      "length": 38,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Identificador único que controla la incersión de nuevos proyectos en la base de datos de TNC\",\"fieldValueType\":\"uniqueIdentifier\"}"
+    },
+    {
+      "name": "CreationDate",
+      "type": "esriFieldTypeDate",
+      "alias": "CreationDate",
+      "sqlType": "sqlTypeOther",
+      "length": 8,
+      "domain": null,
+      "defaultValue": -2209161600000,
+      "description": "{\"value\":\"Campo en el que se registra la fecha de creación o incersión de nuevos proyectos en la base de datos de TNC\",\"fieldValueType\":\"dateAndTime\"}"
+    },
+    {
+      "name": "Creator",
+      "type": "esriFieldTypeString",
+      "alias": "Creator",
+      "sqlType": "sqlTypeOther",
+      "length": 128,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo en el que se registra el usuario del sistema que ha incertado cada uno de los proyectos de TNC\",\"fieldValueType\":\"nameOrTitle\"}"
+    },
+    {
+      "name": "EditDate",
+      "type": "esriFieldTypeDate",
+      "alias": "EditDate",
+      "sqlType": "sqlTypeOther",
+      "length": 8,
+      "domain": null,
+      "defaultValue": -2209161600000,
+      "description": "{\"value\":\"Campo en el que se registra la fecha de la última modificación realizada sobre los proyectos de TNC\",\"fieldValueType\":\"dateAndTime\"}"
+    },
+    {
+      "name": "Editor",
+      "type": "esriFieldTypeString",
+      "alias": "Editor",
+      "sqlType": "sqlTypeOther",
+      "length": 128,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo en el que se registra el nombre del último editor de la información de los proyectos de TNC\",\"fieldValueType\":\"nameOrTitle\"}"
+    },
+    {
+      "name": "descripcion_carbono",
+      "type": "esriFieldTypeString",
+      "alias": "Descripción Carbono",
+      "sqlType": "sqlTypeOther",
+      "length": 256,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo mediante el cual se describe las particularidades de los cálculos de carbono de cada uno de los proyectos de TNC\",\"fieldValueType\":\"description\"}"
+    },
+    {
+      "name": "descripcion_coberturas",
+      "type": "esriFieldTypeString",
+      "alias": "Descripción de coberturas",
+      "sqlType": "sqlTypeOther",
+      "length": 256,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo mediante el cual se describe las particularidades de las coberturas de la tierra de cada uno de los proyectos de TNC\",\"fieldValueType\":\"description\"}"
+    },
+    {
+      "name": "descripcion_biodiversidad",
+      "type": "esriFieldTypeString",
+      "alias": "Descripción de biodiversidad",
+      "sqlType": "sqlTypeOther",
+      "length": 256,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo mediante el cual se describe las particularidades de la biodiversidad de cada uno de los proyectos de TNC\",\"fieldValueType\":\"description\"}"
+    },
+    {
+      "name": "descripcion_implementaciones",
+      "type": "esriFieldTypeString",
+      "alias": "Descripciones de implementaciones",
+      "sqlType": "sqlTypeOther",
+      "length": 256,
+      "domain": null,
+      "defaultValue": null,
+      "description": "{\"value\":\"Campo mediante el cual se describe las particularidades de las implementaciones de cada uno de los proyectos de TNC\",\"fieldValueType\":\"description\"}"
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "OBJECTID": 1,
+        "ID_proyecto": "01AB",
+        "nombre": "Ganadería Colombiana Sostenible",
+        "descripcion": "Ganadería Colombiana Sostenible es una alianza entre el FEDEGAN, CIPAV, TNC, GEF, el gobierno del Reino Unido y el Fondo para la Acción Ambiental, bajo la supervisión del Banco Mundial. Busca mejorar la producción del negocio ganadero a través del trabajo amigable con el medio ambiente, a través del uso de diferentes tipos de árboles integrados a la producción ganadera (sistemas silvopastoriles) y la protección de vegetación natural.",
+        "ID_estrategia": "02",
+        "color": "#49aa42",
+        "fondo": "/img/ganaderia.png",
+        "icono": "https://geotncdev.maps.arcgis.com/sharing/rest/content/items/eeb89df9c41e4c1aa36da2725e2c1848/data",
+        "GlobalID": "2761c1a2-f952-4a34-b351-14f78c6ed0dc",
+        "CreationDate": 1575128815647,
+        "Creator": "GeoTNCDev",
+        "EditDate": 1575209826968,
+        "Editor": "gomezesguerra_uji",
+        "descripcion_carbono": null,
+        "descripcion_coberturas": null,
+        "descripcion_biodiversidad": null,
+        "descripcion_implementaciones": null
+      }
+    },
+    {
+      "attributes": {
+        "OBJECTID": 2,
+        "ID_proyecto": "02BC",
+        "nombre": "Agroforestería",
+        "descripcion": "Agroforestería para la conservación es un proyecto implementado por TNC y The Amazon Conservation Team , financiado por la Iniciativa Internacional del Clima del Ministerio Federal de Ambiente de Alemania. Tiene como objetivo la implementación de sistemas agroforestales sostenibles como una estrategia para reducir la deforestación, contribuir a la restauración y conectividad de los bosques, mejorar la conservación de la biodiversidad y mitigar el cambio climático en la Amazonia colombiana.",
+        "ID_estrategia": "02",
+        "color": "#a0bf4d",
+        "fondo": "/img/agroforesteria.png",
+        "icono": "https://ago-item-storage.s3.us-east-1.amazonaws.com/8e732f4862c94c438947d64d29227194/agroforesteria.jpg?X-Amz-Security-Token=IQoJb3JpZ2luX2VjEPT%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDxaDiDQJM9CTN0TL2HJtZ0MMPtUfFbrLNewEYQKYX8mQIhAKlDgdzmcfxC3qiMPQX1HeK2qiAYQNl0iX3ZtujDm4xsKr0DCN3%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQABoMNjA0NzU4MTAyNjY1IgwSBcCsY2yM5oqI8A8qkQPcAXBAsiqnCO6V3OKUdWBNoxsIq7Zy3VXTlt32lvnAl8u1V3a4eJtVJjIoM0DcPYTzxsUGqv0EKwh9%2BWVxUOHVJ3cgfavM0yPuUKsxxkn%2FKC050E0m%2BFXz4pRceOCt3HlHXdaymBVhwINrNV5IkVJ3nQ7TKNQQZADXWfCTklpqNE3gwyFbViWpABi49DdSJR%2FkxASgG47ht%2F68Y1aeEsk5xfTcMpLMW1wvEQ1urxPZRSPawBfvw7dDaoCeBU1SEDJPkAWG9vnbxmd%2BSwsjSMUXwRdkMPklZdh6ahdFsZr%2BEkGrORk4dBx3dJurvKofENgwZckT1TeSNZjiMbqTr6dqXWmjvVUJmRjzlIV5tedZYWqFfOVbD1mzOICX2yISBl1KQj6U9UEj3DKP4syuu9%2FdT0SnH7bL6ToRxczQRzBG1%2FD4l03iksRq0hhbDeJ4iDmyjS4jkgGyqWtSI9Oeb0nR%2FQPRJ89tCn6zQJqmE7noOabVOMDS1NayqnnEnE596Y1O3bVbFHEtnljc63uzNdai%2BjCulc%2FzBTrqAZZRrbzzLhkIxrRMnOGroFNf0XLNtDHUauIc4rADtqfGXC4Ft5j6P74tRFENUsbI5LknEVs%2BeN%2BMZ%2FdCALlKtvyA4wTfh0V5OX78NJplXhh48BFi7rV05floaeijXEmpVll5oIRTCJr5OVOPRH1qbxBSW%2FPBhOwrgS4r3hZknbujhVxrVu9UUMfHlOzmKUAL3MLm1elZfyW9rT4UBQfLtlTcAKOXyxo2zklGRMv6OlIYL83aoYiwnpDvYXJ3WJBTnQGqP7a7Tqd9JarF2NlZMdQ9FgfWtJ9uNPxnpTAPMdSuT3%2FhPcndswkqTQ%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20200319T210904Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAYZTTEKKEXDZEQ3GW%2F20200319%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=119d13f7f77fc9429a3db1971e60b8ab0c9fc92ae3f9e334a311bd3dbb7f618b",
+        "GlobalID": "889348e8-3c68-4014-aa6e-0df58715007f",
+        "CreationDate": 1575128815647,
+        "Creator": "GeoTNCDev",
+        "EditDate": 1575209754753,
+        "Editor": "gomezesguerra_uji",
+        "descripcion_carbono": null,
+        "descripcion_coberturas": null,
+        "descripcion_biodiversidad": null,
+        "descripcion_implementaciones": null
+      }
+    }
+  ]
+}

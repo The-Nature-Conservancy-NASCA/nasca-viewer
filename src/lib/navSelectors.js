@@ -46,7 +46,7 @@ class EstrategiaSelector {
         item.addEventListener('click', event => {
           const estrategiaId = event.currentTarget.dataset.estrategia;
           if(estrategiaId !== '02') {
-            alert('No hay predios para la estrategia seleccionada');
+            window.modalPopup.openModal({header: window.tncConfig.strings.no_hay_predios, content: ''});
           } else {
             this._closeSelector();
             const estrategiaColor = event.currentTarget.dataset.color;
@@ -97,7 +97,7 @@ class ProyectoSelector  {
     this._selectorToggle = document.getElementById('toggle-selector-proyecto');
     this._offsetTop = offsetTop;
     this._el.style.top = `${60 + offsetTop}px`;
-    this._el.style.right = '-16px';
+    this._el.style.right = '68px';
   }
 
   createSelector(proyectos) {

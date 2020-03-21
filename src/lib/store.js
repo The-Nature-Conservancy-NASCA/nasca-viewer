@@ -60,7 +60,7 @@ class Store {
 
   _createConection() {
     const workerUrl = '/js/jsstore.worker.js';
-    this._connection = new JsStore.Instance(new Worker(Urls.getRelativeUrl(workerUrl)));
+    this._connection = new JsStore.Connection(new Worker(Urls.getRelativeUrl(workerUrl)));
   }
 
   async _createDatabase() {

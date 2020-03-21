@@ -145,9 +145,10 @@ class Landing {
       estrategias = features.map(feature => feature.attributes);
       window.store.insertRows('Estrategias', estrategias);
     }
-
+    const cantidadEstrategias = estrategias.length;
     let estrategiasHTML = this.createHTML(estrategias, 'estrategias');
     document.querySelector('.estrategias').innerHTML = estrategiasHTML;
+    document.querySelector('.estrategias').classList.add(`estrategias--${cantidadEstrategias}`)
   }
 
   buildProyectosHTML(proyectosResponse) {
@@ -192,7 +193,9 @@ class Landing {
       <section class="card ${options.ID_proyecto ? 'proyecto' : 'estrategia'}" 
         ${options.ID_proyecto ? 'data-proyecto="' + options.ID_proyecto + '"' :
         'data-estrategia="estrategia_' + options.ID_estrategia + '"'}
-        style="background: url('./img/bg-overlay.png'), url('${options.fondo}'); background-size: cover, cover;">
+        style="background: url('./img/bg-overlay.png'), url('${options.fondo}');
+            background-size: cover, cover;
+            background-position: center; background-repeat: no-repeat;">
         <img class="card__icon" src="${options.icono}">
       <div class="card-background" style="background-color: ${options.color}">
       </div>

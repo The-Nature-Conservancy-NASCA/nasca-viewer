@@ -57,4 +57,9 @@
   @if $breakpoint == big-desktop {
       @media only screen and (min-width: 112.5em) { @content };    //1800
   }
+  @if $breakpoint == zoom-150 {
+      @media only screen and (max-height: 719px) and (min-width: 901px) {
+        @content
+      }
+  }
 }

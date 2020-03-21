@@ -99,6 +99,14 @@
     }
   }
 
+  &--mobile {
+    display: none;
+
+    @include respond(tab-port) {
+      display: block;
+    }
+  }
+
   .divider {
     background-color: $font-gray;
     height: 3rem;
