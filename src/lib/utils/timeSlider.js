@@ -1,9 +1,17 @@
 class TimeSlider {
-  constructor(el, width, height, otherEl=null) {
+  constructor(el, width, height, otherEl=null, margin=null, padding=null) {
     this.height = height;
     this.width = width;
-    this.margin = { left: 20, right: 20 };
-    this.totalWidth = this.width + this.margin.left + this.margin.right;
+    if (margin) {
+      this.margin = margin;
+    } else {
+      this.margin = { left: 0, right: 0 };
+    }
+    if (padding) {
+      this.padding = padding;
+    } else {
+      this.padding = { left: 10, right: 10 };
+    }
     this.radius = 11;
     this.color = "#49aa42";
     this.labelMarginBottom = 7;
@@ -11,34 +19,38 @@ class TimeSlider {
     this.fontSize = 9;
     this.possiblePositions = {
       1: [
-          this.margin.left + (this.width / 2)
+          this.padding.left + (this.width / 2)
         ],
       2: [
-          this.margin.left + this.radius, 
-          this.totalWidth - this.radius - this.margin.right
+          this.padding.left + this.radius, 
+          this.width - this.radius - this.padding.right
         ],
       3: [
-          this.margin.left + this.radius, 
-          this.margin.left + (this.width / 2), 
-          this.totalWidth - this.radius - this.margin.left
+          this.padding.left + this.radius, 
+          this.padding.left + (this.width / 2), 
+          this.width - this.radius - this.padding.left
         ],
       4: [
-        this.margin.left + this.radius, 
-        this.margin.left + (this.width * 1/3), 
-        this.margin.left + (this.width * 2/3), 
-        this.totalWidth - this.radius - this.margin.left
+        this.padding.left + this.radius, 
+        this.padding.left + (this.width * 1/3), 
+        this.padding.left + (this.width * 2/3), 
+        this.width - this.radius - this.padding.left
       ]
     };
     if (otherEl) {
       this.svg = d3.select(el)
         .insert("svg", otherEl)
-          .attr("width", this.totalWidth)
-          .attr("height", this.height);
+          .attr("width", this.width)
+          .attr("height", this.height)
+          .style("margin-left", this.margin.left)
+          .style("margin-right", this.margin.right);
     } else {
       this.svg = d3.select(el)
       .append("svg")
-        .attr("width", this.totalWidth)
-        .attr("height", this.height);
+        .attr("width", this.width)
+        .attr("height", this.height)
+        .style("margin-left", this.margin.left)
+        .style("margin-right", this.margin.right);
     }
   }
 
@@ -62,8 +74,8 @@ class TimeSlider {
     // agregar linea que conecta los circulos
     this.svg
       .append("line")
-        .attr("x1", this.margin.right + this.radius)
-        .attr("x2", this.totalWidth - this.radius - this.margin.right)
+        .attr("x1", this.padding.right + this.radius)
+        .attr("x2", this.width - this.radius - this.padding.right)
         .attr("y1", this.height / 2)
         .attr("y2", this.height / 2)
         .attr("stroke-width", Math.round(this.radius / 6))

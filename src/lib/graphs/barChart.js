@@ -14,7 +14,7 @@ class BarChart {
     this.data;
     this.moments;
     this.selectedMoment;
-    this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight);
+    this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight, null, this.margin);
     this.color = "#49AA42";
     this.factor = 0.5;
 
