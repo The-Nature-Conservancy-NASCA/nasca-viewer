@@ -213,7 +213,8 @@ class TNCMap {
           // inicializar nivel, valor y componente de visualizacion
           this.vizLevel;
           this.vizLevelValue;
-          this.vizComponent;
+          this.isNewFeature;
+          this.renderedComponents = [];
   
           // definir momentos, iconos biodiversidad y colores coberturas
           this.moments = result[0];
@@ -238,6 +239,8 @@ class TNCMap {
       });
       if (predio || region) {
         let layerTitle;
+        this.previousVizLevel = this.vizLevel;
+        this.previousVizLevelValue = this.vizLevelValue;
         if (predio) {
           layerTitle = "Predios";
           this.vizLevel = "predio";
@@ -247,6 +250,7 @@ class TNCMap {
           this.vizLevel = "region";
           this.vizLevelValue = region;
         }
+        this.isNewFeature = (this.vizLevel !== this.previousVizLevel) || (this.vizLevel === this.previousVizLevel && this.vizLevelValue !== this.previousVizLevelValue); 
         const layer = response.results.find(item => item.graphic.layer.title === layerTitle);
         this.projectId = layer.graphic.attributes["ID_proyecto"];
         this.regionId = layer.graphic.attributes["ID_region"];
@@ -485,60 +489,83 @@ class TNCMap {
   }
 
   panelClick() {
-    console.log(component);
-    if (component === "biodiversidad") {
-      this.renderBiodiversityComponent(this.vizLevel, this.vizLevelValue);
+    const component = d3.event.target.getAttribute("data-tab");
+    if (this.isNewFeature) {
+      this.isNewFeature = false;
+      this.renderedComponents = [];
+    } else {
+      if (this.renderedComponents.includes(component)) {
+        return;  // no se renderiza nada
+      }
+    }
+
+    if (this.component === "biodiversidad") {
+      this.renderBiodiversityComponent(this.vizLevel, this.vizLevelValue).then(() => {this.renderedComponents.push(component)});
     } else if (component === "carbono") {
-      this.renderCarbonComponent(this.vizLevel, this.vizLevelValue);
+      this.renderCarbonComponent(this.vizLevel, this.vizLevelValue).then(() => {this.renderedComponents.push(component)});
     } else if (component === "implementacion") {
-      this.renderImplementationsComponent(this.vizLevel, this.vizLevelValue);
+      this.renderImplementationsComponent(this.vizLevel, this.vizLevelValue).then(() => {this.renderedComponents.push(component)});
     } else if (component === "cobertura") {
-      this.renderLandcoverComponent(this.vizLevel, this.vizLevelValue).then(() => {console.log("aYEEE BIATCH")});
+      this.renderLandcoverComponent(this.vizLevel, this.vizLevelValue).then(() => {this.renderedComponents.push(component)});
     }
   }
 
   renderBiodiversityComponent(level, value) {
-    d3.select("#wrapper__biodiversidad").select("svg").remove();
-    d3.select("#container__biodiversidad").selectAll("*").remove();
+    const promise = new Promise(resolve => {
+      d3.select("#wrapper__biodiversidad").select("svg").remove();
+      d3.select("#container__biodiversidad").selectAll("*").remove();
+      resolve(true);
+    });
+    return promise;
   }
 
   renderCarbonComponent(level, value) {
-    d3.select("#graph__carbono").selectAll("*").remove();
-    this.stackedArea = new StackedArea("#graph__carbono");
-    if (level === "predio") {
-      console.log("Carbono nivel predio no ha sido implementado todavia");
-    } else if (level === "region") {
-      this.carbonoQuery.where = `ID_region = '${value}'`;
-      this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
-        ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
-          this.stackedArea.renderGraphic(result.features, null, closingYear);
-        })
-      });
-    }
+    const promise = new Promise(resolve => {
+      d3.select("#graph__carbono").selectAll("*").remove();
+      this.stackedArea = new StackedArea("#graph__carbono");
+      if (level === "predio") {
+        console.log("Carbono nivel predio no ha sido implementado todavia");
+        resolve(true);
+      } else if (level === "region") {
+        this.carbonoQuery.where = `ID_region = '${value}'`;
+        this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
+          ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
+            this.stackedArea.renderGraphic(result.features, null, closingYear);
+            resolve(true);
+          })
+        });
+      }
+    });
+    return promise;
   }
 
   renderImplementationsComponent(level, value) {
-    d3.select("#graph__implementaciones").selectAll("*").remove();
-    this.barChart = new BarChart("#graph__implementaciones");
-    if (level === "predio") {
-      this.implementacionesQuery.where = `ID_predio = '${value}'`;
-      this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
-        this.barChart.renderGraphic(result.features, this.moments[this.projectId], true);
-      });
-    } else if (level === "region") {
-      this.prediosQuery.where = `ID_region = '${value}'`;
-      this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
-        const prediosIds = [];
-        results.features.forEach(feat => {
-          prediosIds.push(feat.attributes.ID_predio);
-        });  
-        const prediosList = prediosIds.map(el => `'${el}'`).join(",");
-        this.implementacionesQuery.where = `ID_predio in (${prediosList})`;
+    const promise = new Promise(resolve => {
+      d3.select("#graph__implementaciones").selectAll("*").remove();
+      this.barChart = new BarChart("#graph__implementaciones");
+      if (level === "predio") {
+        this.implementacionesQuery.where = `ID_predio = '${value}'`;
         this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
           this.barChart.renderGraphic(result.features, this.moments[this.projectId], true);
+          resolve(true);
         });
-      });
-    }
+      } else if (level === "region") {
+        this.prediosQuery.where = `ID_region = '${value}'`;
+        this.prediosLayer.queryFeatures(this.prediosQuery).then(results => {
+          const prediosIds = [];
+          results.features.forEach(feat => {
+            prediosIds.push(feat.attributes.ID_predio);
+          });  
+          const prediosList = prediosIds.map(el => `'${el}'`).join(",");
+          this.implementacionesQuery.where = `ID_predio in (${prediosList})`;
+          this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
+            this.barChart.renderGraphic(result.features, this.moments[this.projectId], true);
+            resolve(true);
+          });
+        });
+      }
+    });
+    return promise;
   }
 
   renderLandcoverComponent(level, value) {
