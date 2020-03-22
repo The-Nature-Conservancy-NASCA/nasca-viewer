@@ -1,10 +1,10 @@
 class Treemap {
 
   constructor(el, colors) {
-    const margin = {top: 0, right: 0, bottom: 0, left: 0};
+    this.margin = {top: 0, right: 0, bottom: 0, left: 0};
     this.timeSliderHeight = 70;
-    this.width = 400 - margin.left - margin.right;
-    this.height = 300 - margin.top - margin.bottom - this.timeSliderHeight;
+    this.width = 400 - this.margin.left - this.margin.right;
+    this.height = 300 - this.margin.top - this.margin.bottom - this.timeSliderHeight;
     this.el = el;
     this.colors = colors;
     this.tooltipOffset = 15;
@@ -15,10 +15,11 @@ class Treemap {
     this.treemapGroup = d3.select(el)
       .append("svg")
         .attr("class", "treemap")
-        .attr("width", this.width + margin.left + margin.right)
-        .attr("height", this.height + margin.top + margin.bottom)
+        .attr("width", this.width + this.margin.left + this.margin.right)
+        .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+        .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+    this.loader = new Loader(this.treemapGroup, this.width + this.margin.left + this.margin.right, this.height + this.margin.top + this.margin.bottom)
     this.buttonContainer = d3.select(el)
       .append("div")
       .attr("class", "ctas");
@@ -37,8 +38,6 @@ class Treemap {
     const that = this;
     this.buttons.on("click", function () {
       that.scheme = this.value;
-      // that.buttons.classed("selected", false).attr("point-events", "all");
-      // d3.select(this).classed("selected", true).attr("pointer-events", "none");
       that.renderGraphic(that.features, that.scheme);
     });
 
@@ -86,6 +85,22 @@ class Treemap {
   }
 
   _renderTreemap(data) {
+    // remove everything inside the svg
+    this.treemapGroup.selectAll("*").remove();
+
+    if (!data.children.length) {
+      this.treemapGroup
+        .append("text")
+          .attr("x", (this.width + this.margin.left) / 2)
+          .attr("y", (this.height + this.margin.top) / 2)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("font-size", 9)
+          .attr("fill", "black")
+          .text("No hay datos :(");
+      return;
+    }
+
     const root = d3.hierarchy(data).sum(d => d.value);
 
     // create treemap layout
@@ -95,8 +110,7 @@ class Treemap {
       .round(true)
       (root);
 
-    // remove everything inside the svg
-    this.treemapGroup.selectAll("*").remove();
+
 
     const that = this;
 

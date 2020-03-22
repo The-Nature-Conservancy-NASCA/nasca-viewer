@@ -9,8 +9,10 @@ class StackedArea {
     
 
     // compute width and height based on parent div
-    this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
-    this.height = parseInt(this.el.style("height")) - this.margin.top - this.margin.bottom;
+    this.parentWidth = parseInt(this.el.style("width"));
+    this.parentHeight = parseInt(this.el.style("height"));
+    this.width = this.parentWidth - this.margin.left - this.margin.right;
+    this.height = this.parentHeight - this.margin.top - this.margin.bottom;
 
     this.features;
     this.tooltipOffset = 15;
@@ -19,15 +21,16 @@ class StackedArea {
     this.ylabel = "Carbono (GtCO2e)";
     this.title = "Captura de carbono";
     this.closureLabel = "Cierre";
-
     
     this.areaGroup = d3.select(el)
       .append("svg")
         .attr("class", "area")
-        .attr("width", this.width + this.margin.left + this.margin.right)
-        .attr("height", this.height + this.margin.top + this.margin.bottom)
+        .attr("width", this.parentWidth)
+        .attr("height", this.parentHeight)
       .append("g")
         .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+
+    this.loader = new Loader(this.areaGroup, this.parentWidth, this.parentHeight);
 
     this.buttonContainer = d3.select(el).append("div").attr("class", "ctas");
 
@@ -48,8 +51,7 @@ class StackedArea {
           .style("visibility", "hidden")
           .attr("title", "Cobertura");
 
-    this.buttons = this.buttonContainer
-      .selectAll("button");
+    this.buttons = this.buttonContainer.selectAll("button");
 
     const that = this;
     this.buttons.on("click", function () {
@@ -79,10 +81,21 @@ class StackedArea {
   }
 
   _renderStackedAreaChart(data) {
+    this.areaGroup.selectAll("*").remove();
     this.buttons.style("visibility", "visible");
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-    this.areaGroup.selectAll("*")
-      .remove();
+
+    if (!data.length) {
+      this.areaGroup
+      .append("text")
+        .attr("x", this.parentWidth / 2 - this.margin.left)
+        .attr("y", this.parentHeight / 2 - this.margin.top)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "middle")
+        .attr("font-size", 9)
+        .attr("fill", "black")
+        .text("No hay datos :(");
+    return;
+    }
 
     const xScale = d3.scaleLinear()
       .domain([d3.min(this.years), d3.max(this.years)])
@@ -323,6 +336,9 @@ class StackedArea {
   }
 
   _formatData(features, field) {
+    if (!features.length) {
+      return [];
+    }
     const startYear = new Date(features[0].attributes.fecha).getFullYear();
     this.years = d3.range(startYear, startYear + 21);
     const data = [];
