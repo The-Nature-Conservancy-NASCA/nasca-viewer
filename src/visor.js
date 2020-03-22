@@ -109,6 +109,7 @@ fetch(Urls.getRelativeUrl('/json/config.json')).then(response => {
 });
 
 const changeThemeColor = (newColor) => {
+  window.themeColor = newColor;
   document.documentElement.style.setProperty('--theme-color', newColor);
   document.documentElement.style.setProperty('--theme-color-hover', pSBC(0.3, newColor));
   document.documentElement.style.setProperty('--theme-color-active', pSBC(-0.5, newColor));
