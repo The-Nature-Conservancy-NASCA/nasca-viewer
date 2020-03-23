@@ -570,8 +570,8 @@ class TNCMap {
 
   renderLandcoverComponent(level, value) {
     const promise = new Promise(resolve => {
-      d3.select("#graph__coberturas").selectAll("*").remove();
-      this.treemap = new Treemap("#graph__coberturas", this.colors);
+      d3.select("#panel-cobertura .panel__stats").selectAll("*").remove();
+      this.treemap = new Treemap("#panel-cobertura .panel__stats", this.colors);
       if (level === "predio") {
         CoberturasRepository.getCoberturasByPredio(value).then(results => {
           this.treemap.renderGraphic(results, "project", this.moments[this.projectId], true);

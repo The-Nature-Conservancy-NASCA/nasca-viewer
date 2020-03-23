@@ -1,17 +1,24 @@
 class Treemap {
 
   constructor(el, colors) {
-    this.margin = {top: 0, right: 0, bottom: 0, left: 0};
+    this.margin = {top: 0, right: 20, bottom: 20, left: 20};
     this.timeSliderHeight = 70;
-    this.width = 400 - this.margin.left - this.margin.right;
-    this.height = 300 - this.margin.top - this.margin.bottom - this.timeSliderHeight;
-    this.el = el;
+    this.buttonContainerHeight = 12;
+    this.el = d3.select(el);
+
+    // compute width and height based on parent div
+    this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
+    this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
+    this.width = this.parentWidth - this.margin.left - this.margin.right;
+    this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.timeSliderHeight - this.buttonContainerHeight;
+
     this.colors = colors;
     this.tooltipOffset = 15;
     this.features;
     this.scheme;
     this.selectedMoment;
-    this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight);
+    this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight, null, this.margin);
+
     this.treemapGroup = d3.select(el)
       .append("svg")
         .attr("class", "treemap")
@@ -19,15 +26,17 @@ class Treemap {
         .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
         .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+
     this.loader = new Loader(this.treemapGroup, this.width + this.margin.left + this.margin.right, this.height + this.margin.top + this.margin.bottom)
+
     this.buttonContainer = d3.select(el)
       .append("div")
-      .attr("class", "ctas");
+        .attr("class", "panel__buttons")
+        .style("height", this.buttonContainerHeight);
     this.projectBtn = this.buttonContainer
       .append("button")
       .attr("value", "project")
       .attr("class", "selected")
-      .style("visibility", "hidden")
       .attr("title", "Proyecto");
     this.corineBtn = this.buttonContainer
       .append("button")
@@ -35,6 +44,10 @@ class Treemap {
         .style("visibility", "hidden")
         .attr("title", "Corine");
     this.buttons = this.buttonContainer.selectAll("button");
+    this.buttons
+      .style("visibility", "hidden")
+      .style("width", this.buttonContainerHeight + "px")
+      .style("height", this.buttonContainerHeight + "px");
     const that = this;
     this.buttons.on("click", function () {
       that.scheme = this.value;
@@ -88,11 +101,12 @@ class Treemap {
     // remove everything inside the svg
     this.treemapGroup.selectAll("*").remove();
 
+    // agregar texto NoData
     if (!data.children.length) {
       this.treemapGroup
         .append("text")
-          .attr("x", (this.width + this.margin.left) / 2)
-          .attr("y", (this.height + this.margin.top) / 2)
+          .attr("x", (this.width + Math.abs(this.margin.left - this.margin.right)) / 2)
+          .attr("y", (this.height + Math.abs(this.margin.top - this.margin.bottom)) / 2)
           .attr("text-anchor", "middle")
           .attr("dominant-baseline", "middle")
           .attr("font-size", 9)

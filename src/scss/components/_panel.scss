@@ -157,9 +157,36 @@ $panel-width: 58rem;
     width: 100%;
     height: 100%;
     border: 1px solid lightgray;
+    font-size: 0; /* remover espacios blancos entre divs. Ver https://stackoverflow.com/a/5078297/7144368 */
     -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
     -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
     box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
+  }
+
+  &__buttons {
+    text-align: center;
+
+    button {
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+      background-color: #ddd;
+      cursor: pointer;
+      border: none;
+      border-radius: 50%;
+      transition: all 0.2s;
+      margin: 0 10px;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        box-shadow: 0 5px 8px rgba(0, 0, 0, .4);
+      }
+
+      &.selected {
+        background-color: var(--theme-color);
+      }
+    }
   }
 
   &__graph-fields {
