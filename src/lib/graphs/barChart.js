@@ -44,6 +44,20 @@ class BarChart {
   _renderBarChart(features) {
     this.barGroup.selectAll("*").remove();
 
+    // agregar texto NoData
+    if (!features.length) {
+      this.barGroup
+        .append("text")
+          .attr("x", (this.width + Math.abs(this.margin.left - this.margin.right)) / 2)
+          .attr("y", (this.height + Math.abs(this.margin.top - this.margin.bottom)) / 2)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("font-size", 9)
+          .attr("fill", "black")
+          .text("No hay datos :(");
+      return;
+    }
+
     const data = this._processFeatures(features);
 
     this.xScale = d3.scaleBand()
