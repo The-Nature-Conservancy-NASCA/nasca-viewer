@@ -17,7 +17,7 @@ class BarChart {
     this.moments;
     this.selectedMoment;
     this.timeSlider = new TimeSlider(el, this.width + this.offset.left, this.timeSliderHeight, null, { left: 10, right: 10 });
-    this.color = "#49AA42";
+    this.color = window.themeColor;
     this.factor = 0.5;
 
     this.title = "Área total por acción";

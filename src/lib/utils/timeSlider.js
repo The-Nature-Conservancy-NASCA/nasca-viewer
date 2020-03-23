@@ -13,7 +13,7 @@ class TimeSlider {
       this.padding = { left: 10, right: 10 };
     }
     this.radius = 11;
-    this.color = "#49aa42";
+    this.color = window.themeColor;
     this.labelMarginBottom = 7;
     this.labelMarginTop = 8;
     this.fontSize = 9;
