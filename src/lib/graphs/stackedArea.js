@@ -2,22 +2,26 @@ class StackedArea {
   constructor (el) {
 
 
-    // console.log(PieChart);
-    this.margin = {top: 10, right: 10, bottom: 20, left: 30};
+    this.margin = {top: 10, right: 20, bottom: 20, left: 20};
     this.offset = {left: 10, bottom: 10};
     this.el = d3.select(el);
+    this.buttonContainerHeight = 12;
     
 
     // compute width and height based on parent div
-    this.parentWidth = parseInt(this.el.style("width"));
-    this.parentHeight = parseInt(this.el.style("height"));
+    console.log(this.el);
+    this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
+    this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
     this.width = this.parentWidth - this.margin.left - this.margin.right;
-    this.height = this.parentHeight - this.margin.top - this.margin.bottom;
+    this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.buttonContainerHeight;
+
+    console.log(this.parentWidth);
+    console.log(this.parentHeight);
 
     this.features;
     this.tooltipOffset = 15;
     this.closingYear;
-    this.xlabel = "Año";
+    this.xlabel = "Tiempo";
     this.ylabel = "Carbono (GtCO2e)";
     this.title = "Captura de carbono";
     this.closureLabel = "Cierre";
@@ -25,33 +29,38 @@ class StackedArea {
     this.areaGroup = d3.select(el)
       .append("svg")
         .attr("class", "area")
-        .attr("width", this.parentWidth)
-        .attr("height", this.parentHeight)
+        .attr("width", this.width + this.margin.left + this.margin.right)
+        .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
         .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
     this.loader = new Loader(this.areaGroup, this.parentWidth, this.parentHeight);
 
-    this.buttonContainer = d3.select(el).append("div").attr("class", "ctas");
+    this.buttonContainer = d3.select(el)
+      .append("div")
+        .attr("class", "panel__buttons")
+        .style("height", this.buttonContainerHeight);
 
     this.totalBtn = this.buttonContainer
       .append("button")
         .attr("value", null)
         .attr("class", "selected")
-        .style("visibility", "hidden")
         .attr("title", "Total");
     this.compartmentBtn = this.buttonContainer
         .append("button")
           .attr("value", "compartimiento")
-          .style("visibility", "hidden")
           .attr("title", "Compartimiento");
     this.coverBtn = this.buttonContainer
         .append("button")
           .attr("value", "cobertura")
-          .style("visibility", "hidden")
           .attr("title", "Cobertura");
 
     this.buttons = this.buttonContainer.selectAll("button");
+
+    this.buttons
+      .style("visibility", "hidden")
+      .style("width", this.buttonContainerHeight + "px")
+      .style("height", this.buttonContainerHeight + "px");
 
     const that = this;
     this.buttons.on("click", function () {
@@ -86,14 +95,14 @@ class StackedArea {
 
     if (!data.length) {
       this.areaGroup
-      .append("text")
-        .attr("x", this.parentWidth / 2 - this.margin.left)
-        .attr("y", this.parentHeight / 2 - this.margin.top)
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")
-        .attr("font-size", 9)
-        .attr("fill", "black")
-        .text("No hay datos :(");
+        .append("text")
+          .attr("x", (this.width + Math.abs(this.margin.left - this.margin.right)) / 2)
+          .attr("y", (this.height + Math.abs(this.margin.top - this.margin.bottom)) / 2)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("font-size", 9)
+          .attr("fill", "black")
+          .text("No hay datos :(");
     return;
     }
 
@@ -306,8 +315,8 @@ class StackedArea {
         .attr("text-anchor", "end")
         .attr("font-size", 10)
         .attr("font-weight", "bold")
-        .attr("x", this.width - this.margin.right)
-        .attr("y", this.height + 15)
+        .attr("x", this.width - (this.margin.right + 10))
+        .attr("y", this.height - (this.margin.bottom + 5))
         .text(this.xlabel);
     this.areaGroup
       .append("text")
@@ -316,7 +325,7 @@ class StackedArea {
         .attr("font-size", 10)
         .attr("font-weight", "bold")
         .attr("x", this.margin.left)
-        .attr("y", 0)
+        .attr("y", this.margin.top)
         .text(this.ylabel);
     this.areaGroup
       .append("line")

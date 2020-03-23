@@ -201,9 +201,7 @@ class Panel {
               ${window.tncConfig.specificInformation.carbono.content}
             </p>
             <div class="panel__graph">
-              <div class="panel__stats">
-                <div id="graph__carbono"></div>
-              </div>
+              <div class="panel__stats"></div>
             </div>
             <div class="panel__specific__information" data-information-field="descripcion_carbono">
             </div>
@@ -229,8 +227,7 @@ class Panel {
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.cobertura.content}</p>
             <div class="panel__graph">
-              <div class="panel__stats">
-              </div>
+              <div class="panel__stats"></div>
             </div>
             <div class="panel__specific__information" data-information-field="descripcion_coberturas">
             </div>
@@ -241,8 +238,7 @@ class Panel {
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.implementacion.content}</p>
             <div class="panel__graph">
-              <div class="panel__stats">
-              </div>
+              <div class="panel__stats"></div>
             </div>
             <div class="panel__specific__information" data-information-field="descripcion_implementaciones">
             </div>

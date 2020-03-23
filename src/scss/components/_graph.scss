@@ -35,54 +35,6 @@
   }
 }
 
-#graph__coberturas {
-  svg {
-    display: block;
-    margin: auto
-  }
-
-  button {
-     @include tnc_button;
-  }
-}
-
-#graph__carbono {
-  button {
-    @include tnc_button;
-
-    @include respond(tab-port) {
-      width: 10rem;
-      padding: 0.8rem;
-      font-size: 1.2rem;
-    }
-  }
-
-}
-
-#panel-carbono {
-  .panel__stats {
-    height: 22rem;
-  }
-}
-
-#graph__biodiversidad, #graph__carbono {
-  width: 500px;
-  height: 150px;
-
-  @include respond(tab-port) {
-    width: 90vw;
-  }
-}
-
-#graph__implementaciones {
-  width: 50rem;
-  height: 25rem;
-  
-  @include respond(tab-port) {
-    width: 90vw;
-  }
-}
-
 .group__graphic {
   width: 115px;
   height: 115px;
@@ -101,17 +53,6 @@
   @include positionCentered;
   width: 9.5rem;
   pointer-events: none;
-}
-
-#time__coberturas {
-  visibility: hidden;
-}
-
-.time__select {
-  text-align: center;
-  border: none;
-  border-bottom: 2px solid var(--theme-color);
-  padding: 1rem;
 }
 
 #container__biodiversidad {

@@ -268,11 +268,7 @@ class TNCMap {
         this.vizLevel = null;
         this.vizLevelValue = null;
         this.view.graphics.removeAll();
-        d3.select("#graph__coberturas").selectAll("*").remove();
-        d3.select("#graph__carbono").selectAll("*").remove();
-        d3.select("#graph__implementaciones").selectAll("*").remove();
-        d3.select("#wrapper__biodiversidad").select("svg").remove();
-        d3.select("#container__biodiversidad").selectAll("*").remove();
+        d3.selectAll(".panel__stats").selectAll("*").remove();
       }
     });
   }
@@ -521,12 +517,12 @@ class TNCMap {
 
   renderCarbonComponent(level, value) {
     const promise = new Promise(resolve => {
-      d3.select("#graph__carbono").selectAll("*").remove();
-      this.stackedArea = new StackedArea("#graph__carbono");
+      d3.select("#panel-carbono .panel__stats").selectAll("*").remove();
       if (level === "predio") {
         console.log("Carbono nivel predio no ha sido implementado todavia");
         resolve(true);
       } else if (level === "region") {
+        this.stackedArea = new StackedArea("#panel-carbono .panel__stats");
         this.carbonoQuery.where = `ID_region = '${value}'`;
         this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
           ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
