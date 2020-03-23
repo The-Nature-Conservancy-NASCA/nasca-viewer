@@ -1,20 +1,22 @@
 class BarChart {
 
   constructor (el) {
-    this.margin = { top: 10, right: 20, bottom: 20, left: 10 };
+    this.margin = { top: 10, right: 20, bottom: 10, left: 10 };
     this.offset = { left: 10, bottom: 10 };
     this.el = d3.select(el);
     this.tooltipOffset = 15;
     this.timeSliderHeight = 70;
 
     // compute width and height based on parent div
-    this.width = parseInt(this.el.style("width")) - this.margin.left - this.margin.right;
-    this.height = parseInt(this.el.style("height")) - this.margin.top - this.margin.bottom;
+    this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
+    this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
+    this.width = this.parentWidth - this.margin.left - this.margin.right - this.offset.left;
+    this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.offset.bottom - this.timeSliderHeight;
 
     this.data;
     this.moments;
     this.selectedMoment;
-    this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight, null, this.margin);
+    this.timeSlider = new TimeSlider(el, this.width + this.offset.left, this.timeSliderHeight, null, { left: 10, right: 10 });
     this.color = "#49AA42";
     this.factor = 0.5;
 
@@ -28,13 +30,15 @@ class BarChart {
       .append("svg")
       .attr("id", this.graphId)
       .attr("class", "bar graph")
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom)
+      .attr("width", this.width + this.margin.left + this.margin.right + this.offset.left)
+      .attr("height", this.height + this.margin.bottom + this.margin.top + this.offset.bottom)
       .append("g")
       .attr(
         "transform",
         `translate(${this.margin.left}, ${this.margin.top})`
       );
+
+    this.loader = new Loader(this.barGroup, this.width, this.height);
   }
 
   _renderBarChart(features) {
@@ -44,7 +48,7 @@ class BarChart {
 
     this.xScale = d3.scaleBand()
       .domain(d3.range(data.length))
-      .range([this.margin.bottom + this.offset.bottom, this.height])
+      .range([this.offset.bottom, this.height])
       .paddingInner(0.05);
 
     const values = [];
@@ -56,13 +60,13 @@ class BarChart {
     });
     this.yScale = d3.scaleLinear()
       .domain([0, d3.max(values)])
-      .range([0, this.width - this.margin.left - this.offset.left]);
+      .range([0, this.width - this.offset.left]);
 
     const xAxis = d3
       .axisBottom()
       .scale(this.yScale)
-      .tickSizeOuter(0)
-      .ticks(4);
+      .ticks(3)
+      .tickSizeOuter(0);
 
     const yAxis = d3
       .axisLeft()
@@ -173,8 +177,8 @@ class BarChart {
       .append("text")
       .attr("class", "x label")
       .attr("text-anchor", "end")
-      .attr("x", this.width + this.offset.left)
-      .attr("y", this.height + 10)
+      .attr("x", this.width)
+      .attr("y", this.height - (this.offset.bottom + 5))
       .attr("font-size", this.fontSize)
       .attr("font-weight", "bold")
       .text(this.xlabel);

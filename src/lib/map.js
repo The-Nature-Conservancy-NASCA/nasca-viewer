@@ -541,8 +541,8 @@ class TNCMap {
 
   renderImplementationsComponent(level, value) {
     const promise = new Promise(resolve => {
-      d3.select("#graph__implementaciones").selectAll("*").remove();
-      this.barChart = new BarChart("#graph__implementaciones");
+      d3.select("#panel-implementacion .panel__stats").selectAll("*").remove();
+      this.barChart = new BarChart("#panel-implementacion .panel__stats");
       if (level === "predio") {
         this.implementacionesQuery.where = `ID_predio = '${value}'`;
         this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {

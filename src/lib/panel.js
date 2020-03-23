@@ -243,7 +243,6 @@ class Panel {
             <p class="panel__information">${window.tncConfig.specificInformation.implementacion.content}</p>
             <div class="panel__graph">
               <div class="panel__stats">
-                <div id="graph__implementaciones"></div>
               </div>
             </div>
             <div class="panel__specific__information" data-information-field="descripcion_implementaciones">
