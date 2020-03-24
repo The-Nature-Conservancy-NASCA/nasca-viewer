@@ -358,53 +358,7 @@ class TNCMap {
     return promise;
   }
 
-  getBiodiversityPerLandcoverData(region) {
-    const promise = new Promise ((resolve, reject) => {
-      const startingWhere = `ID_region = '${region}'`
-      this.biodiversityQuery.where = startingWhere;
-      this.biodiversityQuery.outFields = this.biodiversityGroups;
-      this.biodiversityQuery.returnDistinctValues = true;
-      this.biodiversidadLayer.queryFeatures(this.biodiversityQuery).then(result => {
-        this.biodiversityQuery.outFields = this.biodiversityCountField;
-        this.biodiversityQuery.returnCountOnly = true;
-        const promises = [];
-        const idx = [];
-        result.features.forEach(el => {
-          this.biodiversityQuery.where = `${startingWhere} AND grupo_tnc = '${el.attributes.grupo_tnc}' AND cobertura = '${el.attributes.cobertura}'`;
-          promises.push(this.biodiversidadLayer.queryFeatures(this.biodiversityQuery));
-          idx.push({"grupo_tnc": el.attributes.grupo_tnc, "cobertura": el.attributes.cobertura});
-        });
-        const data = [];
-        Promise.all(promises).then(values => {
-          values.forEach((el, i) => {
-            const grupo_tnc = idx[i].grupo_tnc;
-            const cobertura = idx[i].cobertura;
-            const count = el.features.length;
-            const groupExists = !!data.filter(item => item.name === grupo_tnc).length;
-            if (!groupExists) {
-              const obj = {
-                "name": grupo_tnc, 
-                "values": []
-              };
-              obj.values.push({
-                "name": cobertura,
-                "value": count
-              });
-              data.push(obj);
-            } else {
-              const group = data.filter(item => item.name === grupo_tnc)[0];
-              group.values.push({
-                "name": cobertura,
-                "value": count
-              });
-            }
-          });
-          resolve(data);
-        });
-      });
-    });
-    return promise;
-  }
+
   
   changeEstrategia(estrategiaId) {
     ProyectoRepository.getProyectosOfEstrategia(estrategiaId).then(proyectos => {
@@ -471,6 +425,58 @@ class TNCMap {
     });
   }
 
+  getSpeciesCountByLandcover(region) {
+    const queryOptions = {
+      where: `ID_region = '${region}'`,
+      returnGeometry: false,
+      groupByFieldsForStatistics: ["grupo_tnc", "momento", "cobertura", "especie"],
+      outStatistics: JSON.stringify([{statisticType: "count", onStatisticField: "especie", outStatisticFieldName: "count"}]),
+      f: "json"
+    }
+    const promise = new Promise(resolve => {
+      this.esriRequest(this.biodiversityQueryUrl, {query: queryOptions}).then(response => {
+        const uniqueSpeciesPerGroup = [];
+        const data = [];
+        response.data.features.forEach(feature => {
+          var attributes = feature.attributes;
+          let group = data.find(item => item.name === attributes.grupo_tnc);
+          let groupCopy = uniqueSpeciesPerGroup.find(item => item.name === attributes.grupo_tnc);
+          if (!group) {
+            group = { name: attributes.grupo_tnc, data: [] };
+            groupCopy = { name: attributes.grupo_tnc, data: [] };
+            data.push(group);
+            uniqueSpeciesPerGroup.push(groupCopy);
+          }
+          let momentData = group.data.find(item => item.moment === attributes.momento);
+          let momentUniqueSpecies = groupCopy.data.find(item => item.moment === attributes.momento);
+          if (!momentData) {
+            momentData = { moment: attributes.momento, landcovers: [] };
+            momentUniqueSpecies = { moment: attributes.momento, species: [] };
+            group.data.push(momentData);
+            groupCopy.data.push(momentUniqueSpecies);
+          }
+          let landcoverData = momentData.landcovers.find(item => item.name === attributes.cobertura);
+          if(landcoverData) {
+            landcoverData.count += 1;
+          } else {
+            landcoverData = { name: attributes.cobertura, count: 1 };
+            momentData.landcovers.push(landcoverData);
+          }
+          if (!momentUniqueSpecies.species.includes(attributes.especie)) {
+            momentUniqueSpecies.species.push(attributes.especie);
+          }
+        });
+        uniqueSpeciesPerGroup.forEach(group => {
+          group.data.forEach(moment => {
+            data.find(item => item.name === group.name).data.find(item => item.moment === moment.moment).count = moment.species.length;
+          });
+        });
+        resolve(data);
+      })
+    });
+    return promise;
+  }
+
   highlightFeature(geometry) {
     if (geometry.type === "polygon") {
       const symbol = new this.SimpleFillSymbol(
@@ -495,7 +501,7 @@ class TNCMap {
       }
     }
 
-    if (this.component === "biodiversidad") {
+    if (component === "biodiversidad") {
       this.renderBiodiversityComponent(this.vizLevel, this.vizLevelValue).then(() => {this.renderedComponents.push(component)});
     } else if (component === "carbono") {
       this.renderCarbonComponent(this.vizLevel, this.vizLevelValue).then(() => {this.renderedComponents.push(component)});
@@ -507,12 +513,32 @@ class TNCMap {
   }
 
   renderBiodiversityComponent(level, value) {
-    const promise = new Promise(resolve => {
-      d3.select("#wrapper__biodiversidad").select("svg").remove();
-      d3.select("#container__biodiversidad").selectAll("*").remove();
-      resolve(true);
-    });
-    return promise;
+    if (level == "region") {
+      const promise = new Promise(resolve => {
+        d3.select("#panel-biodiversidad .panel__stats").selectAll("*").remove();
+        this.getSpeciesCountByLandcover(value).then(data => {
+          console.log(data);
+          // data.forEach(group => {
+          //   const group = groups[i];
+          //   const groupCount = response.data.count;
+          //   const groupContainer = 
+          //   d3.select("#container__biodiversidad")
+          //     .append("div")
+          //       .attr("class", "group__container");
+          //   const header = groupContainer.append("div").attr("class", "group__header");
+          //   header.append("h5").text(group);
+          //   header.append("h6").text(groupCount);
+          //   groupContainer
+          //     .append("div")
+          //       .attr("class", "group__graphic")
+          //       .attr("id", `graph__${group}`);
+          //   const pieChart = new PieChart(`#graph__${group}`, this.colors, this.bioIcons.get(group));
+          // });
+        });
+        resolve(true);
+      });
+      return promise;
+    }
   }
 
   renderCarbonComponent(level, value) {
