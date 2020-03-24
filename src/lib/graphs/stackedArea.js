@@ -9,14 +9,10 @@ class StackedArea {
     
 
     // compute width and height based on parent div
-    console.log(this.el);
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
     this.width = this.parentWidth - this.margin.left - this.margin.right;
     this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.buttonContainerHeight;
-
-    console.log(this.parentWidth);
-    console.log(this.parentHeight);
 
     this.features;
     this.tooltipOffset = 15;
