@@ -26,13 +26,30 @@ class PieChart {
   }
 
   _renderPieChart(data) {
+    this.svg.selectAll("*").remove();
+
+    const img = this.svg
+      .append("image")
+        .attr("xlink:href", this.iconUrl)
+        .attr("width", this.iconSize)
+        .attr("height", this.iconSize)
+        .attr("pointer-events", "none");
+    const bbox = img.node().getBBox();
+    img
+      .attr("x", this.width / 2 - bbox.width / 2)
+      .attr("y", this.height / 2 - bbox.height / 2);
+
+    if (!data.length) {
+      return;
+    }
+
     const outerRadius = this.width / 2 - this.margin;
     const innerRadius = outerRadius / 1.25;
     const arc = d3.arc()
           .innerRadius(innerRadius)
           .outerRadius(outerRadius);
     const pie = d3.pie()
-      .value(d => d.value)
+      .value(d => d.count)
       .padAngle(0.05);
     const arcs = this.svg.selectAll("g.arc")
       .data(pie(data))
@@ -87,17 +104,6 @@ class PieChart {
       .attr("stroke", d => this._shadeColor(this.colors[d.data.name] ? this.colors[d.data.name] : "#000000", -20))
       .attr("stroke-opacity", 1)
       .attr("d", arc);
-
-    const img = this.svg
-      .append("image")
-      .attr("xlink:href", this.iconUrl)
-      .attr("width", this.iconSize)
-      .attr("height", this.iconSize)
-      .attr("pointer-events", "none");
-    const bbox = img.node().getBBox();
-    img
-      .attr("x", this.width / 2 - bbox.width / 2)
-      .attr("y", this.height / 2 - bbox.height / 2);
   }
 
   _shadeColor(color, percent) {

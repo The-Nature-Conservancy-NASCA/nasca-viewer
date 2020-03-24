@@ -516,24 +516,13 @@ class TNCMap {
     if (level == "region") {
       const promise = new Promise(resolve => {
         d3.select("#panel-biodiversidad .panel__stats").selectAll("*").remove();
+        const container = new BiodiversityContainer("#panel-biodiversidad .panel__stats", this.colors, this.moments[this.projectId]);
         this.getSpeciesCountByLandcover(value).then(data => {
           console.log(data);
-          // data.forEach(group => {
-          //   const group = groups[i];
-          //   const groupCount = response.data.count;
-          //   const groupContainer = 
-          //   d3.select("#container__biodiversidad")
-          //     .append("div")
-          //       .attr("class", "group__container");
-          //   const header = groupContainer.append("div").attr("class", "group__header");
-          //   header.append("h5").text(group);
-          //   header.append("h6").text(groupCount);
-          //   groupContainer
-          //     .append("div")
-          //       .attr("class", "group__graphic")
-          //       .attr("id", `graph__${group}`);
-          //   const pieChart = new PieChart(`#graph__${group}`, this.colors, this.bioIcons.get(group));
-          // });
+          data.forEach(group => {
+            container.addPieChart(group.name, group.data, this.bioIcons.get(group.name));
+          });
+          container.renderTimeSlider();
         });
         resolve(true);
       });
