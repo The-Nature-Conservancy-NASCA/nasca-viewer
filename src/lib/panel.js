@@ -211,11 +211,7 @@ class Panel {
           ${this._renderSelection()}
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.biodiversidad.content}</p>
-            <div class="panel__stats">
-              <div id="wrapper__biodiversidad">
-                <div id="container__biodiversidad"></div>
-              </div>
-            </div>
+            <div class="panel__stats"></div>
             <div class="gallery">
             </div>
             <div class="panel__specific__information" data-information-field="descripcion_biodiversidad">
