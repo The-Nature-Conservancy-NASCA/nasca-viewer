@@ -11,9 +11,17 @@
   width: 100vw;
   z-index: $index-header;
 
+  @include respond(zoom-150) {
+    height: 4rem;
+  }
+
   &__logo {
     width: 12rem;
     z-index: 13;
+
+    @include respond(zoom-150) {
+      width: 8rem;
+    }
   }
 
   .mobile-icon {
@@ -62,6 +70,10 @@
     }
   }
   
+  @include respond(zoom-150) {
+    font-size: 1.2rem;
+  }
+
   &__menu-list {
     align-items: center;
     display: flex;

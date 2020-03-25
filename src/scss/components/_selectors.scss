@@ -10,6 +10,18 @@
   &--visible {
     max-height: 100rem;
   }
+
+  @include respond(zoom-150) {
+    top: 4rem;
+  }
+
+  &.proyecto-selector {
+    right: 9.7rem;
+
+    @include respond(zoom-150) {
+      right: 11.3rem;
+    }
+  }
 }
 
 .selector {

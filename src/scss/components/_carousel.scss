@@ -112,22 +112,22 @@
 }
 
 .gallery-controls-previous::before {
-  border: solid #000;
+  border: solid #666;
   border-width: 0 2px 2px 0;
   content: '';
   display: inline-block;
   height: 4px;
-  left: -1rem;
+  left: -7rem;
   padding: 2px;
   position: absolute;
-  top: -6px;
+  top: -28px;
   transform: rotate(135deg) translateY(-50%);
   transition: left 0.15s ease-in-out;
   width: 4px;
 }
 
 .gallery-controls-previous:hover::before {
-  left: -18px;
+  left: -7.2rem;
 }
 
 .gallery-controls-next {
@@ -135,22 +135,22 @@
 }
 
 .gallery-controls-next::before {
-  border: solid #000;
+  border: solid #666;
   border-width: 0 2px 2px 0;
   content: '';
   display: inline-block;
   height: 4px;
   padding: 2px;
   position: absolute;
-  right: -1rem;
-  top: 50%;
+  right: -7rem;
+  top: -20px;
   transform: rotate(-45deg) translateY(-50%);
   transition: right 0.15s ease-in-out;
   width: 4px;
 }
 
 .gallery-controls-next:hover::before {
-  right: -18px;
+  right: -7.2rem;
 }
 
 .gallery-nav {
