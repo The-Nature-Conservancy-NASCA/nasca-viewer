@@ -92,6 +92,20 @@ class ProyectoRepository {
     return result[0][field];
   }
 
+  static async getProjectsSpecificInformation() {
+    const projects = await window.store.select(this.TABLE_NAME);
+    const result = {};
+    projects.forEach(project => {
+      result[project.ID_proyecto] = {
+        descripcion_biodiversidad: project.descripcion_biodiversidad,
+        descripcion_carbono: project.descripcion_carbono,
+        descripcion_coberturas: project.descripcion_coberturas,
+        descripcion_implementaciones: project.descripcion_implementaciones
+      };
+    });
+    return result;
+  }
+
   static async getClosingYear(id) {
     const result = await window.store.select(this.TABLE_NAME, {
       ID_proyecto: id

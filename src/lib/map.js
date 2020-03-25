@@ -193,10 +193,12 @@ class TNCMap {
         const promises = [
           ProyectoRepository.getMoments(),
           this.bioIconsLayer.queryFeatures(this.bioIconsQuery),
-          this.coloresLayer.queryFeatures(this.colorQuery)
+          this.coloresLayer.queryFeatures(this.colorQuery),
+          ProyectoRepository.getProjectsSpecificInformation()
         ];
         Promise.all(promises).then(result => {
           // inicializar nivel, valor y componente de visualizacion
+          this.featureClicked = false;
           this.vizLevel;
           this.vizLevelValue;
           this.isNewFeature;
@@ -206,6 +208,9 @@ class TNCMap {
           this.moments = result[0];
           this.bioIcons = new Map(result[1].features.map(obj => [obj.attributes.grupo_tnc, obj.attributes.url]));
           this.colors = this.colorsToObject(result[2].features);
+
+          // almacenar textos especificos de proyecto para cada componente
+          this.specificInformation = result[3];
   
           // agregar evento al click del mapa y paneles
           this.view.on("click", this.mapClick.bind(this));
@@ -225,6 +230,7 @@ class TNCMap {
       });
       if (predio || region) {
         let layerTitle;
+        this.featureClicked = true;
         this.previousVizLevel = this.vizLevel;
         this.previousVizLevelValue = this.vizLevelValue;
         if (predio) {
@@ -251,10 +257,12 @@ class TNCMap {
         this.highlightFeature(layer.graphic.geometry);
         d3.select(".panel__tab--active").node().click();
       } else {
+        this.featureClicked = false;
         this.vizLevel = null;
         this.vizLevelValue = null;
         this.view.graphics.removeAll();
-        d3.selectAll(".panel__stats").selectAll("*").remove();
+        d3.selectAll(".panel__stats *").remove();
+        this.clearSpecificInformation();
       }
     });
   }
@@ -321,15 +329,20 @@ class TNCMap {
   changeSelectionSpecificInformation(projectId) {
     document.querySelectorAll(".panel__specific__information").forEach(div => {
       const informationField = div.getAttribute("data-information-field");
-      ProyectoRepository.getSpecificInformationText(projectId, informationField).then(text => {
-        div.innerHTML = marked(text);
-      });
-    })
+      const text = this.specificInformation[projectId][informationField];
+      div.innerHTML = marked(text);
+    });
   }
 
   clearSelectionSubContextPredio() {
     document.querySelectorAll(".panel__selection-predio").forEach(div => {
-      div.innerHTML = '';
+      div.innerHTML = "";
+    });
+  }
+
+  clearSpecificInformation() {
+    document.querySelectorAll(".panel__specific__information").forEach(div => {
+      div.innerHTML = "";
     });
   }
 
@@ -408,6 +421,9 @@ class TNCMap {
   }
 
   panelClick() {
+    if (!this.featureClicked) {
+      return;
+    }
     const component = d3.event.target.getAttribute("data-tab");
     if (this.isNewFeature) {
       this.isNewFeature = false;
