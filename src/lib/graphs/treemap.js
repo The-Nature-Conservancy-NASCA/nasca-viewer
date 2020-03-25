@@ -1,6 +1,9 @@
 class Treemap {
 
   constructor(el, colors) {
+    // declarar propiedades utilizando breakpoints
+    
+
     this.margin = {top: 0, right: 20, bottom: 20, left: 20};
     this.timeSliderHeight = 70;
     this.buttonContainerHeight = 12;

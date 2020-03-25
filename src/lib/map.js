@@ -211,6 +211,9 @@ class TNCMap {
 
           // almacenar textos especificos de proyecto para cada componente
           this.specificInformation = result[3];
+
+          // poner helper texts
+          this.setHelperTexts();
   
           // agregar evento al click del mapa y paneles
           this.view.on("click", this.mapClick.bind(this));
@@ -263,6 +266,7 @@ class TNCMap {
         this.view.graphics.removeAll();
         d3.selectAll(".panel__stats *").remove();
         this.clearSpecificInformation();
+        this.setHelperTexts();
       }
     });
   }
@@ -446,9 +450,12 @@ class TNCMap {
   }
 
   renderBiodiversityComponent(level, value) {
-    d3.select("#panel-biodiversidad .panel__stats").selectAll("*").remove();
-    if (level == "region") {
-      const promise = new Promise(resolve => {
+    const promise = new Promise(resolve => {
+      d3.select("#panel-biodiversidad .panel__stats").selectAll("*").remove();
+      if (level == "predio") {
+        this.setBiodiverstiyHelperText();
+        resolve(true);
+      } else if (level == "region") {
         const container = new BiodiversityContainer("#panel-biodiversidad .panel__stats", this.colors, this.moments[this.projectId]);
         this.getSpeciesCountByLandcover(value).then(data => {
           container.destroyLoader();
@@ -456,11 +463,11 @@ class TNCMap {
             container.addPieChart(group.name, group.data, this.bioIcons.get(group.name));
           });
           container.renderTimeSlider();
+          resolve(true);
         });
-        resolve(true);
-      });
-      return promise;
-    }
+      }
+    });
+    return promise;
   }
 
   renderCarbonComponent(level, value) {
@@ -536,5 +543,26 @@ class TNCMap {
       }
     });
     return promise
+  }
+
+  setBiodiverstiyHelperText() {
+    const template = `
+      <div class="helper__text__container">
+        <p class="helper__text">${window.tncConfig.strings.biodiversity_helper_text}</p>
+      <div/>
+    `;
+    document.querySelector("#panel-biodiversidad .panel__stats").innerHTML = template;
+  }
+
+  setHelperTexts() {
+    const template = `
+      <div class="helper__text__container">
+        <p class="helper__text">${window.tncConfig.strings.general_helper_text}</p>
+      <div/>
+    `;
+    this.setBiodiverstiyHelperText();
+    document.querySelector("#panel-carbono .panel__stats").innerHTML = template;
+    document.querySelector("#panel-cobertura .panel__stats").innerHTML = template;
+    document.querySelector("#panel-implementacion .panel__stats").innerHTML = template;
   }
 }
