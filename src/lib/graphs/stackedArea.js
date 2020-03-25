@@ -18,6 +18,8 @@ class StackedArea {
     this.features;
     this.tooltipOffset = 15;
     this.closingYear;
+    this.fontSize = 10;
+    this.smallerFontSize = 9;
     this.xlabel = "Tiempo";
     this.ylabel = "Carbono (GtCO2e)";
     this.title = "Captura de carbono";
@@ -126,7 +128,7 @@ class StackedArea {
       .tickFormat(d => parseInt(d))
       .ticks(5);
 
-    const yAxis = d3.axisLeft()
+    const yAxis = d3.axisRight()
           .scale(yScale)
           .tickSizeOuter(0)
           .tickSize(0)
@@ -270,24 +272,27 @@ class StackedArea {
       .data(series)
       .enter()
       .append("path")
-      .attr("class", "line")
-      .attr("d", line)
-      .attr("pointer-events", "none")
-      .attr("fill", "none")
-      .attr("stroke", d => this.colors[d.key])
-      .attr("stroke-width", 1);
-    this.areaGroup.append("g")
-      .attr("class", "x axis")
-      .attr("transform", `translate(0, ${this.height - this.margin.bottom})`)
-      .call(xAxis);
-    this.areaGroup.append("g")
-      .attr("class", "y axis")
-      .attr("transform", `translate(${this.margin.left}, 0)`)
-      .call(yAxis);
+        .attr("class", "line")
+        .attr("d", line)
+        .attr("pointer-events", "none")
+        .attr("fill", "none")
+        .attr("stroke", d => this.colors[d.key])
+        .attr("stroke-width", 1);
     this.areaGroup
-      .selectAll(".x.axis .domain, .axis .tick line")
+      .append("g")
+        .attr("class", "x axis")
+        .attr("transform", `translate(0, ${this.height - this.margin.bottom})`)
+      .call(xAxis);
+    this.areaGroup
+      .append("g")
+        .attr("class", "y axis")
+        .attr("transform", `translate(${this.margin.left}, -5)`)
+      .call(yAxis);
+    this.areaGroup.select(".y.axis .tick").remove();  // quitar label 0
+    this.areaGroup
+      .selectAll(".axis .domain, .axis .tick line")
       .attr("stroke", "LightGray");
-    this.areaGroup.select(".y.axis .domain").attr("stroke", "none");
+    this.areaGroup.select(".y.axis .domain").attr("stroke", "none");  // quitar linea eje y
     const yearDivision = this.areaGroup
       .append("g")
         .attr("class", "year__division")
@@ -307,27 +312,31 @@ class StackedArea {
       .attr("x", yScale.range()[1] - this.margin.bottom)
       .attr("transform", "rotate(-90)")
       .attr("text-anchor", "end")
-      .attr("font-size", 9)
+      .attr("font-size", this.smallerFontSize)
       .attr("fill", "black")
       .text(this.closureLabel);
     this.areaGroup
       .append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("font-size", 10)
+        .attr("dominant-baseline", "middle")
+        .attr("font-size", this.fontSize)
         .attr("font-weight", "bold")
         .attr("x", this.width - (this.margin.right + 10))
         .attr("y", this.height - (this.margin.bottom + 5))
         .text(this.xlabel);
+
     this.areaGroup
       .append("text")
-        .attr("class", "y label")
-        .attr("text-anchor", "start")
-        .attr("font-size", 10)
-        .attr("font-weight", "bold")
-        .attr("x", this.margin.left)
-        .attr("y", this.margin.top)
-        .text(this.ylabel);
+      .attr("class", "y label")
+      .attr("text-anchor", "middle")
+      .attr("dominant-baseline", "middle")
+      .attr("y", 0)
+      .attr("x", -(this.margin.top + (this.height / 2) - this.margin.bottom))
+      .attr("transform", "rotate(-90)")
+      .attr("font-size", this.fontSize)
+      .attr("font-weight", "bold")
+      .text(this.ylabel);
     this.areaGroup
       .append("line")
       .attr("class", "vertical helper__line")
