@@ -85,7 +85,6 @@ class EstrategiaSelector {
       }); 
     });
   }
-
   _closeSelector() {
     this._el.classList.remove('navigation__selector--visible');
   }
@@ -96,12 +95,16 @@ class ProyectoSelector  {
     this._el = document.getElementById(el);
     this._selectorToggle = document.getElementById('toggle-selector-proyecto');
     this._offsetTop = offsetTop;
-    this._el.style.top = `${60 + offsetTop}px`;
-    this._el.style.right = '68px';
+    this._el.style.top = `${this._calcularHeight() + offsetTop}px`;
   }
 
   createSelector(proyectos) {
     this._renderHTML(proyectos);
+  }
+
+  _calcularHeight() {
+    const isZoomed = window.screen.height < 725 && window.screen.width > 900;
+    return isZoomed ? 40 : 60;
   }
 
   _renderHTML(options) {

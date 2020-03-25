@@ -12,10 +12,16 @@ $panel-width: 58rem;
   top: $alto-header;
   transition: right .3s ease-in-out;
   width: $panel-width;
-  z-index: 12;
+  z-index: 9;
 
   @media screen and (max-width: 900px) {
     width: 100vw;
+  }
+
+  @include respond(zoom-150) {
+    width: 38rem;
+    right: -38rem;
+    top: 4rem;
   }
 
   &__header {
@@ -42,6 +48,10 @@ $panel-width: 58rem;
     transition: transform .2s;
     width: 3.5rem;
 
+    @include respond(zoom-150) {
+      right: 38rem;
+    }
+
     img {
       transform: rotateZ(180deg);
     }
@@ -60,7 +70,11 @@ $panel-width: 58rem;
   &__selection {
     background-color: var(--theme-color);
     padding: 2rem 2rem;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4)
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+
+    @include respond(tab-port) {
+      padding: 1rem 1rem;
+    }
   }
   
   &__selection-context {
@@ -68,6 +82,10 @@ $panel-width: 58rem;
     color: $white;
     font-size: 2.5rem;
     font-weight: 100;
+
+    @include respond(zoom-150) {
+      font-size: 1.8rem;
+    }
   }
 
   &__selection-subcontext {
@@ -78,6 +96,10 @@ $panel-width: 58rem;
       color: $dark-gray;
       font-style: italic;
       font-size: 2rem;
+
+      @include respond(zoom-150) {
+        font-size: 1.2rem;
+      }
     }
   }
 
@@ -100,6 +122,10 @@ $panel-width: 58rem;
     @include respond(tab-port) {
       font-size: 1.4rem;
     }
+
+    @include respond(zoom-150) {
+      font-size: 1.4rem;
+    }
     
     &--active {
       background-color: var(--theme-color);
@@ -113,10 +139,8 @@ $panel-width: 58rem;
   }
 
   &__tab-panel {
-    align-items: center;
     display: none;
-    flex-direction: column;
-    justify-content: space-evenly;
+    height: 100vh;
     width: 100%;
     
     > * {
@@ -134,11 +158,20 @@ $panel-width: 58rem;
     font-size: 1.6rem;
     margin-bottom: 1.6rem;
     width: 100%;
+
+    @include respond(zoom-150) {
+      font-size: 1rem;
+    }
   }
   
   &__tab-content {
     padding: 3rem;
     overflow-y: auto;
+    height: calc(100vh - 205px);
+
+    @include respond(zoom-150) {
+      height: calc(100vh - 185px);
+    }
   }
 
   &__graph {
@@ -197,9 +230,13 @@ $panel-width: 58rem;
   }
 
   &__specific__information {
-    margin-top: 1.6rem;
+    margin: 1.6rem 0;
     color: #999;
     font-size: 1.6rem;
+
+    @include respond(zoom-150) {
+      font-size: 1rem;
+    }
   }
 }
 
