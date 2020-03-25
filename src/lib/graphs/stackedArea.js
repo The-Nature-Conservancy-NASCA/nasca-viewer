@@ -13,6 +13,7 @@ class StackedArea {
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
     this.width = this.parentWidth - this.margin.left - this.margin.right;
     this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.buttonContainerHeight;
+    this.loaderHeight = this.parentHeight * 0.75;
 
     this.features;
     this.tooltipOffset = 15;
@@ -27,10 +28,11 @@ class StackedArea {
         .attr("class", "area")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .append("g")
-        .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+        .attr("overflow", "visible")
+      .append("g");
 
-    this.loader = new Loader(this.areaGroup, this.parentWidth, this.parentHeight);
+    const translateY = (this.parentHeight - this.loaderHeight) / 2;
+    this.loader = new Loader(this.areaGroup, this.parentWidth, this.loaderHeight, translateY);
 
     this.buttonContainer = d3.select(el)
       .append("div")
@@ -87,6 +89,9 @@ class StackedArea {
 
   _renderStackedAreaChart(data) {
     this.areaGroup.selectAll("*").remove();
+
+    // definir transform una vez se haya quitado el laoder
+    this.areaGroup.attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
     this.buttons.style("visibility", "visible");
 
     if (!data.length) {

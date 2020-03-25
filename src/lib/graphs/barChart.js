@@ -12,6 +12,7 @@ class BarChart {
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
     this.width = this.parentWidth - this.margin.left - this.margin.right - this.offset.left;
     this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.offset.bottom - this.timeSliderHeight;
+    this.loaderHeight = this.parentHeight * 0.75;
 
     this.data;
     this.moments;
@@ -29,20 +30,21 @@ class BarChart {
     this.barGroup = this.el
       .append("svg")
       .attr("id", this.graphId)
-      .attr("class", "bar graph")
-      .attr("width", this.width + this.margin.left + this.margin.right + this.offset.left)
-      .attr("height", this.height + this.margin.bottom + this.margin.top + this.offset.bottom)
-      .append("g")
-      .attr(
-        "transform",
-        `translate(${this.margin.left}, ${this.margin.top})`
-      );
+        .attr("class", "bar graph")
+        .attr("width", this.width + this.margin.left + this.margin.right + this.offset.left)
+        .attr("height", this.height + this.margin.bottom + this.margin.top + this.offset.bottom)
+        .attr("overflow", "visible")
+      .append("g");
 
-    this.loader = new Loader(this.barGroup, this.width, this.height);
+    const translateY = -this.timeSliderHeight + ((this.parentHeight - this.loaderHeight) / 2);
+    this.loader = new Loader(this.barGroup, this.parentWidth, this.loaderHeight, translateY);
   }
 
   _renderBarChart(features) {
     this.barGroup.selectAll("*").remove();
+
+    // agregar transform una vez se haya quitado el loader
+    this.barGroup.attr("transform",`translate(${this.margin.left}, ${this.margin.top})`);
 
     // agregar texto NoData
     if (!features.length) {

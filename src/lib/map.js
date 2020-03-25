@@ -513,12 +513,12 @@ class TNCMap {
   }
 
   renderBiodiversityComponent(level, value) {
+    d3.select("#panel-biodiversidad .panel__stats").selectAll("*").remove();
     if (level == "region") {
       const promise = new Promise(resolve => {
-        d3.select("#panel-biodiversidad .panel__stats").selectAll("*").remove();
         const container = new BiodiversityContainer("#panel-biodiversidad .panel__stats", this.colors, this.moments[this.projectId]);
         this.getSpeciesCountByLandcover(value).then(data => {
-          console.log(data);
+          container.destroyLoader();
           data.forEach(group => {
             container.addPieChart(group.name, group.data, this.bioIcons.get(group.name));
           });

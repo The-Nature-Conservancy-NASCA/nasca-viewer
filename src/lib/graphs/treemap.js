@@ -11,6 +11,7 @@ class Treemap {
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
     this.width = this.parentWidth - this.margin.left - this.margin.right;
     this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.timeSliderHeight - this.buttonContainerHeight;
+    this.loaderHeight = this.parentHeight * 0.75;
 
     this.colors = colors;
     this.tooltipOffset = 15;
@@ -24,10 +25,11 @@ class Treemap {
         .attr("class", "treemap")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
-      .append("g")
-        .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
+        .attr("overflow", "visible")
+      .append("g");
 
-    this.loader = new Loader(this.treemapGroup, this.width + this.margin.left + this.margin.right, this.height + this.margin.top + this.margin.bottom)
+    const translateY = -this.timeSliderHeight + ((this.parentHeight - this.loaderHeight) / 2);
+    this.loader = new Loader(this.treemapGroup, this.parentWidth, this.loaderHeight, translateY);
 
     this.buttonContainer = d3.select(el)
       .append("div")
@@ -100,6 +102,9 @@ class Treemap {
   _renderTreemap(data) {
     // remove everything inside the svg
     this.treemapGroup.selectAll("*").remove();
+
+    // set transform to group after loader is removed
+    this.treemapGroup.attr("transform", `translate(${this.margin.left}, ${this.margin.top})`);
 
     // agregar texto NoData
     if (!data.children.length) {

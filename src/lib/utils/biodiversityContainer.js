@@ -10,6 +10,7 @@ class BiodiversityContainer {
     // compute parent's dimensions
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
+    this.loaderHeight = this.parentHeight * 0.75;
 
     this.timeSlider = new TimeSlider(el, this.parentWidth, this.timeSliderHeight);
 
@@ -17,6 +18,15 @@ class BiodiversityContainer {
       .append("div")
         .attr("id", "container__biodiversidad")
         .style("height", `${this.parentHeight - this.timeSliderHeight}px`);
+
+    this.svg = this.container
+      .append("svg")
+        .attr("width", this.parentWidth)
+        .attr("height", this.parentHeight - this.timeSliderHeight)
+        .attr("overflow", "visible");
+
+    const translateY = -this.timeSliderHeight + ((this.parentHeight - this.loaderHeight) / 2);
+    this.loader = new Loader(this.svg, this.parentWidth, this.loaderHeight, translateY);
   }
 
   addPieChart(name, data, icon) {
@@ -25,13 +35,16 @@ class BiodiversityContainer {
     const count = momentData ? momentData.count : 0;
     const groupContainer = this.container.append("div").attr("class", "group__container");
     const header = groupContainer.append("div").attr("class", "group__header").attr("id", `group__header__${cleanName}`);
-    console.log(name);
     header.append("h6").attr("class", "group__label").text(name);
     header.append("h6").attr("class", "group__count").text(count);
     groupContainer.append("div").attr("class", "group__graphic").attr("id", `graph__${cleanName}`);
     const pieChart = new PieChart(`#graph__${cleanName}`, this.colors, icon);
     this.charts.push({ chart: pieChart, data: data, name: cleanName });
     pieChart.renderGraphic(momentData ? momentData.landcovers : []);
+  }
+
+  destroyLoader() {
+    this.svg.remove();
   }
 
   renderTimeSlider() {
