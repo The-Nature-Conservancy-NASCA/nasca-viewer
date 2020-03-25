@@ -69,26 +69,12 @@ class TNCMap {
       this.carbonoQuery.outFields = ["*"];
       this.implementacionesQuery = this.implementacionesLayer.createQuery();
       this.implementacionesQuery.outFields = ["*"];
-      this.biodiversityQuery = this.biodiversidadLayer.createQuery();
-      this.biodiversityQuery.returnGeometry = false;
-      this.biodiversityGroups = ["grupo_tnc", "cobertura"];
-      this.biodiversityCountField = "genero";
       this.colorQuery = this.coloresLayer.createQuery();
       this.colorQuery.where = "1=1";
       this.colorQuery.outFields = ["*"];
       this.bioIconsQuery = this.bioIconsLayer.createQuery();
       this.bioIconsQuery.where = "1=1";
       this.bioIconsQuery.outFields = ["grupo_tnc", "url"];
-      this.bioQuery = this.biodiversidadLayer.createQuery();
-      this.bioQuery.returnGeometry = false;
-      this.bioQuery.outFields = ['ID_region', 'cantidad_individuos', 'grupo_tnc'];
-      const sumPopulation = {
-        onStatisticField: "grupo_tnc",
-        outStatisticFieldName: "cantidad",
-        statisticType: "count"
-      };
-      this.bioQuery.outStatistics = [sumPopulation];
-      this.bioQuery.groupByFieldsForStatistics = ['grupo_tnc'];
       
       window.tnc_map = new WebMap({
         portalItem: {
@@ -273,57 +259,6 @@ class TNCMap {
     });
   }
 
-  clickRegion(region) {
-
-
-
-
-    this.getBiodiversityGroups(region).then(groups => {
-      d3.select("#wrapper__biodiversidad").select("svg").remove();
-      d3.select("#container__biodiversidad").selectAll("*").remove();
-      const groupCountPromises = [];
-      groups.forEach(group => {
-        let queryParameters =  {
-          where: `ID_region = '${region}' AND grupo_tnc = '${group}'`,
-          outFields: "especie",
-          returnGeometry: false,
-          returnDistinctValues: true,
-          returnCountOnly: true,
-          f: "json"
-        };
-        groupCountPromises.push(this.esriRequest(this.biodiversityQueryUrl, {query: queryParameters}));
-      });
-      Promise.all(groupCountPromises).then(responses => {
-        responses.forEach((response, i) => {
-          // create group label with count and initialize PieChart
-          const group = groups[i];
-          const groupCount = response.data.count;
-          const groupContainer = 
-          d3.select("#container__biodiversidad")
-            .append("div")
-              .attr("class", "group__container");
-          const header = groupContainer.append("div").attr("class", "group__header");
-          header.append("h5").text(group);
-          header.append("h6").text(groupCount);
-          groupContainer
-            .append("div")
-              .attr("class", "group__graphic")
-              .attr("id", `graph__${group}`);
-          const pieChart = new PieChart(`#graph__${group}`, this.colors, this.bioIcons.get(group));
-        });
-
-        // get container width
-        // d3.select("#panel-biodiversidad").classed("panel__tab-panel--active", true);
-        // const containerWidth = d3.select("#wrapper__biodiversidad").node().offsetWidth;
-        const containerWidth = 458;
-        // d3.select("#panel-biodiversidad").classed("panel__tab-panel--active", false);
-
-        // add TimeSlider
-        const timeSlider = new TimeSlider("#wrapper__biodiversidad", containerWidth, 70, "#container__biodiversidad", false);
-        const timeButtons = timeSlider.render(this.moments);
-      });
-    });
-  }
 
   colorsToObject(features) {
     const colors = {};
@@ -341,24 +276,6 @@ class TNCMap {
     const region = capaRegiones ? capaRegiones.graphic.attributes['ID_region'] : undefined;
     return { predio, region };
   }
-
-  getBiodiversityGroups(region) {
-    const queryOptions = {
-      where: `ID_region = '${region}'`,
-      outFields: "grupo_tnc",
-      returnGeometry: false,
-      returnDistinctValues: true,
-      f: "json"
-    }
-    const promise = new Promise(resolve => {
-      this.esriRequest(this.biodiversityQueryUrl, {query: queryOptions}).then(response => {
-        resolve(response.data.features.map(feature => feature.attributes.grupo_tnc));
-      })
-    });
-    return promise;
-  }
-
-
   
   changeEstrategia(estrategiaId) {
     ProyectoRepository.getProyectosOfEstrategia(estrategiaId).then(proyectos => {
