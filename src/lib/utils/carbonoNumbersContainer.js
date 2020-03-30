@@ -19,7 +19,7 @@ class CarbonNumbersContainer {
     let stockValue;
     let stockUnitVisibility = "visible";
     if (stock) {
-      stockValue = Number(Math.round(stock)).toLocaleString("us");
+      stockValue = Number(Math.round(stock)).toLocaleString("en");
     } else {
       stockValue = "-";
       stockUnitVisibility = "hidden";
@@ -27,7 +27,7 @@ class CarbonNumbersContainer {
     let captureValue;
     let captureUnitVisibility = "visible";
     if (capture) {
-      captureValue = Number(Math.round(capture)).toLocaleString("us");
+      captureValue = Number(Math.round(capture)).toLocaleString("en");
     } else {
       captureValue = "-";
       captureUnitVisibility = "hidden";
