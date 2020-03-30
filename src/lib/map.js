@@ -56,6 +56,10 @@ class TNCMap {
       this.biodiversidadLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/2"
       });
+      this.biodiversidadLayer.featureReduction = {
+        type: 'cluster',
+        clusterRadius: '75px'
+      };
       this.coloresLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/12"
       });
