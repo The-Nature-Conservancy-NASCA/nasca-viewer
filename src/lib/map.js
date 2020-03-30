@@ -171,9 +171,10 @@ class TNCMap {
         window.tnc_map.layers.items.find(item => item.title === "Regiones").outFields = ["*"];
         const estrategiaInitial = getEstrategiaInitial();
         let definitionExpression = null;
-
         if (estrategiaInitial) {
-          changeSelectionContext()
+          if(estrategiaInitial !== '02') {
+            window.modalPopup.openModal({header: window.tncConfig.strings.no_hay_predios, content: ''});
+          }
           EstrategiaRepository.getColor(estrategiaInitial).then(color => { changeThemeColor(color); });
           ProyectoRepository.getProyectosOfEstrategia(estrategiaInitial).then(proyectos => {
             definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
