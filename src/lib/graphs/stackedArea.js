@@ -16,12 +16,16 @@ class StackedArea {
     this.loaderHeight = this.parentHeight * 0.75;
 
     this.features;
+    this.factor = 1000000;
+    this.decimals = 2;
     this.tooltipOffset = 15;
+    this.years;
+    this.startYear;
     this.closingYear;
     this.fontSize = 10;
     this.smallerFontSize = 9;
     this.xlabel = "Tiempo";
-    this.ylabel = "Carbono (GtCO2e)";
+    this.ylabel = "Carbono (MtCO2e)";
     this.title = "Captura de carbono";
     this.closureLabel = "Cierre";
     
@@ -66,7 +70,7 @@ class StackedArea {
     this.buttons.on("click", function () {
       that.buttons.classed("selected", false);
       d3.select(this).classed("selected", true);
-      that.renderGraphic(that.features, this.value, that.closingYear);
+      that.renderGraphic(that.features, this.value, that.closingYear, that.startYear);
     });
 
 
@@ -109,6 +113,24 @@ class StackedArea {
     return;
     }
 
+    // obtener llaves de los valores
+    const keys = [];
+    data.forEach(el => {
+      const elKeys = Object.keys(el).filter(item => item !== "year");
+      elKeys.forEach(key => {
+        if (!keys.includes(key)) {
+          keys.push(key);
+        }
+      }) 
+    });
+
+    // escalar datos
+    data.forEach(item => {
+      keys.forEach(key => {
+        item[key] /= this.factor;
+      });
+    });
+
     const xScale = d3.scaleLinear()
       .domain([d3.min(this.years), d3.max(this.years)])
       .range([this.margin.left, this.width - this.margin.right]);
@@ -129,20 +151,11 @@ class StackedArea {
       .ticks(5);
 
     const yAxis = d3.axisRight()
-          .scale(yScale)
-          .tickSizeOuter(0)
-          .tickSize(0)
-          .ticks(3);
-
-    const keys = [];
-    data.forEach(el => {
-      const elKeys = Object.keys(el).filter(item => item !== "year");
-      elKeys.forEach(key => {
-        if (!keys.includes(key)) {
-          keys.push(key);
-        }
-      }) 
-    });
+      .scale(yScale)
+      .tickSizeOuter(0)
+      .tickSize(0)
+      .ticks(3)
+      .tickFormat(d => d.toFixed(this.decimals));
     const stack = d3.stack()
       .keys(keys)
       .order(d3.stackOrderDescending);
@@ -204,7 +217,7 @@ class StackedArea {
           that.areaGroup.select(".year__division").raise();
           that.areaGroup.select(".helper__dot").raise();
           const coordinates = [d3.event.pageX, d3.event.pageY];
-          const tooltipValue = Number(Math.round(value)).toLocaleString("en");
+          const tooltipValue = value.toFixed(that.decimals);
           const tooltipContent = `
           <span class="tooltip__title">${label} (${year})</span>
           <hr>
@@ -244,7 +257,7 @@ class StackedArea {
           that.areaGroup.select(".year__division").raise();
           that.areaGroup.select(".helper__dot").raise();
           const coordinates = [d3.event.pageX, d3.event.pageY];
-          const tooltipValue = Number(Math.round(value)).toLocaleString("en");
+          const tooltipValue = value.toFixed(that.decimals);
           const tooltipContent = `
           <span class="tooltip__title">${label} (${year})</span>
           <hr>
@@ -358,8 +371,7 @@ class StackedArea {
     if (!features.length) {
       return [];
     }
-    const startYear = new Date(features[0].attributes.fecha).getFullYear();
-    this.years = d3.range(startYear, startYear + 21);
+    this.years = d3.range(this.startYear, this.startYear + 21);
     const data = [];
     features.forEach((feat, i) => {
       const attrs = feat.attributes;
@@ -393,10 +405,11 @@ class StackedArea {
     return data;
   }
 
-  renderGraphic(features, field, closingYear) {
+  renderGraphic(features, field, closingYear, startYear) {
     this.features = features;
-    const data = this._formatData(features, field);
     this.closingYear = closingYear;
+    this.startYear = startYear;
+    const data = this._formatData(features, field);
     this._renderStackedAreaChart(data);
   }
 }
