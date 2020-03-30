@@ -21,9 +21,8 @@ class BarChart {
     this.color = window.themeColor;
     this.factor = 0.5;
 
-    this.title = "Área total por acción";
-    this.ylabel = "Acción";
-    this.xlabel = "Área (ha)";
+    this.ylabel = window.tncConfig.strings.implementacionesYLabel;
+    this.xlabel = window.tncConfig.strings.implementacionesXLabel;
     this.fontSize = 10;
 
 
@@ -56,7 +55,7 @@ class BarChart {
           .attr("dominant-baseline", "middle")
           .attr("font-size", 9)
           .attr("fill", "black")
-          .text("No hay datos :(");
+          .text(window.tncConfig.strings.noAvailableData);
       return;
     }
 
@@ -74,15 +73,16 @@ class BarChart {
         values.push(features.map(feat => feat.attributes).filter(feat => feat.momento === moment.value).reduce((a, b) => a + b[field], 0));
       })
     });
-    this.yScale = d3.scaleLinear()
-      .domain([0, d3.max(values)])
+    this.yScale = d3.scaleLog()
+      .clamp(true)
+      .domain([0.1, d3.max(values)])
       .range([0, this.width - this.offset.left]);
 
     const xAxis = d3
       .axisBottom()
       .scale(this.yScale)
-      .ticks(3)
-      .tickSizeOuter(0);
+      .tickValues([])
+      .tickSize(0);
 
     const yAxis = d3
       .axisLeft()
@@ -229,9 +229,9 @@ class BarChart {
 
   _processFeatures(features) {
     const fieldMap = {
-      "Bosque": "area_bosque",
-      "Restauración": "area_restauracion",
-      "Produccion Sostenible": "areas_p_sostenibles"
+      [window.tncConfig.strings.implementacionesAccionBosque]: "area_bosque",
+      [window.tncConfig.strings.implementacionesAccionRestauracion]: "area_restauracion",
+      [window.tncConfig.strings.implementacionesAccionProduccionSostenible]: "areas_p_sostenibles"
     };
 
     const data = [];

@@ -119,10 +119,10 @@ class ProyectoRepository {
 
   static async getMoments() {
     const moments = {
-      "Línea base": { field: "fecha_linea_base", value: "0" },
-      "Seguimiento 1": { field: "fecha_seguimiento1", value: "1" },
-      "Seguimiento 2" : { field: "fecha_seguimiento2", value: "2" },
-      "Cierre": { field: "fecha_cierre", value: "3"}
+      [window.tncConfig.strings.momentBaseLine]: { field: "fecha_linea_base", value: "0" },
+      [window.tncConfig.strings.momentFollowUp1]: { field: "fecha_seguimiento1", value: "1" },
+      [window.tncConfig.strings.momentFollowUp2]: { field: "fecha_seguimiento2", value: "2" },
+      [window.tncConfig.strings.momentClosure]: { field: "fecha_cierre", value: "3"}
     };
     const result = {};
     const projects = await window.store.select(this.TABLE_NAME);

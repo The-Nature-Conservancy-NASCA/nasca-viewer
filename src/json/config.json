@@ -51,7 +51,25 @@
       "biodiversity_helper_text": "Haz click en una región para ver los resultados",
       "general_helper_text": "Haz click en un predio o región para ver los resultados",
       "stock": "Stock",
-      "captura": "Captura"
+      "captura": "Captura",
+      "carbonoTotal": "Captura total de carbono",
+      "carbonoByCompartment": "Captura de carbono por compartimiento",
+      "carbonoByLandcover": "Captura de carbono por cobertura",
+      "carbonoXLabel": "Tiempo",
+      "carbonoYLabel": "Carbono (MtCO2e)",
+      "closureLabel": "Cierre",
+      "landcoverByProjectName": "Coberturas - clasificación Proyecto",
+      "landcoverByCorineName": "Coberturas - clasificación Corine",
+      "implementacionesXLabel": "Log Área (ha)",
+      "implementacionesYLabel": "Acción",
+      "implementacionesAccionBosque": "Protección Ecosistemas Naturales",
+      "implementacionesAccionRestauracion": "Restauración",
+      "implementacionesAccionProduccionSostenible": "Producción Sostenible",
+      "momentBaseLine": "Línea base",
+      "momentFollowUp1": "Seguimiento 1",
+      "momentFollowUp2": "Seguimiento 2",
+      "momentClosure": "Cierre",
+      "noAvailableData": "No hay datos disponibles"
     }
   },
   "en": {
@@ -106,7 +124,25 @@
       "biodiversity_helper_text": "Click on a region to see the results",
       "general_helper_text": "Click on a lot or region to see the results",
       "stock": "Stock",
-      "captura": "Capture"
+      "captura": "Capture",
+      "carbonoTotal": "Total carbon capture",
+      "carbonoByCompartment": "Carbon capture by compartment",
+      "carbonoByLandcover": "Carbon capture by landcover",
+      "carbonoXLabel": "Time",
+      "carbonoYLabel": "Carbon (MtCO2e)",
+      "closureLabel": "Closure",
+      "landcoverByProjectName": "Landcovers - Project classification",
+      "landcoverByCorineName": "Landcovers - Corine classification",
+      "implementacionesXLabel": "Log Area (ha)",
+      "implementacionesYLabel": "Action",
+      "implementacionesAccionBosque": "Natural Ecosystems Protection",
+      "implementacionesAccionRestauracion": "Restoration",
+      "implementacionesAccionProduccionSostenible": "Sustainable Production",
+      "momentBaseLine": "Baseline",
+      "momentFollowUp1": "Follow-up 1",
+      "momentFollowUp2": "Follow-up 2",
+      "momentClosure": "Closure",
+      "noAvailableData": "There is no available data"
     }
   }
 }

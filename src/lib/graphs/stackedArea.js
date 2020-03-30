@@ -24,10 +24,9 @@ class StackedArea {
     this.closingYear;
     this.fontSize = 10;
     this.smallerFontSize = 9;
-    this.xlabel = "Tiempo";
-    this.ylabel = "Carbono (MtCO2e)";
-    this.title = "Captura de carbono";
-    this.closureLabel = "Cierre";
+    this.xlabel = window.tncConfig.strings.carbonoXLabel;
+    this.ylabel = window.tncConfig.strings.carbonoYLabel;
+    this.closureLabel = window.tncConfig.strings.closureLabel;
     
     this.areaGroup = d3.select(el)
       .append("svg")
@@ -49,15 +48,15 @@ class StackedArea {
       .append("button")
         .attr("value", null)
         .attr("class", "selected")
-        .attr("title", "Total");
+        .attr("title", window.tncConfig.strings.carbonoTotal);
     this.compartmentBtn = this.buttonContainer
         .append("button")
           .attr("value", "compartimiento")
-          .attr("title", "Compartimiento");
+          .attr("title", window.tncConfig.strings.carbonoByCompartment);
     this.coverBtn = this.buttonContainer
         .append("button")
           .attr("value", "cobertura")
-          .attr("title", "Cobertura");
+          .attr("title", window.tncConfig.strings.carbonoByLandCover);
 
     this.buttons = this.buttonContainer.selectAll("button");
 

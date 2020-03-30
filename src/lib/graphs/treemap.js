@@ -42,12 +42,12 @@ class Treemap {
       .append("button")
       .attr("value", "project")
       .attr("class", "selected")
-      .attr("title", "Proyecto");
+      .attr("title", window.tncConfig.strings.landcoverByProjectName);
     this.corineBtn = this.buttonContainer
       .append("button")
         .attr("value", "corine")
         .style("visibility", "hidden")
-        .attr("title", "Corine");
+        .attr("title", window.tncConfig.strings.landcoverByCorineName);
     this.buttons = this.buttonContainer.selectAll("button");
     this.buttons
       .style("visibility", "hidden")
@@ -119,7 +119,7 @@ class Treemap {
           .attr("dominant-baseline", "middle")
           .attr("font-size", 9)
           .attr("fill", "black")
-          .text("No hay datos :(");
+          .text(window.tncConfig.strings.noAvailableData);
       return;
     }
 
