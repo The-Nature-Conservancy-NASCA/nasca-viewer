@@ -23,7 +23,6 @@ class Landing {
         card.addEventListener('click', event => {
           this.selectedEstrategia = event.currentTarget.dataset.estrategia;
           this.showProyectos();
-          document.querySelector('.estrategias').classList.add('collapsed');
         });
       }
     });
@@ -64,10 +63,17 @@ class Landing {
   }
   
   showProyectos() {
-    document.querySelector('.cta-back').classList.remove('hidden');
-    this.hideProyectos();
     const proyecto = document.querySelector(`.proyectos#${this.selectedEstrategia}`);
-    proyecto.classList.remove('hidden');
+    if (proyecto) {
+      document.querySelector('.cta-back').classList.remove('hidden');
+      document.querySelector('.estrategias').classList.add('collapsed');
+      this.hideProyectos();
+      proyecto.classList.remove('hidden');
+    } else {
+      window.sessionStorage.clear();
+      window.sessionStorage.setItem('estrategia', this.selectedEstrategia.split('_')[1]);
+      this._openVisor();
+    }
   }
 
   hideProyectos() {

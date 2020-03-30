@@ -50,10 +50,15 @@ $panel-width: 58rem;
 
     @include respond(zoom-150) {
       right: 38rem;
+      height: 4rem;
+      width: 2.2rem;
     }
 
     img {
       transform: rotateZ(180deg);
+      @include respond(zoom-150) {
+        width: 24px;
+      }
     }
 
     &.expanded {

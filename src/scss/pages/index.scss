@@ -91,6 +91,10 @@
   position: relative;
   top: $alto-header;
 
+  @include respond(zoom-150) {
+    top: 4rem;
+  }
+
   &.hidden {
     display: none;
   }
@@ -107,6 +111,10 @@
 
   @include respond(tab-port) {
     width: 100vw;
+  }
+
+  @include respond(zoom-150) {
+    height: calc(100vh - 4rem);
   }
 
   img {
@@ -126,6 +134,10 @@
 
   @include respond(tab-port) {
     height: unset;
+  }
+
+  @include respond(zoom-150) {
+    height: calc(100vh - 4rem);
   }
 
   .estrategia.card {
@@ -211,6 +223,10 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: calc(100vh - #{$alto-header});
+  }
+
+  @include respond(zoom-150) {
+    height: calc(100vh - 4rem);
   }
 
 }
