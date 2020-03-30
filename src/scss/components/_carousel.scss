@@ -21,6 +21,10 @@
   width: 15rem;
   z-index: 0;
 
+  @include respond(zoom-150) {
+    width: 10rem;
+  }
+
   &__image {
    width: 100%;
   }
@@ -53,6 +57,11 @@
   width: 30rem;
   z-index: 2;
 
+  @include respond(zoom-150) {
+    width: 25rem;
+    height: 16.67rem;
+  }
+
   .gallery-item__description {
     visibility: visible;
     opacity: 1;
@@ -66,6 +75,10 @@
   width: 20rem;
   z-index: 1;
 
+  @include respond(zoom-150) {
+    width: 14rem;
+    height: 7rem;
+  }
 }
 
 .gallery-item.gallery-item-previous {

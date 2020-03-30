@@ -12,8 +12,8 @@
   }
 
   @include respond(zoom-150) {
-    left: 0;
-    top: 4rem;
+    left: 1rem;
+    top: 5rem;
   }
   
   &__menu {
@@ -38,10 +38,6 @@
         background-color: var(--theme-color-active);
       }
     }
-
-    @include respond(zoom-150) {
-      padding: .5rem;
-    }
   }
 
   &__menu-icon {
@@ -51,7 +47,6 @@
 
     @include respond(zoom-150) {
       font-size: 1.4rem;
-      padding: .2rem;
     }
   }
 }
@@ -69,7 +64,7 @@
   width: 25rem;
 
   @include respond(zoom-150) {
-    width: 14rem;
+    width: 21rem;
   }
 
   &__title {
@@ -89,7 +84,7 @@
     width: 25rem;
 
     @include respond(zoom-150) {
-      width: 14rem;
+      width: 21rem;
     }
   
   }
