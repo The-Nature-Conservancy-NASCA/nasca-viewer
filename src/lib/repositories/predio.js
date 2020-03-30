@@ -43,6 +43,17 @@ class PredioRepository {
     return results[0];
   }
 
+  static async getStockAndCaptureValues(id) {
+    const result = await window.store.select(this.TABLE_NAME, {
+      ID_predio: id
+    });
+
+    const stock = result[0].stock_carbono;
+    const capture = result[0].captura_carbono;
+
+    return { stock, capture };
+  }
+
 }
 
 PredioRepository.TABLE_NAME = 'Predios'

@@ -288,7 +288,7 @@ class TNCMap {
     const region = capaRegiones ? capaRegiones.graphic.attributes['ID_region'] : undefined;
     return { predio, region };
   }
-  
+
   changeEstrategia(estrategiaId) {
     ProyectoRepository.getProyectosOfEstrategia(estrategiaId).then(proyectos => {
       const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
@@ -474,14 +474,17 @@ class TNCMap {
     const promise = new Promise(resolve => {
       d3.select("#panel-carbono .panel__stats").selectAll("*").remove();
       if (level === "predio") {
-        console.log("Carbono nivel predio no ha sido implementado todavia");
-        resolve(true);
+        const carbonNumbersContainer = new CarbonNumbersContainer("#panel-carbono .panel__stats");
+        PredioRepository.getStockAndCaptureValues(value).then(obj => {
+          carbonNumbersContainer.renderTemplate(obj.stock, obj.capture);
+          resolve(true);
+        });
       } else if (level === "region") {
         this.stackedArea = new StackedArea("#panel-carbono .panel__stats");
         this.carbonoQuery.where = `ID_region = '${value}'`;
         this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
-          ProyectoRepository.getClosingYear(this.projectId).then(closingYear => {
-            this.stackedArea.renderGraphic(result.features, null, closingYear);
+          ProyectoRepository.getClosingYearAndLandcoverStartYear(this.projectId).then(obj => {
+            this.stackedArea.renderGraphic(result.features, null, obj.closingYear, obj.landcoverStartYear);
             resolve(true);
           })
         });

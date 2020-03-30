@@ -49,7 +49,9 @@
       "placeholder_predios": "Busca el nombre o ID del predio",
       "no_hay_predios": "No hay predios para la estrategia seleccionada",
       "biodiversity_helper_text": "Haz click en una región para ver los resultados",
-      "general_helper_text": "Haz click en un predio o región para ver los resultados"
+      "general_helper_text": "Haz click en un predio o región para ver los resultados",
+      "stock": "Stock",
+      "captura": "Captura"
     }
   },
   "en": {
@@ -102,7 +104,9 @@
       "placeholder_predios": "Search the name or ID of a property",
       "no_hay_predios": "There are no lots for the selected strategy",
       "biodiversity_helper_text": "Click on a region to see the results",
-      "general_helper_text": "Click on a lot or region to see the results"
+      "general_helper_text": "Click on a lot or region to see the results",
+      "stock": "Stock",
+      "captura": "Capture"
     }
   }
 }
