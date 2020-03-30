@@ -270,6 +270,7 @@ class TNCMap {
         this.vizLevelValue = null;
         this.view.graphics.removeAll();
         d3.selectAll(".panel__stats *").remove();
+        this.clearSelectionContext();
         this.clearSpecificInformation();
         this.setHelperTexts();
       }
@@ -342,6 +343,16 @@ class TNCMap {
       div.innerHTML = marked(text);
     });
   }
+
+  clearSelectionContext() {
+    document.querySelectorAll(".panel__selection-context").forEach(div => {
+      div.innerHTML = "";
+    });
+    document.querySelectorAll(".panel__selection-region").forEach(div => {
+      div.innerHTML = "";
+    });
+    this.clearSelectionSubContextPredio();
+  };
 
   clearSelectionSubContextPredio() {
     document.querySelectorAll(".panel__selection-predio").forEach(div => {
