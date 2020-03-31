@@ -55,7 +55,6 @@ class Store {
     RegionRepository.loadData();
     PredioRepository.loadData();
     CarouselRepository.loadData();
-    CoberturasRepository.loadData();
   }
 
   _createConection() {
@@ -81,7 +80,6 @@ class Store {
       EstrategiaRepository.getTabla(),
       ProyectoRepository.getTabla(),
       CarouselRepository.getTabla(),
-      CoberturasRepository.getTabla(),
       RegionRepository.getTabla(),
       PredioRepository.getTabla()
     ];

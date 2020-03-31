@@ -1,7 +1,7 @@
 class Visor {
 
   constructor() {
-    eventBus.addEventListener('coberturaLoaded', event => {
+    eventBus.addEventListener('prediosLoaded', event => {
       document.querySelector('.loader').classList.add('hidden');
       window.modalPopup.openModal({header: window.tncConfig.strings.warning_panel, content: ''});
     });
@@ -45,7 +45,6 @@ class Visor {
 
   _loadData() {
     CarouselRepository.loadData();
-    CoberturasRepository.loadData();
     RegionRepository.loadData();
     PredioRepository.loadData();
     this.loadLandingData();

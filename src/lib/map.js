@@ -44,6 +44,7 @@ class TNCMap {
       this.SimpleFillSymbol = SimpleFillSymbol;
       this.esriRequest = esriRequest;
       this.biodiversityQueryUrl = "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/2/query";
+      this.landcoversQueryUrl = "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/13/query";
       this.prediosLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/1"
       });
@@ -542,9 +543,15 @@ class TNCMap {
     const promise = new Promise(resolve => {
       d3.select("#panel-cobertura .panel__stats").selectAll("*").remove();
       this.treemap = new Treemap("#panel-cobertura .panel__stats", this.colors);
+      const queryOptions = {
+        outFields: ["ID_predio", "cobertura_comun", "corine2", "cobertura_proyecto", "subcobertura_proyecto", "area", "momento"],
+        f: "json"
+      }
       if (level === "predio") {
-        CoberturasRepository.getCoberturasByPredio(value).then(results => {
-          this.treemap.renderGraphic(results, "project", this.moments[this.projectId], true);
+        queryOptions.where = `ID_predio = '${value}'`;
+        this.esriRequest(this.landcoversQueryUrl, {query: queryOptions}).then(result => {
+          const data = result.data.features.map(feat => feat.attributes);
+          this.treemap.renderGraphic(data, "project", this.moments[this.projectId], true);
           resolve(true);
         });
       } else if (level === "region") {
@@ -554,7 +561,10 @@ class TNCMap {
           result.features.forEach(feat => {
             prediosIds.push(feat.attributes.ID_predio);
           });
-          CoberturasRepository.getCoberturasByPredios(prediosIds).then(data => {
+          const prediosList = prediosIds.map(el => `'${el}'`).join(",");
+          queryOptions.where = `ID_predio in (${prediosList})`;
+          this.esriRequest(this.landcoversQueryUrl, {query: queryOptions}).then(result => {
+            const data = result.data.features.map(feat => feat.attributes);
             this.treemap.renderGraphic(data, "project", this.moments[this.projectId], true);
             resolve(true);
           });
