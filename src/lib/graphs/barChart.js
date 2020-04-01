@@ -194,7 +194,7 @@ class BarChart {
       .attr("class", "x label")
       .attr("text-anchor", "end")
       .attr("x", this.width)
-      .attr("y", this.height - (this.offset.bottom + 5))
+      .attr("y", this.height + 10)
       .attr("font-size", this.fontSize)
       .attr("font-weight", "bold")
       .text(this.xlabel);

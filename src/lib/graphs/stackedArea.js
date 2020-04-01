@@ -1,10 +1,11 @@
 class StackedArea {
-  constructor (el) {
+  constructor (el, panelTitleSelector=null) {
 
 
     this.margin = {top: 10, right: 20, bottom: 20, left: 20};
     this.offset = {left: 10, bottom: 10};
     this.el = d3.select(el);
+    this.panelTitleSelector = panelTitleSelector;
     this.buttonContainerHeight = 12;
     
 
@@ -56,7 +57,7 @@ class StackedArea {
     this.coverBtn = this.buttonContainer
         .append("button")
           .attr("value", "cobertura")
-          .attr("title", window.tncConfig.strings.carbonoByLandCover);
+          .attr("title", window.tncConfig.strings.carbonoByLandcover);
 
     this.buttons = this.buttonContainer.selectAll("button");
 
@@ -69,6 +70,7 @@ class StackedArea {
     this.buttons.on("click", function () {
       that.buttons.classed("selected", false);
       d3.select(this).classed("selected", true);
+      that._changePanelTitle(this.title);
       that.renderGraphic(that.features, this.value, that.closingYear, that.startYear);
     });
 
@@ -402,6 +404,10 @@ class StackedArea {
       }
     });
     return data;
+  }
+
+  _changePanelTitle(titleString) {
+    d3.select(this.panelTitleSelector).text(titleString);
   }
 
   renderGraphic(features, field, closingYear, startYear) {

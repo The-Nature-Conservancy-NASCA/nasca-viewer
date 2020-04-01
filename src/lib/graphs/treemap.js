@@ -1,6 +1,6 @@
 class Treemap {
 
-  constructor(el, colors) {
+  constructor(el, colors, panelTitleSelector=null) {
     // declarar propiedades utilizando breakpoints
     
 
@@ -8,6 +8,7 @@ class Treemap {
     this.timeSliderHeight = 70;
     this.buttonContainerHeight = 12;
     this.el = d3.select(el);
+    this.panelTitleSelector = panelTitleSelector;
 
     // compute width and height based on parent div
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
@@ -56,6 +57,7 @@ class Treemap {
     const that = this;
     this.buttons.on("click", function () {
       that.scheme = this.value;
+      that._changePanelTitle(this.title);
       that.renderGraphic(that.features, that.scheme);
     });
 
@@ -268,6 +270,10 @@ class Treemap {
         })
         .remove();
                     
+  }
+
+  _changePanelTitle(titleString) {
+    d3.select(this.panelTitleSelector).text(titleString);
   }
 
   _cleanString(string) {

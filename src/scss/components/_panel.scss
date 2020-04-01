@@ -180,8 +180,14 @@ $panel-width: 58rem;
   }
 
   &__graph {
+    display: flex;
+    flex-flow: column;
     width: 100%;
     height: 300px;
+    border: 1px solid lightgray;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
+    box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
 
     @include respond(zoom-150) {
       height: 250px;
@@ -192,15 +198,24 @@ $panel-width: 58rem;
     }
   }
 
+  &__title {
+    flex: 0 1 auto;
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.4rem;
+  }
+
   &__stats {
     padding: 1rem;
     width: 100%;
-    height: 100%;
-    border: 1px solid lightgray;
     font-size: 0; /* remover espacios blancos entre divs. Ver https://stackoverflow.com/a/5078297/7144368 */
-    -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
-    -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
-    box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
+
+    /* hacer que ocupe la altura restante del padre */
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 auto;
+    overflow-y: auto;
+
 
     .helper__text__container {
       width: 100%;

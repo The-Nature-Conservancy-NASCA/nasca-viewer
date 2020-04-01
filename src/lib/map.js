@@ -270,12 +270,21 @@ class TNCMap {
         this.vizLevel = null;
         this.vizLevelValue = null;
         this.view.graphics.removeAll();
+        d3.selectAll(".panel__title").remove();
         d3.selectAll(".panel__stats *").remove();
         this.clearSelectionContext();
         this.clearSpecificInformation();
         this.setHelperTexts();
       }
     });
+  }
+
+  addPanelTitle(panelSelector, titleString) {
+    d3.select(panelSelector)
+      .append("div")
+        .lower()  // poner el div como primer hijo del padre
+        .attr("class", "panel__title")
+        .text(titleString);
   }
 
 
@@ -467,13 +476,18 @@ class TNCMap {
   }
 
   renderBiodiversityComponent(level, value) {
+    const panelStatsSelector = "#panel-biodiversidad .panel__stats";
+    const panelGraphSelector = "#panel-biodiversidad .panel__graph";
+    const panelTitleSelector = panelGraphSelector + " .panel__title";
     const promise = new Promise(resolve => {
-      d3.select("#panel-biodiversidad .panel__stats").selectAll("*").remove();
+      d3.select(panelTitleSelector).remove();
+      d3.select(panelStatsSelector).selectAll("*").remove();
       if (level == "predio") {
         this.setBiodiverstiyHelperText();
         resolve(true);
       } else if (level == "region") {
-        const container = new BiodiversityContainer("#panel-biodiversidad .panel__stats", this.colors, this.moments[this.projectId]);
+        this.addPanelTitle(panelGraphSelector, window.tncConfig.strings.biodiversityDefaultTitle);
+        const container = new BiodiversityContainer(panelStatsSelector, this.colors, this.moments[this.projectId]);
         this.getSpeciesCountByLandcover(value).then(data => {
           container.destroyLoader();
           data.forEach(group => {
@@ -488,16 +502,22 @@ class TNCMap {
   }
 
   renderCarbonComponent(level, value) {
+    const panelStatsSelector = "#panel-carbono .panel__stats";
+    const panelGraphSelector = "#panel-carbono .panel__graph";
+    const panelTitleSelector = panelGraphSelector + " .panel__title";
     const promise = new Promise(resolve => {
-      d3.select("#panel-carbono .panel__stats").selectAll("*").remove();
+      d3.select(panelTitleSelector).remove();
+      d3.select(panelStatsSelector).selectAll("*").remove();
       if (level === "predio") {
-        const carbonNumbersContainer = new CarbonNumbersContainer("#panel-carbono .panel__stats");
+        this.addPanelTitle(panelGraphSelector, window.tncConfig.strings.carbonoLotDefaultTitle);
+        const carbonNumbersContainer = new CarbonNumbersContainer(panelStatsSelector);
         PredioRepository.getStockAndCaptureValues(value).then(obj => {
           carbonNumbersContainer.renderTemplate(obj.stock, obj.capture);
           resolve(true);
         });
       } else if (level === "region") {
-        this.stackedArea = new StackedArea("#panel-carbono .panel__stats");
+        this.addPanelTitle(panelGraphSelector, window.tncConfig.strings.carbonoTotal);
+        this.stackedArea = new StackedArea(panelStatsSelector, panelTitleSelector);
         this.carbonoQuery.where = `ID_region = '${value}'`;
         this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
           ProyectoRepository.getClosingYearAndLandcoverStartYear(this.projectId).then(obj => {
@@ -511,9 +531,14 @@ class TNCMap {
   }
 
   renderImplementationsComponent(level, value) {
+    const panelStatsSelector = "#panel-implementacion .panel__stats";
+    const panelGraphSelector = "#panel-implementacion .panel__graph";
+    const panelTitleSelector = panelGraphSelector + " .panel__title";
     const promise = new Promise(resolve => {
-      d3.select("#panel-implementacion .panel__stats").selectAll("*").remove();
-      this.barChart = new BarChart("#panel-implementacion .panel__stats");
+      d3.select(panelTitleSelector).remove();
+      d3.select(panelStatsSelector).selectAll("*").remove();
+      this.addPanelTitle(panelGraphSelector, window.tncConfig.strings.implementacionesDefaultTitle);
+      this.barChart = new BarChart(panelStatsSelector);
       if (level === "predio") {
         this.implementacionesQuery.where = `ID_predio = '${value}'`;
         this.implementacionesLayer.queryFeatures(this.implementacionesQuery).then(result => {
@@ -540,9 +565,14 @@ class TNCMap {
   }
 
   renderLandcoverComponent(level, value) {
+    const panelStatsSelector = "#panel-cobertura .panel__stats";
+    const panelGraphSelector = "#panel-cobertura .panel__graph";
+    const panelTitleSelector = panelGraphSelector + " .panel__title";
     const promise = new Promise(resolve => {
-      d3.select("#panel-cobertura .panel__stats").selectAll("*").remove();
-      this.treemap = new Treemap("#panel-cobertura .panel__stats", this.colors);
+      d3.select(panelTitleSelector).remove();
+      d3.select(panelStatsSelector).selectAll("*").remove();
+      this.addPanelTitle(panelGraphSelector, window.tncConfig.strings.landcoverByProjectName);
+      this.treemap = new Treemap(panelStatsSelector, this.colors, panelTitleSelector);
       const queryOptions = {
         outFields: ["ID_predio", "cobertura_comun", "corine2", "cobertura_proyecto", "subcobertura_proyecto", "area", "momento"],
         f: "json"
