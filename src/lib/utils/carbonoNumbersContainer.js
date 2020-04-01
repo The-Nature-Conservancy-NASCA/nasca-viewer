@@ -7,7 +7,7 @@ class CarbonNumbersContainer {
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
     this.loaderHeight = this.parentHeight * 0.75;
 
-    this.svg = this.el.append("svg").attr("width", this.parentHeight).attr("height", this.parentWidth);
+    this.svg = this.el.append("svg").attr("width", this.parentWidth).attr("height", this.parentHeight);
 
     const translateY = (this.parentHeight - this.loaderHeight) / 2;
     this.loader = new Loader(this.svg, this.parentWidth, this.loaderHeight, translateY);
