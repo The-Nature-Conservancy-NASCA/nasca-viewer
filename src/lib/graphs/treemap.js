@@ -128,7 +128,7 @@ class Treemap {
     // create treemap layout
     d3.treemap()
       .size([this.width, this.height])
-      .padding(1)
+      .padding(0)
       .round(true)
       (root);
 
@@ -148,15 +148,22 @@ class Treemap {
         .on("mouseover", function (d) {
           that.treemapGroup
             .selectAll("rect")
-            .attr("fill-opacity", 0.2)
-            .attr("stroke-opacity", 0.3);
-          that.treemapGroup.selectAll("text").attr("fill-opacity", 0.3);
+            .attr("fill-opacity", 0.05)
+            .attr("stroke-opacity", 0.1);
+          that.treemapGroup
+            .selectAll(`rect.${that._cleanString(d.parent.data.name)}`)
+              .attr("fill-opacity", 0.8)
+              .attr("stroke-opacity", 1);
+          that.treemapGroup.selectAll("text")
+            .attr("fill", "black")
+            .attr("fill-opacity", 0.4)
+            .attr("font-weight", "normal")
+            .style("text-shadow", "none");
           that.treemapGroup
             .select(`text#${that._cleanString(d.parent.data.name)}`)
-            .attr("fill-opacity", 1)
-            .attr("font-weight", "bold");
+            .attr("visibility", "hidden");
           d3.select(this)
-            .attr("stroke-width", 1)
+            .attr("stroke-width", 1.5)
             .attr("fill-opacity", 1)
             .attr("stroke-opacity", 1);
           const coordinates = [d3.event.pageX, d3.event.pageY];
@@ -185,16 +192,16 @@ class Treemap {
         .on("mouseout", function () {
           that.treemapGroup
             .selectAll("rect")
-            .attr("fill-opacity", 0.8)
-            .attr("stroke-opacity", 1)
-            .attr("stroke-width", 0.5);
-          that.treemapGroup
-            .selectAll("text")
+              .attr("fill-opacity", 0.8)
+              .attr("stroke-opacity", 1)
+              .attr("stroke-width", 0.5);
+          that.treemapGroup.selectAll("text")
+            .attr("visibility", "visible")
+            .attr("fill", d => that._pickTextColorBasedOnBgColorAdvanced(that.colors[d.name]))
             .attr("fill-opacity", 1)
-            .attr("font-weight", "normal");
-          d3.select("#tooltip__graph")
-          .html("")
-          .style("display", "none");
+            .attr("font-weight", "bold")
+            .style("text-shadow", d => `0 0 6px ${that._pickShadowColorBasedOnBgColorAdvanced(that.colors[d.name])}, 0 0 3px ${that._pickShadowColorBasedOnBgColorAdvanced(that.colors[d.name])}`);
+          d3.select("#tooltip__graph").html("").style("display", "none");
         })
         .attr("x", d => d.x0)
         .attr("y", d => d.y0)
@@ -219,8 +226,9 @@ class Treemap {
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
         .attr("font-size", 9)
-        .attr("fill", "black")
-        .attr("fill-opacity", 1)
+        .attr("font-weight", "bold")
+        .attr("fill", d => this._pickTextColorBasedOnBgColorAdvanced(this.colors[d.name]))
+        .attr("fill-opacity", 1)  // 0 0 6px #000000, 0 0 3px #000000
         .attr("x", d => {
           const center = that._computeElementsCenter(
             d3
@@ -241,6 +249,7 @@ class Treemap {
           );
           return center.y;
         })
+        .style("text-shadow", d => `0 0 6px ${this._pickShadowColorBasedOnBgColorAdvanced(this.colors[d.name])}, 0 0 3px ${this._pickShadowColorBasedOnBgColorAdvanced(this.colors[d.name])}`)
         .text(d => d.name)
         .each(this._wrap.bind(this));
       this.treemapGroup
@@ -311,6 +320,38 @@ class Treemap {
     var BB =
       B.toString(16).length == 1 ? "0" + B.toString(16) : B.toString(16);
     return "#" + RR + GG + BB;
+  }
+
+  _pickShadowColorBasedOnBgColorAdvanced(bgColor) {
+    var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
+    var r = parseInt(color.substring(0, 2), 16); // hexToR
+    var g = parseInt(color.substring(2, 4), 16); // hexToG
+    var b = parseInt(color.substring(4, 6), 16); // hexToB
+    var uicolors = [r / 255, g / 255, b / 255];
+    var c = uicolors.map((col) => {
+      if (col <= 0.03928) {
+        return col / 12.92;
+      }
+      return Math.pow((col + 0.055) / 1.055, 2.4);
+    });
+    var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
+    return (L > 0.179) ? "#ffffff" : "#000000";
+  }
+
+  _pickTextColorBasedOnBgColorAdvanced(bgColor) {
+    var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
+    var r = parseInt(color.substring(0, 2), 16); // hexToR
+    var g = parseInt(color.substring(2, 4), 16); // hexToG
+    var b = parseInt(color.substring(4, 6), 16); // hexToB
+    var uicolors = [r / 255, g / 255, b / 255];
+    var c = uicolors.map((col) => {
+      if (col <= 0.03928) {
+        return col / 12.92;
+      }
+      return Math.pow((col + 0.055) / 1.055, 2.4);
+    });
+    var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
+    return (L > 0.179) ? "#000000" : "#ffffff";
   }
 
   _wrap(d, i) {
