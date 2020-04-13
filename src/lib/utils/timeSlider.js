@@ -10,13 +10,13 @@ class TimeSlider {
     if (padding) {
       this.padding = padding;
     } else {
-      this.padding = { left: 10, right: 10 };
+      this.padding = { left: 12, right: 12 };
     }
-    this.radius = 11;
+    this.radius = 9;
     this.color = window.themeColor;
     this.labelMarginBottom = 7;
     this.labelMarginTop = 8;
-    this.fontSize = 9;
+    this.fontSize = 8;
     this.possiblePositions = {
       1: [
           this.padding.left + (this.width / 2)
