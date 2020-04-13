@@ -154,20 +154,25 @@ class Treemap {
             .attr("stroke-opacity", 0.1);
           that.treemapGroup
             .selectAll(`rect.${that._cleanString(d.parent.data.name)}`)
-              .attr("fill-opacity", 0.8)
+              .attr("fill-opacity", 0.6)
               .attr("stroke-opacity", 1);
-          that.treemapGroup.selectAll("text")
-            .attr("fill", "black")
-            .attr("fill-opacity", 0.4)
-            .attr("font-weight", "normal")
-            .style("text-shadow", "none");
           that.treemapGroup
-            .select(`text#${that._cleanString(d.parent.data.name)}`)
-            .attr("visibility", "hidden");
+            .selectAll("text")
+            .filter(function() {
+              return (
+                d3.select(this).attr("id") !==
+                that._cleanString(d.parent.data.name)
+              );
+            })
+              .attr("fill", "black")
+              .attr("fill-opacity", 0.4)
+              .attr("font-weight", "normal")
+              .style("text-shadow", "none");
           d3.select(this)
             .attr("stroke-width", 1.5)
             .attr("fill-opacity", 1)
             .attr("stroke-opacity", 1);
+          const svgXCoordinate = d3.mouse(this)[0];
           const coordinates = [d3.event.pageX, d3.event.pageY];
           const value = Number(Math.round(d.data.value)).toLocaleString("en");
           const tooltipContent = `
@@ -179,17 +184,36 @@ class Treemap {
               <span class="tooltip__value">${value} ha</span>
             `;
           d3.select("#tooltip__graph")
-            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
             .style("top", `${coordinates[1]}px`)
             .style("display", "block")
             .style("font-size", "11px")
             .html(tooltipContent);
+          d3.select("#tooltip_graph")
+            .style("right", `${screen.width - (coordinates[0] - that.tooltipOffset)}px`)
+          if (svgXCoordinate <= that.width / 2) {
+            d3.select("#tooltip__graph")
+              .style("right", null)
+              .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+          } else {
+            d3.select("#tooltip__graph")
+              .style("left", null)
+              .style("right", `${screen.width - (coordinates[0] - that.tooltipOffset)}px`)
+          }
         })
         .on("mousemove", function () {
+          const svgXCoordinate = d3.mouse(this)[0];
           const coordinates = [d3.event.pageX, d3.event.pageY];
           d3.select("#tooltip__graph")
-            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
             .style("top", `${coordinates[1]}px`);
+          if (svgXCoordinate <= that.width / 2) {
+            d3.select("#tooltip__graph")
+              .style("right", null)
+              .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+          } else {
+            d3.select("#tooltip__graph")
+              .style("left", null)
+              .style("right", `${screen.width - (coordinates[0] - that.tooltipOffset)}px`)
+          }
         })
         .on("mouseout", function () {
           that.treemapGroup
@@ -197,12 +221,23 @@ class Treemap {
               .attr("fill-opacity", 0.8)
               .attr("stroke-opacity", 1)
               .attr("stroke-width", 0.5);
-          that.treemapGroup.selectAll("text")
-            .attr("visibility", "visible")
-            .attr("fill", d => that._pickTextColorBasedOnBgColorAdvanced(that.colors[d.name]))
-            .attr("fill-opacity", 1)
-            .attr("font-weight", "bold")
-            .style("text-shadow", d => `0 0 6px ${that._pickShadowColorBasedOnBgColorAdvanced(that.colors[d.name])}, 0 0 3px ${that._pickShadowColorBasedOnBgColorAdvanced(that.colors[d.name])}`);
+          that.treemapGroup
+            .selectAll("text")
+              .attr("visibility", "visible")
+              .attr("fill", d =>
+                that._pickTextColorBasedOnBgColorAdvanced(that.colors[d.name])
+              )
+              .attr("fill-opacity", 1)
+              .attr("font-weight", "bold")
+              .style(
+                "text-shadow",
+                d =>
+                  `0 0 6px ${that._pickShadowColorBasedOnBgColorAdvanced(
+                    that.colors[d.name]
+                  )}, 0 0 3px ${that._pickShadowColorBasedOnBgColorAdvanced(
+                    that.colors[d.name]
+                  )}`
+              );
           d3.select("#tooltip__graph").html("").style("display", "none");
         })
         .attr("x", d => d.x0)

@@ -102,6 +102,7 @@ class BarChart {
           d3.select(this)
             .attr("stroke", "black")
             .attr("fill-opacity", 1);
+          const svgXCoordinate = d3.mouse(this)[0];
           const coordinates = [d3.event.pageX, d3.event.pageY];
           const value = new Number(Math.round(d.value)).toLocaleString("en");
           const tooltipContent = `
@@ -110,17 +111,34 @@ class BarChart {
             <span class="tooltip__value">${value}</span><span class="tooltip__subtitle"> ha</span>
           `;
           d3.select("#tooltip__graph")
-            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
             .style("top", `${coordinates[1]}px`)
             .style("display", "block")
             .style("font-size", "11px")
             .html(tooltipContent);
+          if (svgXCoordinate <= that.width / 2) {
+            d3.select("#tooltip__graph")
+              .style("right", null)
+              .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+          } else {
+            d3.select("#tooltip__graph")
+              .style("left", null)
+              .style("right", `${screen.width - (coordinates[0] - that.tooltipOffset)}px`)
+          }
         })
         .on("mousemove", function () {
+          const svgXCoordinate = d3.mouse(this)[0];
           const coordinates = [d3.event.pageX, d3.event.pageY];
           d3.select("#tooltip__graph")
-            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
             .style("top", `${coordinates[1]}px`);
+          if (svgXCoordinate <= that.width / 2) {
+            d3.select("#tooltip__graph")
+              .style("right", null)
+              .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+          } else {
+            d3.select("#tooltip__graph")
+              .style("left", null)
+              .style("right", `${screen.width - (coordinates[0] - that.tooltipOffset)}px`)
+          }
         })
         .on("mouseout", function () {
           that.barGroup.selectAll("rect")

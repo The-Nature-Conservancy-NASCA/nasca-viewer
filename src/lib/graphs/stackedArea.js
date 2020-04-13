@@ -217,6 +217,7 @@ class StackedArea {
           that.areaGroup.selectAll(".helper__line").raise();
           that.areaGroup.select(".year__division").raise();
           that.areaGroup.select(".helper__dot").raise();
+          const svgXCoordinate = d3.mouse(this)[0];
           const coordinates = [d3.event.pageX, d3.event.pageY];
           const tooltipValue = value.toFixed(that.decimals);
           const tooltipContent = `
@@ -225,11 +226,19 @@ class StackedArea {
           <span class="tooltip__value">${tooltipValue} MtCO2e</span>
           `;
           d3.select("#tooltip__graph")
-            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
             .style("top", `${coordinates[1]}px`)
             .style("display", "block")
             .style("font-size", "11px")
             .html(tooltipContent);
+          if (svgXCoordinate <= that.width / 2) {
+            d3.select("#tooltip__graph")
+              .style("right", null)
+              .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+          } else {
+            d3.select("#tooltip__graph")
+              .style("left", null)
+              .style("right", `${screen.width - (coordinates[0] - that.tooltipOffset)}px`)
+          }
         })
         .on("mousemove", function (d) {
           const label = d.key;
@@ -257,6 +266,7 @@ class StackedArea {
           that.areaGroup.selectAll(".helper__line").raise();
           that.areaGroup.select(".year__division").raise();
           that.areaGroup.select(".helper__dot").raise();
+          const svgXCoordinate = d3.mouse(this)[0];
           const coordinates = [d3.event.pageX, d3.event.pageY];
           const tooltipValue = value.toFixed(that.decimals);
           const tooltipContent = `
@@ -265,9 +275,17 @@ class StackedArea {
           <span class="tooltip__value">${tooltipValue} MtCO2e</span>
           `;
           d3.select("#tooltip__graph")
-            .style("left", `${coordinates[0] + that.tooltipOffset}px`)
             .style("top", `${coordinates[1]}px`)
             .html(tooltipContent);
+          if (svgXCoordinate <= that.width / 2) {
+            d3.select("#tooltip__graph")
+              .style("right", null)
+              .style("left", `${coordinates[0] + that.tooltipOffset}px`)
+          } else {
+            d3.select("#tooltip__graph")
+              .style("left", null)
+              .style("right", `${screen.width - (coordinates[0] - that.tooltipOffset)}px`)
+          }
         })
         .on("mouseout", function () {
           that.areaGroup.selectAll("path.area").attr("fill-opacity", 0.3);
