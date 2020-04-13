@@ -5,7 +5,7 @@ class BarChart {
     this.offset = { left: 10, bottom: 10 };
     this.el = d3.select(el);
     this.tooltipOffset = 15;
-    this.timeSliderHeight = 70;
+    this.timeSliderHeight = 50;
 
     // compute width and height based on parent div
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
@@ -78,11 +78,26 @@ class BarChart {
       .domain([0.1, d3.max(values)])
       .range([0, this.width - this.offset.left]);
 
+
+    let exp = -1;
+    let domainFits = true;
+    let result;
+    const xTicks = [];
+    while (domainFits) {
+      result = d3.max(values) / 10 ** exp;
+      if (result >= 1) {
+        xTicks.push(10 ** exp);
+        exp += 1;
+      } else {
+        domainFits = false;
+      }
+    }
     const xAxis = d3
       .axisBottom()
       .scale(this.yScale)
-      .tickValues([])
-      .tickSize(0);
+      .tickValues(xTicks)
+      .tickSizeOuter(0)
+      .tickFormat(d => d.toLocaleString("en"));
 
     const yAxis = d3
       .axisLeft()
@@ -206,13 +221,19 @@ class BarChart {
           this.margin.bottom})`
       )
       .call(xAxis);
+    
+    // cambiar label del primer tick de 0.1 a 0
+    const firstTickText = this.barGroup.select(".x.axis .tick text");
+    if (firstTickText.text() === "0.1") {
+      firstTickText.text("0");
+    }
 
     this.barGroup
       .append("text")
       .attr("class", "x label")
       .attr("text-anchor", "end")
       .attr("x", this.width)
-      .attr("y", this.height + 10)
+      .attr("y", this.height - (this.offset.bottom + this.margin.bottom))
       .attr("font-size", this.fontSize)
       .attr("font-weight", "bold")
       .text(this.xlabel);
