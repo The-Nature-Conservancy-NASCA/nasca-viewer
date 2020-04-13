@@ -106,15 +106,21 @@ class ProyectoRepository {
     return result;
   }
 
-  static async getClosingYearAndLandcoverStartYear(id) {
+  static async getClosingYearAndBaselineYear(id) {
     const result = await window.store.select(this.TABLE_NAME, {
       ID_proyecto: id
     });
 
-    const closingYear = new Date(result[0].fecha_cierre).getFullYear();
-    const landcoverStartYear = result[0].inicio_coberturas;
+    let baselineYear;
+    let closingYear;
+    if (result[0].fecha_linea_base) {
+      baselineYear = new Date(result[0].fecha_linea_base).getFullYear();
+    }
+    if (result[0].fecha_cierre) {
+      closingYear = new Date(result[0].fecha_cierre).getFullYear();
+    }
 
-    return { closingYear, landcoverStartYear } ;
+    return { baselineYear, closingYear } ;
   }
 
   static async getMoments() {

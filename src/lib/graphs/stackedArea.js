@@ -1,11 +1,12 @@
 class StackedArea {
-  constructor (el, panelTitleSelector=null) {
+  constructor (el, panelTitleSelector=null, colors) {
 
 
     this.margin = {top: 10, right: 20, bottom: 20, left: 20};
     this.offset = {left: 10, bottom: 10};
     this.el = d3.select(el);
     this.panelTitleSelector = panelTitleSelector;
+    this.colors = colors;
     this.buttonContainerHeight = 12;
     
 
@@ -71,7 +72,7 @@ class StackedArea {
       that.buttons.classed("selected", false);
       d3.select(this).classed("selected", true);
       that._changePanelTitle(this.title);
-      that.renderGraphic(that.features, this.value, that.closingYear, that.startYear);
+      that.renderGraphic(that.features, this.value, that.startYear, that.closingYear);
     });
 
 
@@ -80,17 +81,6 @@ class StackedArea {
       0: "Biomasa",
       1: "Suelos",
       2: "Madera"
-    };
-    this.colors = {
-      Total: "#49A942",
-      Biomasa: "#49A942",
-      Suelos: "#ffa600",
-      "Madera muerta": "#003f5c",
-      "Cercas vivas": "#ef5675",
-      "Árboles dispersos en potreros": "#ffa600",
-      Bosque: "#49A942",
-      "Bosque secundario": "#4F7942",
-      "Sistemas silvopastoriles intensivos": "#7a5195"
     };
   }
 
@@ -325,7 +315,8 @@ class StackedArea {
       .selectAll(".axis .domain, .axis .tick line")
       .attr("stroke", "LightGray");
     this.areaGroup.select(".y.axis .domain").attr("stroke", "none");  // quitar linea eje y
-    const yearDivision = this.areaGroup
+    if (this.closingYear) {
+      const yearDivision = this.areaGroup
       .append("g")
         .attr("class", "year__division")
         .attr("pointer-events", "none");
@@ -347,6 +338,7 @@ class StackedArea {
       .attr("font-size", this.smallerFontSize)
       .attr("fill", "black")
       .text(this.closureLabel);
+    }
     this.areaGroup
       .append("text")
         .attr("class", "x label")
@@ -428,10 +420,10 @@ class StackedArea {
     d3.select(this.panelTitleSelector).text(titleString);
   }
 
-  renderGraphic(features, field, closingYear, startYear) {
+  renderGraphic(features, field, startYear, closingYear) {
     this.features = features;
-    this.closingYear = closingYear;
     this.startYear = startYear;
+    this.closingYear = closingYear;
     const data = this._formatData(features, field);
     this._renderStackedAreaChart(data);
   }

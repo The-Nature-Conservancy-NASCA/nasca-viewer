@@ -517,11 +517,11 @@ class TNCMap {
         });
       } else if (level === "region") {
         this.addPanelTitle(panelGraphSelector, window.tncConfig.strings.carbonoTotal);
-        this.stackedArea = new StackedArea(panelStatsSelector, panelTitleSelector);
+        this.stackedArea = new StackedArea(panelStatsSelector, panelTitleSelector, this.colors);
         this.carbonoQuery.where = `ID_region = '${value}'`;
         this.carbonoLayer.queryFeatures(this.carbonoQuery).then(result => {
-          ProyectoRepository.getClosingYearAndLandcoverStartYear(this.projectId).then(obj => {
-            this.stackedArea.renderGraphic(result.features, null, obj.closingYear, obj.landcoverStartYear);
+          ProyectoRepository.getClosingYearAndBaselineYear(this.projectId).then(obj => {
+            this.stackedArea.renderGraphic(result.features, null, obj.baselineYear, obj.closingYear);
             resolve(true);
           })
         });
