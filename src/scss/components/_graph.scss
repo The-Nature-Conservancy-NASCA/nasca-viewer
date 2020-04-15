@@ -36,23 +36,26 @@
 }
 
 .group__graphic {
-  width: 115px;
-  height: 115px;
+  width: 100px;
+  height: 100px;
   position: relative;
 }
 
 .group__header {
   text-align: center;
+  margin-bottom: 1rem;
 }
 
-.group__container {
-  margin-bottom: 1.6rem;
+
+.group__count {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--theme-color);
 }
 
-.biodiversity__icon {
-  @include positionCentered;
-  width: 9.5rem;
-  pointer-events: none;
+.group__label {
+  font-size: 1.5rem;
+  color: #999;
 }
 
 #container__biodiversidad {
@@ -60,15 +63,4 @@
   flex-wrap: wrap;
   justify-content: space-evenly;
   width: 100%;
-
-
-  h5 {
-    color: $dark-gray;
-    text-transform: uppercase;
-  }
-
-  h6 {
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
-  }
 }

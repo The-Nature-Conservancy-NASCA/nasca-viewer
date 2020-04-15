@@ -35,8 +35,8 @@ class BiodiversityContainer {
     const count = momentData ? momentData.count : 0;
     const groupContainer = this.container.append("div").attr("class", "group__container");
     const header = groupContainer.append("div").attr("class", "group__header").attr("id", `group__header__${cleanName}`);
-    header.append("h6").attr("class", "group__label").text(name);
-    header.append("h6").attr("class", "group__count").text(count);
+    header.append("div").attr("class", "group__count").text(count);
+    header.append("div").attr("class", "group__label").text(name);
     groupContainer.append("div").attr("class", "group__graphic").attr("id", `graph__${cleanName}`);
     const pieChart = new PieChart(`#graph__${cleanName}`, this.colors, icon);
     this.charts.push({ chart: pieChart, data: data, name: cleanName });

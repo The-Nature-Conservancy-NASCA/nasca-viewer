@@ -5,6 +5,7 @@ class CarouselRepository {
       name: this.TABLE_NAME,
       columns: {
         id: { primaryKey: true, dataType: 'number' },
+        region: { dataType: 'string' },
         nombre: { dataType: 'string' },
         especie: { dataType: 'string' },
         url: { dataType: 'string' },
@@ -26,9 +27,10 @@ class CarouselRepository {
       const carouselRequest = esriRequest(window.tncConfig.urls.carrusel, queryOptions);
       carouselRequest.then(response => {
         const carouselData = response.data.features.map(feature => {
-          const { OBJECTID, Especie, URL, nombre_comun } = feature.attributes;
+          const { OBJECTID, ID_region, Especie, URL, nombre_comun } = feature.attributes;
           return {
             id: OBJECTID,
+            region: ID_region,
             especie: Especie,
             url: URL,
             nombre: nombre_comun

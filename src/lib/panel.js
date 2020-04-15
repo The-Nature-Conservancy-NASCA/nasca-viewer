@@ -40,8 +40,6 @@ class Panel {
       }
     });
     this.registerHandlers();
-
-    this._createCarousel();
   }
 
   registerHandlers() {
@@ -84,42 +82,6 @@ class Panel {
         });
       });
     }
-  }
-
-  _createCarousel() {
-    const fakeImg = 'https://fakeimg.pl/300x200/?text=N/A';
-    let carouselImages = Array(5).fill({nombre: '', url: fakeImg});
-
-    CarouselRepository.getData().then(carouselData => {
-      carouselData.forEach((item, i) => {
-        if(carouselImages[i]) {
-          carouselImages[i] = {url: item.url, nombre: item.nombre};
-        }
-      });
-      const template = /* html */`
-          <div class="gallery-container">
-            ${carouselImages.map(item => /* html */`
-              <div class="gallery-item">
-                <img class="gallery-item__image" src="${item.url}">
-                <span class="gallery-item__description">${item.nombre}</span>
-              </div>
-            `).join('')}
-          </div>
-          <div class="gallery-controls"></div>
-    `;
-      document.querySelector('.gallery').innerHTML = template;
-      const galleryContainer = document.querySelector('.gallery-container');
-      const galleryControlsContainer = document.querySelector('.gallery-controls');
-      const galleryControls = ['previous', 'next'];
-      const galleryItems = document.querySelectorAll('.gallery-item');
-          
-      const biodiversidadCarousel = new Carousel(galleryContainer, galleryItems, galleryControls, galleryControlsContainer);
-
-      biodiversidadCarousel.setControls();
-      biodiversidadCarousel.setNav();
-      biodiversidadCarousel.setInitialState();
-      biodiversidadCarousel.useControls();
-    });
   }
 
   togglePanelVisibility() {

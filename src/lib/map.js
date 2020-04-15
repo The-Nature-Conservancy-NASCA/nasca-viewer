@@ -200,7 +200,8 @@ class TNCMap {
           ProyectoRepository.getMoments(),
           this.bioIconsLayer.queryFeatures(this.bioIconsQuery),
           this.coloresLayer.queryFeatures(this.colorQuery),
-          ProyectoRepository.getProjectsSpecificInformation()
+          ProyectoRepository.getProjectsSpecificInformation(),
+          CarouselRepository.getData()
         ];
         Promise.all(promises).then(result => {
           // inicializar nivel, valor y componente de visualizacion
@@ -217,6 +218,9 @@ class TNCMap {
 
           // almacenar textos especificos de proyecto para cada componente
           this.specificInformation = result[3];
+
+          // almacenar imagenes carousel
+          this.carouselImages = result[4];
 
           // poner helper texts
           this.setHelperTexts();
@@ -377,6 +381,39 @@ class TNCMap {
     });
   }
 
+  createCarousel(region, images) {
+    const fakeImg = 'https://fakeimg.pl/300x200/?text=N/A';
+    let carouselImages = Array(5).fill({nombre: '', url: fakeImg});
+
+    images.filter(img => img.region === region).forEach((img, i) => {
+      carouselImages[i] = {url: img.url, nombre: img.nombre};
+    });
+
+    const template = /* html */`
+        <div class="gallery-container">
+          ${carouselImages.map(item => /* html */`
+            <div class="gallery-item">
+              <img class="gallery-item__image" src="${item.url}">
+              <span class="gallery-item__description">${item.nombre}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="gallery-controls"></div>
+    `;
+    document.querySelector('.gallery').innerHTML = template;
+    const galleryContainer = document.querySelector('.gallery-container');
+    const galleryControlsContainer = document.querySelector('.gallery-controls');
+    const galleryControls = ['previous', 'next'];
+    const galleryItems = document.querySelectorAll('.gallery-item');
+        
+    const biodiversidadCarousel = new Carousel(galleryContainer, galleryItems, galleryControls, galleryControlsContainer);
+
+    biodiversidadCarousel.setControls();
+    biodiversidadCarousel.setNav();
+    biodiversidadCarousel.setInitialState();
+    biodiversidadCarousel.useControls();
+  }
+
   filterLayers(definitionExpression) {
     const layers = window.tnc_map.layers.filter(layer => layer.title === 'Predios' || layer.title === 'Regiones' || layer.title === 'Biodiversidad');
     layers.forEach(layer => {
@@ -480,13 +517,16 @@ class TNCMap {
     const panelStatsSelector = "#panel-biodiversidad .panel__stats";
     const panelGraphSelector = "#panel-biodiversidad .panel__graph";
     const panelTitleSelector = panelGraphSelector + " .panel__title";
+    const carouselSelector = "#panel-biodiversidad .gallery";
     const promise = new Promise(resolve => {
       d3.select(panelTitleSelector).remove();
       d3.select(panelStatsSelector).selectAll("*").remove();
+      d3.select(carouselSelector).selectAll("*").remove();
       if (level == "predio") {
-        this.setBiodiverstiyHelperText();
+        this.setBiodiverstiyHelperTexts();
         resolve(true);
       } else if (level == "region") {
+        this.createCarousel(value, this.carouselImages);
         this.addPanelTitle(panelGraphSelector, window.tncConfig.strings.biodiversityDefaultTitle);
         const container = new BiodiversityContainer(panelStatsSelector, this.colors, this.moments[this.projectId]);
         this.getSpeciesCountByLandcover(value).then(data => {
@@ -605,13 +645,19 @@ class TNCMap {
     return promise
   }
 
-  setBiodiverstiyHelperText() {
+  setBiodiverstiyHelperTexts() {
     const template = `
       <div class="helper__text__container">
         <p class="helper__text">${window.tncConfig.strings.biodiversity_helper_text}</p>
       <div/>
     `;
     document.querySelector("#panel-biodiversidad .panel__stats").innerHTML = template;
+    const template2 = `
+      <div class="helper__text__container">
+        <p class="helper__text">${window.tncConfig.strings.carousel_helper_text}</p>
+      <div/>
+    `;
+    document.querySelector("#panel-biodiversidad .gallery").innerHTML = template2;
   }
 
   setHelperTexts() {
@@ -620,7 +666,7 @@ class TNCMap {
         <p class="helper__text">${window.tncConfig.strings.general_helper_text}</p>
       <div/>
     `;
-    this.setBiodiverstiyHelperText();
+    this.setBiodiverstiyHelperTexts();
     document.querySelector("#panel-carbono .panel__stats").innerHTML = template;
     document.querySelector("#panel-cobertura .panel__stats").innerHTML = template;
     document.querySelector("#panel-implementacion .panel__stats").innerHTML = template;
