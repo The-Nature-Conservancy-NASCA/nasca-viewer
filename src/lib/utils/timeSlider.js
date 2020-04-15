@@ -19,7 +19,7 @@ class TimeSlider {
     this.fontSize = 8;
     this.possiblePositions = {
       1: [
-          this.padding.left + (this.width / 2)
+          this.width / 2
         ],
       2: [
           this.padding.left + this.radius, 
@@ -27,14 +27,14 @@ class TimeSlider {
         ],
       3: [
           this.padding.left + this.radius, 
-          this.padding.left + (this.width / 2), 
-          this.width - this.radius - this.padding.left
+          this.width / 2, 
+          this.width - this.radius - this.padding.right
         ],
       4: [
         this.padding.left + this.radius, 
         this.padding.left + (this.width * 1/3), 
         this.padding.left + (this.width * 2/3), 
-        this.width - this.radius - this.padding.left
+        this.width - this.radius - this.padding.right
       ]
     };
     if (otherEl) {
