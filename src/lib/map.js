@@ -171,7 +171,7 @@ class TNCMap {
       });
       this.view.ui.remove('zoom');
       
-      window.tnc_map.when(() => {        
+      window.tnc_map.when(() => {
         window.tnc_map.layers.items.find(item => item.title === "Predios").outFields = ["*"];
         window.tnc_map.layers.items.find(item => item.title === "Regiones").outFields = ["*"];
         const estrategiaInitial = getEstrategiaInitial();
@@ -224,6 +224,7 @@ class TNCMap {
           // agregar evento al click del mapa y paneles
           this.view.on("click", this.mapClick.bind(this));
           d3.selectAll(".panel__tab").on("click", this.panelClick.bind(this));
+
         });
       });
     }.bind(this));
@@ -377,7 +378,7 @@ class TNCMap {
   }
 
   filterLayers(definitionExpression) {
-    const layers = window.tnc_map.layers.filter(layer => layer.title === 'Predios' || layer.title === 'Regiones');
+    const layers = window.tnc_map.layers.filter(layer => layer.title === 'Predios' || layer.title === 'Regiones' || layer.title === 'Biodiversidad');
     layers.forEach(layer => {
       layer.when(() => {
         layer.definitionExpression = definitionExpression;
