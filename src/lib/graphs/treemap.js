@@ -364,6 +364,9 @@ class Treemap {
   }
 
   _pickShadowColorBasedOnBgColorAdvanced(bgColor) {
+    if (!bgColor) {
+      bgColor = "#000000";
+    }
     var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
     var r = parseInt(color.substring(0, 2), 16); // hexToR
     var g = parseInt(color.substring(2, 4), 16); // hexToG
@@ -380,6 +383,9 @@ class Treemap {
   }
 
   _pickTextColorBasedOnBgColorAdvanced(bgColor) {
+    if (!bgColor) {
+      bgColor = "#000000";
+    }
     var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
     var r = parseInt(color.substring(0, 2), 16); // hexToR
     var g = parseInt(color.substring(2, 4), 16); // hexToG
