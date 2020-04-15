@@ -10,13 +10,15 @@ class PieChart {
       this.iconSize = "8rem";
     } else if (screen.width <= 768) {
       this.iconSize = "16rem";
-    } else if (screen.height <= 768) {
-      this.iconSize = "8rem";
     } else if (screen.width > 900 && screen.width <= 1280) {
       this.iconSize = "7rem";
     } else {
-      this.iconSize = "9rem";
+      this.iconSize = "7rem";
     }
+    if (screen.height <= 768) {
+      this.iconSize = "7rem";
+    }
+
     this.svg = d3.select(el)
       .append("svg")
         .attr("class", "pie")

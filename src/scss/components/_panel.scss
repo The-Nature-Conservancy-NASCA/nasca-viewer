@@ -190,7 +190,7 @@ $panel-width: 58rem;
     box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.25);
 
     @include respond(zoom-150) {
-      height: 250px;
+      height: 300px;
     }
 
     @media screen and (min-height: 1080px) {
