@@ -31,8 +31,9 @@ class BiodiversityContainer {
 
   addPieChart(name, data, icon) {
     const cleanName = this._cleanString(name);
-    const momentData = data.find(item => item.moment === this.selectedMoment);
-    const count = momentData ? momentData.count : 0;
+    const filteredData = data.filter(item => +item.moment <= +this.selectedMoment);
+    const landcoverData = this._sumDuplicatedLandcovers(filteredData);
+    const count = filteredData.reduce((a, b) => a + b.count, 0);
     const groupContainer = this.container.append("div").attr("class", "group__container");
     const header = groupContainer.append("div").attr("class", "group__header").attr("id", `group__header__${cleanName}`);
     header.append("div").attr("class", "group__count").text(count);
@@ -40,7 +41,7 @@ class BiodiversityContainer {
     groupContainer.append("div").attr("class", "group__graphic").attr("id", `graph__${cleanName}`);
     const pieChart = new PieChart(`#graph__${cleanName}`, this.colors, icon);
     this.charts.push({ chart: pieChart, data: data, name: cleanName });
-    pieChart.renderGraphic(momentData ? momentData.landcovers : []);
+    pieChart.renderGraphic(landcoverData);
   }
 
   destroyLoader() {
@@ -56,14 +57,28 @@ class BiodiversityContainer {
     this.timeSlider.buttonToggle(d, i, n);
     this.selectedMoment = d3.select(n[i]).attr("data-moment");
     this.charts.forEach(pieChart => {
-      const momentData = pieChart.data.find(item => item.moment === this.selectedMoment);
-      const count = momentData ? momentData.count : 0;
+      const filteredData = pieChart.data.filter(item => +item.moment <= +this.selectedMoment);
+      const landcoverData = this._sumDuplicatedLandcovers(filteredData);
+      const count = filteredData.reduce((a, b) => a + b.count, 0);
       d3.select(`#group__header__${pieChart.name}`).select(".group__count").text(count);
-      pieChart.chart.renderGraphic(momentData ? momentData.landcovers : []);
+      pieChart.chart.renderGraphic(landcoverData);
     });
   }
 
   _cleanString(string) {
     return string.toLowerCase().replace(/[^A-Z0-9]/gi, "_");
+  }
+
+  _sumDuplicatedLandcovers(data) {
+    const flatData = Array.prototype.concat(...data.map(item => item.landcovers));
+    const landcoverData = [];
+    flatData.forEach(function (a) {
+      if (!this[a.name]) {
+          this[a.name] = { name: a.name, count: 0 };
+          landcoverData.push(this[a.name]);
+      }
+      this[a.name].count += a.count;
+    }, Object.create(null));
+    return landcoverData;
   }
 }
