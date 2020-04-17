@@ -313,6 +313,33 @@ $panel-width: 58rem;
   }
 }
 
+.swiper-container {
+  width: 100%;
+
+  .swiper-wrapper {
+    // padding: 0 1rem;
+  }
+
+  .swiper-button-next, .swiper-button-prev{
+    width: auto;
+    height: auto;
+    font-size: 4rem;
+    color: #666;
+  }
+
+  .swiper-button-next {
+    right: 0px;
+  }
+
+  .swiper-button-prev {
+    left: 0px;
+  }
+
+  .swiper-button-next:after, .swiper-button-prev:after{
+    content: none;
+  }
+}
+
 .js-panel-warning {
   width: 100%;
   text-align: center;

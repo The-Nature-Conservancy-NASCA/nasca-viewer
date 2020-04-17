@@ -535,6 +535,7 @@ class TNCMap {
             container.addPieChart(group.name, group.data, this.bioIcons.get(group.name));
           });
           container.renderTimeSlider();
+          container.initializeSwiper();
           resolve(true);
         });
       }

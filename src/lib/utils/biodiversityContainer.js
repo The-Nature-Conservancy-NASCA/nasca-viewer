@@ -6,6 +6,7 @@ class BiodiversityContainer {
     this.selectedMoment = moments.slice(-1)[0].value;
     this.timeSliderHeight = 70;
     this.charts = [];
+    this.slidesPerView = 2;
 
     // compute parent's dimensions
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
@@ -16,8 +17,7 @@ class BiodiversityContainer {
 
     this.container = this.el
       .append("div")
-        .attr("id", "container__biodiversidad")
-        .style("height", `${this.parentHeight - this.timeSliderHeight}px`);
+        .style("height", `${this.parentHeight - this.timeSliderHeight}px`)
 
     this.svg = this.container
       .append("svg")
@@ -30,15 +30,30 @@ class BiodiversityContainer {
   }
 
   addPieChart(name, data, icon) {
+
+    // obtener nombre, numero de especies y datos
     const cleanName = this._cleanString(name);
     const filteredData = data.filter(item => +item.moment <= +this.selectedMoment);
     const landcoverData = this._sumDuplicatedLandcovers(filteredData);
     const count = filteredData.reduce((a, b) => a + b.count, 0);
-    const groupContainer = this.container.append("div").attr("class", "group__container");
-    const header = groupContainer.append("div").attr("class", "group__header").attr("id", `group__header__${cleanName}`);
-    header.append("div").attr("class", "group__count").text(count);
-    header.append("div").attr("class", "group__label").text(name);
-    groupContainer.append("div").attr("class", "group__graphic").attr("id", `graph__${cleanName}`);
+
+    const template = `
+      <div id="group__${cleanName}" class="group__wrapper" style="height: 100%;">
+        <div class="group__header">
+          <div class="group__count">${count}</div>
+          <div class="group__label">${name}</div>
+        </div>
+        <div class="group__graphic" id="graph__${cleanName}"></div>
+      </div>
+    `;
+
+    // agregar slide con plantilla
+    this.wrapper
+      .append("div")
+        .attr("class", "swiper-slide")
+        .html(template);
+
+    // crear piechart y renderizarlo
     const pieChart = new PieChart(`#graph__${cleanName}`, this.colors, icon);
     this.charts.push({ chart: pieChart, data: data, name: cleanName });
     pieChart.renderGraphic(landcoverData);
@@ -46,6 +61,44 @@ class BiodiversityContainer {
 
   destroyLoader() {
     this.svg.remove();
+    this._addSwiper();
+  }
+
+  initializeSwiper() {
+    // insertar flechas de navegacion
+    this.container
+      .append("div")
+        .attr("class", "swiper-button-prev")
+        .html("&#8249;");
+    this.container
+      .append("div")
+        .attr("class", "swiper-button-next")
+        .html("&#8250;");
+
+    // inizializar swiper
+    new Swiper('.swiper-container', {
+      centerInsufficientSlides: true,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      },
+      slidesPerView: this.slidesPerView,
+      spaceBetween: 0
+    });
+
+    // remover flechas de navegacion si no son necesarias
+    if (this.charts.length <= this.slidesPerView) {
+      this.container.select(".swiper-button-next").style("display", "none");
+      this.container.select(".swiper-button-prev").style("display", "none");
+    }
+  }
+
+
+  _addSwiper() {
+    this.container.attr("class", "swiper-container");
+    this.wrapper = this.container
+      .append("div")
+        .attr("class", "swiper-wrapper");
   }
 
   renderTimeSlider() {
@@ -60,7 +113,7 @@ class BiodiversityContainer {
       const filteredData = pieChart.data.filter(item => +item.moment <= +this.selectedMoment);
       const landcoverData = this._sumDuplicatedLandcovers(filteredData);
       const count = filteredData.reduce((a, b) => a + b.count, 0);
-      d3.select(`#group__header__${pieChart.name}`).select(".group__count").text(count);
+      d3.select(`#group__${pieChart.name}`).select(".group__count").text(count);
       pieChart.chart.renderGraphic(landcoverData);
     });
   }

@@ -39,6 +39,7 @@
   width: 100px;
   height: 100px;
   position: relative;
+  margin: auto;
 }
 
 .group__header {
@@ -58,9 +59,9 @@
   color: #999;
 }
 
-#container__biodiversidad {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  width: 100%;
-}
+// #container__biodiversidad {
+//   display: flex;
+//   flex-wrap: wrap;
+//   justify-content: space-evenly;
+//   width: 100%;
+// }
