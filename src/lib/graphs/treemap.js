@@ -134,8 +134,6 @@ class Treemap {
       .round(true)
       (root);
 
-
-
     const that = this;
 
     // add rectangles
