@@ -3,7 +3,6 @@ class Treemap {
   constructor(el, colors, panelTitleSelector=null) {
     // declarar propiedades utilizando breakpoints
     
-
     this.margin = {top: 0, right: 20, bottom: 20, left: 20};
     this.timeSliderHeight = 70;
     this.buttonContainerHeight = 12;
@@ -248,6 +247,15 @@ class Treemap {
         .attr("width", d => d.x1 - d.x0)
         .attr("height", d => d.y1 - d.y0);
 
+      // eliminar rectangulos que por tener un area muy pequeña no son visibles y causan comportamientos inesperados
+      this.treemapGroup
+        .selectAll("rect")
+        .filter(function () {
+          return d3.select(this).attr("width") <= 0 || d3.select(this).attr("height") <= 0;
+        })
+        .remove();
+
+
       this.buttons.style("visibility", "visible");
 
       this.treemapGroup
@@ -263,7 +271,7 @@ class Treemap {
         .attr("font-size", 9)
         .attr("font-weight", "bold")
         .attr("fill", d => this._pickTextColorBasedOnBgColorAdvanced(this.colors[d.name]))
-        .attr("fill-opacity", 1)  // 0 0 6px #000000, 0 0 3px #000000
+        .attr("fill-opacity", 1)
         .attr("x", d => {
           const center = that._computeElementsCenter(
             d3
