@@ -42,21 +42,20 @@ class TimeSlider {
         .insert("svg", otherEl)
           .attr("width", this.width)
           .attr("height", this.height)
-          .style("margin-left", this.margin.left)
-          .style("margin-right", this.margin.right);
+          .style("margin-left", this.margin.left + "px")
+          .style("margin-right", this.margin.right + "px");
     } else {
       this.svg = d3.select(el)
       .append("svg")
         .attr("width", this.width)
         .attr("height", this.height)
-        .style("margin-left", this.margin.left)
-        .style("margin-right", this.margin.right);
+        .style("margin-left", this.margin.left + "px")
+        .style("margin-right", this.margin.right + "px");
     }
   }
 
   render(data) {
     this.svg.selectAll("*").remove();  // remover todo lo que este dentro del svg
-    const that = this;
     const positions = this.possiblePositions[data.length];
 
     // agregar circulos grandes
