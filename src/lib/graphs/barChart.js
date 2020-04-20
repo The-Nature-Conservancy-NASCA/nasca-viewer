@@ -17,6 +17,7 @@ class BarChart {
     this.data;
     this.moments;
     this.selectedMoment;
+    this.features;
     this.timeSlider = new TimeSlider(el, this.width + this.offset.left, this.timeSliderHeight, null, { left: 10, right: 10 });
     this.color = window.themeColor;
     this.factor = 0.5;
@@ -25,18 +26,39 @@ class BarChart {
     this.xlabel = window.tncConfig.strings.implementacionesXLabel;
     this.fontSize = 10;
 
-
-    this.barGroup = this.el
+    this.svg = this.el
       .append("svg")
-      .attr("id", this.graphId)
+        .attr("id", this.graphID)
         .attr("class", "bar graph")
         .attr("width", this.width + this.margin.left + this.margin.right + this.offset.left)
         .attr("height", this.height + this.margin.bottom + this.margin.top + this.offset.bottom)
-        .attr("overflow", "visible")
-      .append("g");
+        .attr("overflow", "visible");
+    this.barGroup = this.svg.append("g");
 
     const translateY = -this.timeSliderHeight + ((this.parentHeight - this.loaderHeight) / 2);
     this.loader = new Loader(this.barGroup, this.parentWidth, this.loaderHeight, translateY);
+
+    window.addEventListener("resize", this._adjust.bind(this));
+  }
+
+  _adjust() {
+    // compute width and height based on parent div
+    this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
+    this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
+    this.width = this.parentWidth - this.margin.left - this.margin.right - this.offset.left;
+    this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.offset.bottom - this.timeSliderHeight;
+
+    // cambiar dimensiones svg
+    this.svg
+      .attr("width", this.width + this.margin.left + this.margin.right + this.offset.left)
+      .attr("height", this.height + this.margin.bottom + this.margin.top + this.offset.bottom);
+
+    // renderizar grafica
+    this._renderBarChart(this.features);
+
+    // renderizar time slider
+    this.timeButtons = this.timeSlider.adjust(this.width, this.timeSliderHeight);
+    this.timeButtons.on("click", this._changeMoment.bind(this));
   }
 
   _renderBarChart(features) {
