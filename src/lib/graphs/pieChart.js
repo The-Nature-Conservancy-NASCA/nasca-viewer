@@ -6,6 +6,7 @@ class PieChart {
     this.margin = 4;
     this.colors = colors;
     this.iconUrl = iconUrl;
+    this.tooltipOffset = 15;
     if (screen.width <= 440) {
       this.iconSize = "8rem";
     } else if (screen.width <= 768) {
@@ -19,12 +20,12 @@ class PieChart {
       this.iconSize = "7rem";
     }
 
-    this.svg = d3.select(el)
+    this.svg = this.el
       .append("svg")
         .attr("class", "pie")
         .attr("width", this.width)
         .attr("height", this.height);
-    this.tooltipOffset = 15;
+
   }
 
   _renderPieChart(data) {

@@ -20,21 +20,22 @@ class Treemap {
     this.tooltipOffset = 15;
     this.features;
     this.scheme;
+    this.moments;
     this.selectedMoment;
     this.timeSlider = new TimeSlider(el, this.width, this.timeSliderHeight, null, this.margin);
 
-    this.treemapGroup = d3.select(el)
+    this.svg = this.el
       .append("svg")
         .attr("class", "treemap")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
-        .attr("overflow", "visible")
-      .append("g");
+        .attr("overflow", "visible");
+    this.treemapGroup = this.svg.append("g");
 
     const translateY = -this.timeSliderHeight + ((this.parentHeight - this.loaderHeight) / 2);
     this.loader = new Loader(this.treemapGroup, this.parentWidth, this.loaderHeight, translateY);
 
-    this.buttonContainer = d3.select(el)
+    this.buttonContainer = this.el
       .append("div")
         .attr("class", "panel__buttons")
         .style("height", this.buttonContainerHeight);
@@ -68,6 +69,28 @@ class Treemap {
       CHILD_LABEL_ALT: "corine2",
       VALUE_FIELD: "area"
     };
+
+    window.addEventListener("resize", this._adjust.bind(this));
+  }
+
+  _adjust() {
+    // compute width and height based on parent div
+    this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
+    this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
+    this.width = this.parentWidth - this.margin.left - this.margin.right;
+    this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.timeSliderHeight - this.buttonContainerHeight;
+
+    // cambiar dimensiones svg
+    this.svg
+      .attr("width", this.width + this.margin.left + this.margin.right)
+      .attr("height", this.height + this.margin.top + this.margin.bottom);
+    
+    // renderizar treemap
+    this._renderTreemap(this.data);
+
+    // renderizar time slider
+    this.timeButtons = this.timeSlider.adjust(this.width, this.timeSliderHeight);
+    this.timeButtons.on("click", this._changeMoment.bind(this));
   }
 
   _stratify(features, name, parentLabel, childLabel, valueField, moment) {
@@ -459,8 +482,9 @@ class Treemap {
   renderGraphic(features, scheme, moments=null, isFirstRender=false) {
     if (isFirstRender) {
       this.scheme = scheme;
-      this.selectedMoment = moments.slice(-1)[0].value;
-      this.timeButtons = this.timeSlider.render(moments);
+      this.moments = moments;
+      this.selectedMoment = this.moments.slice(-1)[0].value;
+      this.timeButtons = this.timeSlider.render(this.moments);
       this.timeButtons.on("click", this._changeMoment.bind(this));
     }
     const valueField = this.constants.VALUE_FIELD;
@@ -471,11 +495,12 @@ class Treemap {
     } else if (scheme === "corine") {
       data = this._stratify(features, this.constants.NAME, this.constants.PARENT_LABEL_ALT, this.constants.CHILD_LABEL_ALT, valueField, this.selectedMoment);
     }
+    this.data = data;
     this.buttons
         .classed("selected", false)
       .filter((d, i, n) => d3.select(n[i]).attr("value") === this.scheme)
         .classed("selected", true);
-    this._renderTreemap(data);
+    this._renderTreemap(this.data);
   }
 
   _changeMoment(d, i, n) {

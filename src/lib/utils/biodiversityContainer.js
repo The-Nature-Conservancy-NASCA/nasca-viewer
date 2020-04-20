@@ -27,6 +27,17 @@ class BiodiversityContainer {
 
     const translateY = -this.timeSliderHeight + ((this.parentHeight - this.loaderHeight) / 2);
     this.loader = new Loader(this.svg, this.parentWidth, this.loaderHeight, translateY);
+  
+    window.addEventListener("resize", this._adjust.bind(this));
+  }
+
+  _adjust() {
+    // compute parent's dimensions
+    this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
+
+    // renderizar time slider
+    this.timeButtons = this.timeSlider.adjust(this.parentWidth, this.timeSliderHeight);
+    this.timeButtons.on("click", this._changeMoment.bind(this));
   }
 
   addPieChart(name, data, icon) {

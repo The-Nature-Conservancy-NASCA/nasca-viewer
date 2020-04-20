@@ -1,5 +1,6 @@
 class TimeSlider {
   constructor(el, width, height, otherEl=null, margin=null, padding=null) {
+    this.el = d3.select(el);
     this.height = height;
     this.width = width;
     if (margin) {
@@ -17,6 +18,7 @@ class TimeSlider {
     this.labelMarginBottom = 7;
     this.labelMarginTop = 8;
     this.fontSize = 8;
+    this.data;
     this.possiblePositions = {
       1: [
           this.width / 2
@@ -38,23 +40,57 @@ class TimeSlider {
       ]
     };
     if (otherEl) {
-      this.svg = d3.select(el)
+      this.svg = this.el
         .insert("svg", otherEl)
           .attr("width", this.width)
           .attr("height", this.height)
           .style("margin-left", this.margin.left + "px")
           .style("margin-right", this.margin.right + "px");
     } else {
-      this.svg = d3.select(el)
+      this.svg = this.el
       .append("svg")
         .attr("width", this.width)
         .attr("height", this.height)
         .style("margin-left", this.margin.left + "px")
         .style("margin-right", this.margin.right + "px");
     }
+
+  }
+
+  adjust(width, height) {
+    this.width = width;
+    this.height = height;
+    this.svg
+      .attr("width", this.width)
+      .attr("height", this.height);
+
+    this.possiblePositions = {
+      1: [
+          this.width / 2
+        ],
+      2: [
+          this.padding.left + this.radius, 
+          this.width - this.radius - this.padding.right
+        ],
+      3: [
+          this.padding.left + this.radius, 
+          this.width / 2, 
+          this.width - this.radius - this.padding.right
+        ],
+      4: [
+        this.padding.left + this.radius, 
+        this.padding.left + (this.width * 1/3), 
+        this.padding.left + (this.width * 2/3), 
+        this.width - this.radius - this.padding.right
+      ]
+    };
+    
+    const timeButtons = this.render(this.data);
+    return timeButtons;
   }
 
   render(data) {
+    this.data = data;
     this.svg.selectAll("*").remove();  // remover todo lo que este dentro del svg
     const positions = this.possiblePositions[data.length];
 

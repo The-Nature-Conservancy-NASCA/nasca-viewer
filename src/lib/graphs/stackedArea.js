@@ -17,6 +17,7 @@ class StackedArea {
     this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.buttonContainerHeight;
     this.loaderHeight = this.parentHeight * 0.75;
 
+    this.data;
     this.features;
     this.factor = 1000000;
     this.decimals = 2;
@@ -30,18 +31,18 @@ class StackedArea {
     this.ylabel = window.tncConfig.strings.carbonoYLabel;
     this.closureLabel = window.tncConfig.strings.closureLabel;
     
-    this.areaGroup = d3.select(el)
+    this.svg = this.el
       .append("svg")
         .attr("class", "area")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
         .attr("overflow", "visible")
-      .append("g");
+    this.areaGroup = this.svg.append("g");
 
     const translateY = (this.parentHeight - this.loaderHeight) / 2;
     this.loader = new Loader(this.areaGroup, this.parentWidth, this.loaderHeight, translateY);
 
-    this.buttonContainer = d3.select(el)
+    this.buttonContainer = this.el
       .append("div")
         .attr("class", "panel__buttons")
         .style("height", this.buttonContainerHeight);
@@ -75,13 +76,31 @@ class StackedArea {
       that.renderGraphic(that.features, this.value, that.startYear, that.closingYear);
     });
 
-
     this.defaultKey = "Total";
     this.domain = {
       0: "Biomasa",
       1: "Suelos",
       2: "Madera"
     };
+
+    window.addEventListener("resize", this._adjust.bind(this));
+  }
+
+  _adjust() {
+    // compute width and height based on parent div
+    this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
+    this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
+    this.width = this.parentWidth - this.margin.left - this.margin.right;
+    this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.buttonContainerHeight;
+
+    // cambiar dimensiones svg
+    this.svg
+      .attr("width", this.width + this.margin.left + this.margin.right)
+      .attr("height", this.height + this.margin.top + this.margin.bottom);
+
+    // renderizar stacked area
+    this._renderStackedAreaChart(this.data);
+
   }
 
   _renderStackedAreaChart(data) {
@@ -424,7 +443,7 @@ class StackedArea {
     this.features = features;
     this.startYear = startYear;
     this.closingYear = closingYear;
-    const data = this._formatData(features, field);
-    this._renderStackedAreaChart(data);
+    this.data = this._formatData(features, field);
+    this._renderStackedAreaChart(this.data);
   }
 }
