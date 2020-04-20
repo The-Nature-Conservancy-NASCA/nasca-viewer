@@ -229,6 +229,8 @@ class TNCMap {
           this.view.on("click", this.mapClick.bind(this));
           d3.selectAll(".panel__tab").on("click", this.panelClick.bind(this));
 
+          // quitar titulo en el contexto de seleccion del panel
+          this.clearSelectionContext();
         });
       });
     }.bind(this));
