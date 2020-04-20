@@ -24,7 +24,11 @@ class BarChart {
 
     this.ylabel = window.tncConfig.strings.implementacionesYLabel;
     this.xlabel = window.tncConfig.strings.implementacionesXLabel;
+
     this.fontSize = 10;
+    if (screen.width >= 1400 && screen.height >= 800) {
+      this.fontSize = 14;
+    } 
 
     this.svg = this.el
       .append("svg")
@@ -42,6 +46,11 @@ class BarChart {
   }
 
   _adjust() {
+    this.fontSize = 10;
+    if (screen.width >= 1400 && screen.height >= 800) {
+      this.fontSize = 14;
+    }
+
     // compute width and height based on parent div
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));

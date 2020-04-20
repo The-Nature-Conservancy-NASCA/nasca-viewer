@@ -34,6 +34,10 @@ class BiodiversityContainer {
   _adjust() {
     // compute parent's dimensions
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
+    this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
+    
+    this.container
+      .style("height", `${this.parentHeight - this.timeSliderHeight}px`);
 
     // renderizar time slider
     this.timeButtons = this.timeSlider.adjust(this.parentWidth, this.timeSliderHeight);

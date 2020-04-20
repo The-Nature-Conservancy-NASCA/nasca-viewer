@@ -16,6 +16,11 @@ class Treemap {
     this.height = this.parentHeight - this.margin.top - this.margin.bottom - this.timeSliderHeight - this.buttonContainerHeight;
     this.loaderHeight = this.parentHeight * 0.75;
 
+    this.fontSize = 10;
+    if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+      this.fontSize = 14;
+    }
+
     this.colors = colors;
     this.tooltipOffset = 15;
     this.features;
@@ -74,6 +79,11 @@ class Treemap {
   }
 
   _adjust() {
+    this.fontSize = 10;
+    if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+      this.fontSize = 14;
+    } 
+
     // compute width and height based on parent div
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));
@@ -291,7 +301,7 @@ class Treemap {
         .attr("pointer-events", "none")
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "middle")
-        .attr("font-size", 9)
+        .attr("font-size", this.fontSize)
         .attr("font-weight", "bold")
         .attr("fill", d => this._pickTextColorBasedOnBgColorAdvanced(this.colors[d.name]))
         .attr("fill-opacity", 1)

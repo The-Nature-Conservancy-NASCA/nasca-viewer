@@ -7,18 +7,13 @@ class PieChart {
     this.colors = colors;
     this.iconUrl = iconUrl;
     this.tooltipOffset = 15;
-    if (screen.width <= 440) {
-      this.iconSize = "8rem";
-    } else if (screen.width <= 768) {
-      this.iconSize = "16rem";
-    } else if (screen.width > 900 && screen.width <= 1280) {
-      this.iconSize = "7rem";
-    } else {
-      this.iconSize = "7rem";
-    }
-    if (screen.height <= 768) {
-      this.iconSize = "7rem";
-    }
+
+    this.data;
+
+    this.iconSize = "7rem";
+    if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+      this.iconSize = "10.5rem";
+    } 
 
     this.svg = this.el
       .append("svg")
@@ -26,21 +21,41 @@ class PieChart {
         .attr("width", this.width)
         .attr("height", this.height);
 
+    window.addEventListener("resize", this._adjust.bind(this));
+  }
+
+  _adjust() {
+    this.width = parseInt(this.el.style("width"));
+    this.height = parseInt(this.el.style("height"));
+
+    this.iconSize = "7rem";
+    if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+      this.iconSize = "10.5rem";
+    }
+
+
+    this.svg
+      .attr("width", this.width)
+      .attr("height", this.height);
+
+    this._renderPieChart(this.data);
   }
 
   _renderPieChart(data) {
     this.svg.selectAll("*").remove();
 
-    const img = this.svg
+    if (this.iconUrl) {
+      const img = this.svg
       .append("image")
         .attr("xlink:href", this.iconUrl)
-        .attr("width", this.iconSize)
-        .attr("height", this.iconSize)
-        .attr("pointer-events", "none");
+        .attr("pointer-events", "none")
+        .style("width", this.iconSize)
+        .style("height", this.iconSize);
     const bbox = img.node().getBBox();
     img
       .attr("x", this.width / 2 - bbox.width / 2)
       .attr("y", this.height / 2 - bbox.height / 2);
+    }
 
     if (!data.length) {
       return;
@@ -147,6 +162,7 @@ class PieChart {
   }
 
   renderGraphic(data) {
-    this._renderPieChart(data);
+    this.data = data;
+    this._renderPieChart(this.data);
   }
 }

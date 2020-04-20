@@ -25,8 +25,14 @@ class StackedArea {
     this.years;
     this.startYear;
     this.closingYear;
+
     this.fontSize = 10;
     this.smallerFontSize = 9;
+    if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+      this.fontSize = 14;
+      this.smallerFontSize = 13;
+    }
+    
     this.xlabel = window.tncConfig.strings.carbonoXLabel;
     this.ylabel = window.tncConfig.strings.carbonoYLabel;
     this.closureLabel = window.tncConfig.strings.closureLabel;
@@ -87,6 +93,13 @@ class StackedArea {
   }
 
   _adjust() {
+    this.fontSize = 10;
+    this.smallerFontSize = 9;
+    if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+      this.fontSize = 14;
+      this.smallerFontSize = 13;
+    }
+
     // compute width and height based on parent div
     this.parentWidth = parseInt(this.el.style("width")) - parseInt(this.el.style("padding-left")) - parseInt(this.el.style("padding-right"));
     this.parentHeight = parseInt(this.el.style("height")) - parseInt(this.el.style("padding-top")) - parseInt(this.el.style("padding-bottom"));

@@ -9,15 +9,25 @@ class TimeSlider {
       this.margin = { left: 0, right: 0 };
     }
     if (padding) {
+      this.initialPadding = true;
       this.padding = padding;
     } else {
-      this.padding = { left: 12, right: 12 };
+      this.initialPadding = false;
+      this.padding = { left: 15, right: 15 };
+      if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+        this.padding = { left: 20, right: 20 };
+      }
     }
     this.radius = 9;
     this.color = window.themeColor;
     this.labelMarginBottom = 7;
     this.labelMarginTop = 8;
-    this.fontSize = 8;
+
+    this.fontSize = 10;
+    if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+      this.fontSize = 12;
+    }
+
     this.data;
     this.possiblePositions = {
       1: [
@@ -58,6 +68,19 @@ class TimeSlider {
   }
 
   adjust(width, height) {
+
+    if (!this.initialPadding) {
+      this.padding = { left: 15, right: 15 };
+      if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+        this.padding = { left: 20, right: 20 };
+      }
+    }
+    
+    this.fontSize = 10;
+    if (window.innerWidth >= 1400 && window.innerHeight >= 800) {
+      this.fontSize = 12;
+    }
+
     this.width = width;
     this.height = height;
     this.svg
