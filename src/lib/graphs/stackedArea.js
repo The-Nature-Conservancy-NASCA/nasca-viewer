@@ -414,7 +414,7 @@ class StackedArea {
     if (!features.length) {
       return [];
     }
-    this.years = d3.range(this.startYear, this.startYear + 21);
+    this.years = d3.range(this.startYear, this.startYear + 20);
     const data = [];
     features.forEach((feat, i) => {
       const attrs = feat.attributes;
@@ -428,9 +428,9 @@ class StackedArea {
           key = attrs[field];
         }
       }
-      for (let j = 0; j <= 20; j++) {
+      for (let j = 1; j <= 20; j++) {
         const t = `T${j}`;
-        const year = this.years[j];
+        const year = this.years[j-1];
         if (i == 0) {
           const obj = {"year": year};
           obj[key] = attrs[t];
