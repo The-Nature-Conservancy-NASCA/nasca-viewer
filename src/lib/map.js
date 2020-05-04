@@ -184,6 +184,7 @@ class TNCMap {
           ProyectoRepository.getProyectosOfEstrategia(estrategiaInitial).then(proyectos => {
             definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
           });
+          this.filterLayers(definitionExpression);
         }
         const proyecto = getProyectoInitial();
         if(proyecto) {
@@ -191,9 +192,9 @@ class TNCMap {
             changeThemeColor(color);
           });
           definitionExpression = `ID_proyecto='${proyecto}'`;
+          this.filterLayers(definitionExpression);
         }
         
-        this.filterLayers(definitionExpression);
 
 
         const promises = [
