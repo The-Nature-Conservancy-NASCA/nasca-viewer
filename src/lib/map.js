@@ -173,7 +173,7 @@ class TNCMap {
       
       window.tnc_map.when(() => {
         window.tnc_map.layers.items.find(item => item.title === "Predios").outFields = ["*"];
-        window.tnc_map.layers.items.find(item => item.title === "Regiones").outFields = ["*"];
+        window.tnc_map.layers.items.find(item => item.title === "Regiones proyecto").outFields = ["*"];
         const estrategiaInitial = getEstrategiaInitial();
         let definitionExpression = null;
         if (estrategiaInitial) {
@@ -255,7 +255,7 @@ class TNCMap {
           this.vizLevel = "predio";
           this.vizLevelValue = predio;
         } else if (region) {
-          layerTitle = "Regiones";
+          layerTitle = "Regiones proyecto";
           this.vizLevel = "region";
           this.vizLevelValue = region;
         }
@@ -308,7 +308,7 @@ class TNCMap {
     const capaPredios = results.find(result => result.graphic.layer.title === 'Predios');
     const predio = capaPredios ? capaPredios.graphic.attributes['ID_predio'] : undefined;
 
-    const capaRegiones = results.find(result => result.graphic.layer.title === 'Regiones');
+    const capaRegiones = results.find(result => result.graphic.layer.title === 'Regiones proyecto');
     const region = capaRegiones ? capaRegiones.graphic.attributes['ID_region'] : undefined;
     return { predio, region };
   }
@@ -418,7 +418,7 @@ class TNCMap {
   }
 
   filterLayers(definitionExpression) {
-    const layers = window.tnc_map.layers.filter(layer => layer.title === 'Predios' || layer.title === 'Regiones' || layer.title === 'Biodiversidad');
+    const layers = window.tnc_map.layers.filter(layer => layer.title === 'Predios' || layer.title === 'Regiones proyecto' || layer.title === 'Biodiversidad');
     layers.forEach(layer => {
       layer.when(() => {
         layer.definitionExpression = definitionExpression;
