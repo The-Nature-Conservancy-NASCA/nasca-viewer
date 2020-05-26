@@ -22,6 +22,8 @@ class Treemap {
     }
 
     this.colors = colors;
+    this.decimals = 0;
+    this.smallerThanOneDecimals = 1;
     this.tooltipOffset = 15;
     this.features;
     this.scheme;
@@ -204,14 +206,19 @@ class Treemap {
             .attr("stroke-opacity", 1);
           const svgXCoordinate = d3.mouse(this)[0];
           const coordinates = [d3.event.pageX, d3.event.pageY];
-          const value = Number(Math.round(d.data.value)).toLocaleString("en");
+          let value;
+          if (d.data.value < 1) {
+            value = d.data.value.toFixed(that.smallerThanOneDecimals);
+          } else {
+            value = d.data.value.toFixed(that.decimals);
+          }
           const tooltipContent = `
               <span class="tooltip__title">${d.parent.data.name}</span><br>
               <span class="tooltip__subtitle">${
                 d.data.name ? d.data.name : ""
               }</span>
               <hr>
-              <span class="tooltip__value">${value} ha</span>
+              <span class="tooltip__value">${value.toLocaleString("en")} ha</span>
             `;
           d3.select("#tooltip__graph")
             .style("top", `${coordinates[1]}px`)
