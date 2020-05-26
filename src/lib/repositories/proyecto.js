@@ -116,8 +116,8 @@ class ProyectoRepository {
     if (result[0].fecha_linea_base) {
       baselineYear = new Date(result[0].fecha_linea_base).getFullYear();
     }
-    if (result[0].fecha_cierre) {
-      closingYear = new Date(result[0].fecha_cierre).getFullYear();
+    if (result[0].cierre) {
+      closingYear = result[0].cierre;
     }
 
     return { baselineYear, closingYear } ;
