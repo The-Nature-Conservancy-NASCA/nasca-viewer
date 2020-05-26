@@ -363,7 +363,7 @@ class StackedArea {
       .attr("stroke-width", 0.75);
     yearDivision
       .append("text")
-      .attr("y", xScale(this.closingYear) - 5)
+      .attr("y", xScale(this.closingYear) + 10)
       .attr("x", yScale.range()[1] - this.margin.bottom)
       .attr("transform", "rotate(-90)")
       .attr("text-anchor", "end")
