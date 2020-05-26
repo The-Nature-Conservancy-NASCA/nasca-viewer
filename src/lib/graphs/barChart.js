@@ -1,7 +1,7 @@
 class BarChart {
 
   constructor (el) {
-    this.margin = { top: 10, right: 20, bottom: 10, left: 10 };
+    this.margin = { top: 20, right: 20, bottom: 10, left: 10 };
     this.offset = { left: 10, bottom: 10 };
     this.el = d3.select(el);
     this.tooltipOffset = 15;
@@ -213,10 +213,7 @@ class BarChart {
       .data(data)
       .enter()
       .append("text")
-      .attr(
-        "x",
-        d => this.yScale(d.value) / 2 + this.margin.left + this.offset.left
-      )
+      .attr("x", d => this.margin.left + this.offset.left + 5)
       .attr(
         "y",
         (d, i) =>
@@ -225,7 +222,7 @@ class BarChart {
           this.offset.bottom +
           this.xScale.bandwidth() / 2
       )
-      .attr("text-anchor", "middle")
+      .attr("text-anchor", "start")
       .attr("dominant-baseline", "middle")
       .attr("font-size", this.fontSize)
       .attr("font-weight", "normal")
@@ -271,8 +268,8 @@ class BarChart {
     this.barGroup
       .append("text")
       .attr("class", "y label")
-      .attr("text-anchor", "end")
-      .attr("x", 0)
+      .attr("text-anchor", "middle")
+      .attr("x", -(this.height / 2) + this.margin.bottom + this.offset.bottom)
       .attr("y", 0)
       .attr("transform", "rotate(-90)")
       .attr("font-size", this.fontSize)
