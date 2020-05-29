@@ -173,7 +173,11 @@ class TNCMap {
       
       window.tnc_map.when(() => {
         window.tnc_map.layers.items.find(item => item.title === "Predios").outFields = ["*"];
-        window.tnc_map.layers.items.find(item => item.title === "Regiones proyecto").outFields = ["*"];
+        const regionLayer = window.tnc_map.layers.items.find(item => item.title === "Regiones proyecto")
+        regionLayer.outFields = ["*"];
+        regionLayer.when(() => regionLayer.queryExtent()).then(response => {
+          this.view.goTo(response.extent)
+        })
         const estrategiaInitial = getEstrategiaInitial();
         let definitionExpression = null;
         if (estrategiaInitial) {
@@ -194,8 +198,6 @@ class TNCMap {
           definitionExpression = `ID_proyecto='${proyecto}'`;
           this.filterLayers(definitionExpression);
         }
-        
-
 
         const promises = [
           ProyectoRepository.getMoments(),
@@ -422,8 +424,14 @@ class TNCMap {
     layers.forEach(layer => {
       layer.when(() => {
         layer.definitionExpression = definitionExpression;
+        if (layer.title === 'Regiones proyecto') {
+          layer.queryExtent().then(response => {
+            this.view.goTo(response.extent)
+          })
+        }
       });
     });
+    
   }
 
   getSpeciesCountByLandcover(region) {

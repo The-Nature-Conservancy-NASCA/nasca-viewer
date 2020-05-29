@@ -95,7 +95,6 @@ class Visor {
     }
   }
 }
-
 const eventBus = new Eventbus();
 fetch(Urls.getRelativeUrl('/json/config.json')).then(response => {
   response.json().then(config => {

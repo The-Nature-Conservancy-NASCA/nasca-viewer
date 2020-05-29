@@ -141,14 +141,14 @@ class Panel {
       `
       <header class="panel__header">
         <ul class="panel__tabs">
-          <li class="panel__tab panel__tab--active" data-tab='carbono'>
-            ${window.tncConfig.strings.carbono}
+          <li class="panel__tab" data-tab='implementacion'>
+            ${window.tncConfig.strings.implementaciones}
           </li>
           <li class="panel__tab" data-tab='cobertura'>
             ${window.tncConfig.strings.coberturas}
           </li>
-          <li class="panel__tab" data-tab='implementacion'>
-            ${window.tncConfig.strings.implementaciones}
+          <li class="panel__tab panel__tab--active" data-tab='carbono'>
+            ${window.tncConfig.strings.carbono}
           </li>
           <li class="panel__tab" data-tab='biodiversidad'>
             ${window.tncConfig.strings.biodiversidad}
