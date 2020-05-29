@@ -21,7 +21,7 @@ class PredioRepository {
         },
         responseType: 'json'
       };
-      const request = esriRequest(window.tncConfig.urls.predios, queryOptions);
+      const request = esriRequest(`${window.tncConfig.urls.service}/1/query`, queryOptions);
       request.then(response => {
         const prediosData = response.data.features.map(feature => {
           const { ID_predio, nombre, stock_carbono, captura_carbono } = feature.attributes;

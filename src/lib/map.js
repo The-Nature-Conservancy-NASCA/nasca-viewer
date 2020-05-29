@@ -43,26 +43,26 @@ class TNCMap {
       this.SimpleLineSymbol = SimpleLineSymbol
       this.SimpleFillSymbol = SimpleFillSymbol;
       this.esriRequest = esriRequest;
-      this.biodiversityQueryUrl = "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/2/query";
-      this.landcoversQueryUrl = "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/13/query";
+      this.biodiversityQueryUrl = `${window.tncConfig.urls.service}/2/query`;
+      this.landcoversQueryUrl = `${window.tncConfig.urls.service}/13/query`;
       this.prediosLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/1"
+        url: `${window.tncConfig.urls.service}/1`
       });
       this.carbonoLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/11/query"
+        url: `${window.tncConfig.urls.service}/11`
       });
       this.implementacionesLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer/8"
+        url: `${window.tncConfig.urls.service}/8`
       });
       this.biodiversidadLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/2"
+        url: `${window.tncConfig.urls.service}/2`
       });
       this.biodiversidadLayer.featureReduction = {
         type: 'cluster',
         clusterRadius: '75px'
       };
       this.coloresLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/arcgis/rest/services/TNCServices4/FeatureServer/12"
+        url: `${window.tncConfig.urls.service}/12`
       });
       this.bioIconsLayer = new FeatureLayer({
         url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/iconos_biodiversidad/FeatureServer/0"

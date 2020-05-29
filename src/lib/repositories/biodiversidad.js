@@ -25,7 +25,7 @@ class BiodiversidadRepository {
         },
         responseType: 'json'
       };
-      const biodiversidadRequest = esriRequest(window.tncConfig.urls.biodiversidad, queryOptions);
+      const biodiversidadRequest = esriRequest(`${window.tncConfig.urls.service}/2/query`, queryOptions);
       biodiversidadRequest.then(response => {
         const data = response.data.features.map(feature => {
           const  {

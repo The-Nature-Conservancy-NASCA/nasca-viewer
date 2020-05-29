@@ -62,8 +62,8 @@ class Visor {
        responseType: 'json'
      };
 
-     const estrategiasRequest = esriRequest(window.tncConfig.urls.estrategias, queryOptions);
-     const proyectosRequest = esriRequest(window.tncConfig.urls.proyectos, queryOptions);
+     const estrategiasRequest = esriRequest(`${window.tncConfig.urls.service}/3/query`, queryOptions);
+     const proyectosRequest = esriRequest(`${window.tncConfig.urls.service}/4/query`, queryOptions);
      
      Promise.all([estrategiasRequest, proyectosRequest]).then(this.processResponse.bind(this));
    });

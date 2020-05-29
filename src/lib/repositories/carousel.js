@@ -24,7 +24,7 @@ class CarouselRepository {
         },
         responseType: 'json'
       };
-      const carouselRequest = esriRequest(window.tncConfig.urls.carrusel, queryOptions);
+      const carouselRequest = esriRequest(`${window.tncConfig.urls.service}/10/query`, queryOptions);
       carouselRequest.then(response => {
         const carouselData = response.data.features.map(feature => {
           const { OBJECTID, ID_region, Especie, URL, nombre_comun } = feature.attributes;

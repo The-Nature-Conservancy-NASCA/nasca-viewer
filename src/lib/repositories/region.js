@@ -21,7 +21,7 @@ class RegionRepository {
         },
         responseType: 'json'
       };
-      const request = esriRequest(window.tncConfig.urls.regiones, queryOptions);
+      const request = esriRequest(`${window.tncConfig.urls.service}/0/query`, queryOptions);
       request.then(response => {
         const regionesData = response.data.features.map(feature => {
           const { ID_region, nombre } = feature.attributes;
