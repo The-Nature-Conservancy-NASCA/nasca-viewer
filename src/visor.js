@@ -1,6 +1,7 @@
 class Visor {
 
   constructor() {
+    window.themeColor = document.documentElement.style.getPropertyValue('--theme-color');
     eventBus.addEventListener('prediosLoaded', event => {
       document.querySelector('.loader').classList.add('hidden');
       window.modalPopup.openModal({header: window.tncConfig.strings.warning_panel, content: ''});
