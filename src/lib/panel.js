@@ -141,13 +141,13 @@ class Panel {
       `
       <header class="panel__header">
         <ul class="panel__tabs">
-          <li class="panel__tab" data-tab='implementacion'>
+          <li class="panel__tab panel__tab--active" data-tab='implementacion'>
             ${window.tncConfig.strings.implementaciones}
           </li>
           <li class="panel__tab" data-tab='cobertura'>
             ${window.tncConfig.strings.coberturas}
           </li>
-          <li class="panel__tab panel__tab--active" data-tab='carbono'>
+          <li class="panel__tab" data-tab='carbono'>
             ${window.tncConfig.strings.carbono}
           </li>
           <li class="panel__tab" data-tab='biodiversidad'>
@@ -156,7 +156,7 @@ class Panel {
         </ul>
       </header>
       <section class="resultados">
-        <div class="panel__tab-panel panel__tab-panel--active" id="panel-carbono">
+        <div class="panel__tab-panel" id="panel-carbono">
           ${this._renderSelection()}
           <div class="panel__tab-content">
             <p class="panel__information">
@@ -191,7 +191,7 @@ class Panel {
             </div>
           </div>  
         </div>
-        <div class="panel__tab-panel" id="panel-implementacion">
+        <div class="panel__tab-panel panel__tab-panel--active" id="panel-implementacion">
           ${this._renderSelection()}
           <div class="panel__tab-content">
             <p class="panel__information">${window.tncConfig.specificInformation.implementacion.content}</p>
