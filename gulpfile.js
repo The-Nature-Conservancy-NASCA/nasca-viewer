@@ -10,14 +10,14 @@ sass.compiler = require('node-sass');
 function compileJsVisor(cb) {
   return src(['src/lib/**/*.js', 'src/visor.js'])
     .pipe(concat('visor.min.js')) 
-    //.pipe(uglify())
+    .pipe(uglify())
     .pipe(dest('dist/js/'));
 }
 
 function compileJSLanding(cb) {
   return src(['src/lib/utils/url.js', 'src/lib/repositories/*.js', 'src/lib/store.js', 'src/index.js'])
         .pipe(concat('index.min.js')) 
-        //.pipe(uglify())
+        .pipe(uglify())
         .pipe(dest('dist/js/'));
 }
 

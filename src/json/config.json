@@ -1,7 +1,7 @@
 {
   "es": {
     "urls": {
-      "service": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer"
+      "service": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/VisorTNC_View/FeatureServer"
     },
     "generalInformation": {
       "header": "Sobre la Herramienta",
@@ -72,7 +72,7 @@
   },
   "en": {
     "urls": {
-      "service": "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/TNCServices4/FeatureServer"
+      "service": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/ArcGIS/rest/services/VisorTNC_View/FeatureServer"
     },
     "generalInformation": {
       "header": "Information",

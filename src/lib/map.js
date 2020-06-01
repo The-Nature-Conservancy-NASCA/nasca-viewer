@@ -65,7 +65,7 @@ class TNCMap {
         url: `${window.tncConfig.urls.service}/12`
       });
       this.bioIconsLayer = new FeatureLayer({
-        url: "https://services9.arcgis.com/LQG65AprqDvQfUnp/ArcGIS/rest/services/iconos_biodiversidad/FeatureServer/0"
+        url: `${window.tncConfig.urls.service}/14`
       });
       this.prediosQuery = this.prediosLayer.createQuery();
       this.prediosQuery.outFields  = ["Id_predio"];
@@ -83,7 +83,7 @@ class TNCMap {
       
       window.tnc_map = new WebMap({
         portalItem: {
-          id: "9b5f3da3a6ae4558bbaa25d50754e286"
+          id: "c20162c95766418386bd982848d49d44"
         },
         basemap: 'satellite',
         slider: false
