@@ -3,7 +3,7 @@ class Loader {
     this.loaderSize = height;
 
     const img = el.append("image")
-      .attr("xlink:href", "./img/loader.gif")
+      .attr("xlink:href", "img/loader.gif")
       .attr("width", this.loaderSize)
       .attr("height", this.loaderSize)
       .attr("pointer-events", "none");
