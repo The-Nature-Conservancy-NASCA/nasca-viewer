@@ -1,7 +1,6 @@
 class Visor {
 
   constructor() {
-    window.themeColor = document.documentElement.style.getPropertyValue('--theme-color');
     eventBus.addEventListener('prediosLoaded', event => {
       document.querySelector('.loader').classList.add('hidden');
       window.modalPopup.openModal({header: window.tncConfig.strings.warning_panel, content: ''});
@@ -99,6 +98,7 @@ class Visor {
 const eventBus = new Eventbus();
 fetch(Urls.getRelativeUrl('/json/config.json')).then(response => {
   response.json().then(config => {
+    window.themeColor = '#4aa241';
     window.store = new Store();
     const lang =/* window.navigator.language.slice(0, 2) || */document.documentElement.lang;
     window.tncConfig = config[lang];
