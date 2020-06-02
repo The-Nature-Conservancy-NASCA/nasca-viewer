@@ -276,15 +276,7 @@ class TNCMap {
         this.highlightFeature(layer.graphic.geometry);
         d3.select(".panel__tab--active").node().click();
       } else {
-        this.featureClicked = false;
-        this.vizLevel = null;
-        this.vizLevelValue = null;
-        this.view.graphics.removeAll();
-        d3.selectAll(".panel__title").remove();
-        d3.selectAll(".panel__stats *").remove();
-        this.clearSelectionContext();
-        this.clearSpecificInformation();
-        this.setHelperTexts();
+        this.resetPanel();
       }
     });
   }
@@ -320,6 +312,7 @@ class TNCMap {
       const definitionExpression = `ID_proyecto in (${proyectos.map(item => `'${item}'`).join(',')})`;
       this.filterLayers(definitionExpression);
     });
+    this.resetPanel();
   }
 
   changeProyecto(proyectoId) {
@@ -330,6 +323,7 @@ class TNCMap {
         div.innerHTML = proyecto.nombre;
       });
     });
+    this.resetPanel();
   }
 
   changeSelectionContext(projectId) {
@@ -655,6 +649,19 @@ class TNCMap {
       }
     });
     return promise
+  }
+
+  resetPanel() {
+    eventBus.emitEventListeners('resetPanel');
+    this.featureClicked = false;
+    this.vizLevel = null;
+    this.vizLevelValue = null;
+    this.view.graphics.removeAll();
+    d3.selectAll(".panel__title").remove();
+    d3.selectAll(".panel__stats *").remove();
+    this.clearSelectionContext();
+    this.clearSpecificInformation();
+    this.setHelperTexts();
   }
 
   setBiodiverstiyHelperTexts() {

@@ -14,6 +14,7 @@ class Visor {
     window.modalPopup = new Modal();
   
     document.getElementById('nav-ver-todo').addEventListener('click', event => {
+      window.map.resetPanel();
       window.map.filterLayers('');
     });
   

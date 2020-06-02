@@ -39,6 +39,9 @@ class Panel {
         this._hidePanel();
       }
     });
+    eventBus.addEventListener('resetPanel', () => {
+      this._hidePanel();
+    });
     this.registerHandlers();
   }
 
