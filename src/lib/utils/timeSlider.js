@@ -130,7 +130,7 @@ class TimeSlider {
         .attr("fill", this.color);
 
     // agregar linea que conecta los circulos
-    this.svg
+    this.line = this.svg
       .append("line")
         .attr("x1", this.padding.right + this.radius)
         .attr("x2", this.width - this.radius - this.padding.right)
@@ -138,6 +138,7 @@ class TimeSlider {
         .attr("y2", this.height / 2)
         .attr("stroke-width", Math.round(this.radius / 6))
         .attr("stroke", this.color);
+  
 
     // agregar labels con el nombre del momento
     this.momentLabelsGroup = this.svg.append("g").attr("class", "circle__labels");
@@ -189,6 +190,24 @@ class TimeSlider {
       .filter((d, i) => i == data.length-1)
         .attr("fill", this.color)
         .attr("pointer-events", "none");
+
+    // esconder linea y circulos en casos donde haya solo una fecha
+    if (this.data.length === 1) {
+      this.bigCirclesGroup.attr("visibility", "hidden");
+      this.line.attr("visibility", "hidden");
+      this.smallCirclesGroup.attr("visibility", "hidden");
+      const that = this;
+      this.momentLabelsGroup
+      .selectAll("text")
+      .attr("y", function() {
+        return +d3.select(this).attr("y") + 7;
+      });
+      this.yearLabelsGroup
+        .selectAll("text")
+        .attr("y", function() {
+          return +d3.select(this).attr("y") - 7;
+        });
+    }
     
     return this.smallCirclesGroup.selectAll("circle");
   }
