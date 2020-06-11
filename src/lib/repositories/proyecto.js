@@ -84,24 +84,25 @@ class ProyectoRepository {
     }
   }
 
-  static async getSpecificInformationText(id, field) {
-    const result = await window.store.select(this.TABLE_NAME, {
-      ID_proyecto: id
-    });
-
-    return result[0][field];
-  }
-
   static async getProjectsSpecificInformation() {
     const projects = await window.store.select(this.TABLE_NAME);
+    const keys = [
+      "descripcion_biodiversidad", 
+      "descripcion_carbono", 
+      "descripcion_coberturas", 
+      "descripcion_implementaciones"
+    ];
     const result = {};
     projects.forEach(project => {
-      result[project.ID_proyecto] = {
-        descripcion_biodiversidad: project.descripcion_biodiversidad,
-        descripcion_carbono: project.descripcion_carbono,
-        descripcion_coberturas: project.descripcion_coberturas,
-        descripcion_implementaciones: project.descripcion_implementaciones
-      };
+      result[project.ID_proyecto] = {};
+      keys.forEach(key => {
+        const text = project[key];
+        if (text) {
+          result[project.ID_proyecto][key] = text;
+        } else {
+          result[project.ID_proyecto][key] = '';
+        }
+      });
     });
     return result;
   }
