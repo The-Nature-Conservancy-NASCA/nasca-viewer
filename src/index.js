@@ -220,8 +220,10 @@ class Landing {
 
 fetch(Urls.getRelativeUrl('/json/config.json')).then(response => {
   response.json().then(config => {
-    const lang = window.navigator.language.slice(0, 2) || document.documentElement.lang;
-    window.tncConfig = config[lang];
+    // Se elimina temporalmente english
+    //const lang = window.navigator.language.slice(0, 2) || document.documentElement.lang;
+    //window.tncConfig = config[lang];
+    window.tncConfig = config['es'];
     new Landing();
   });
 

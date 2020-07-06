@@ -33,6 +33,7 @@
 
     @include respond(tab-port) {
       display: inline-block;
+      padding: 1rem;
     }
   }
 }
